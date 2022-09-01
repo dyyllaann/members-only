@@ -1,0 +1,110 @@
+body {
+  padding: 50px;
+  font: 14px "Montserrat", Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn > a {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* LANDING PAGE */
+.landing-page {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* LOGO */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+}
+
+@media only screen and (max-width: 700px) {
+  .logo-container {
+    display: none;
+  }
+}
+
+h1.logo {
+  color:#54359C;
+  font-size: 6vw;
+  font-weight: 900;
+}
+
+h2.logo-subtext {
+  width: 85%;
+  font-weight: 400;
+}
+
+/* LOGIN */
+.login-container {
+  min-width: 300px;
+  width: 50%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.login-input, .btn {
+  width: 90%;
+  margin-top: 10px;
+  padding: 15px;
+  font-size: 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.login-btn {
+  background-color: #54359C;
+  color: #fff;
+}
+
+.login-bottom {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.login-bottom > * {
+  width: 100%;
+}
+
+.login-divider {
+  width: 90%;
+  border-bottom: 1px solid #dadde1;
+  margin: 0 auto;
+}
+
+.login_new-account {
+  display: flex;
+  justify-content: center;
+}
+
+.login_new-account-btn {
+  font-size: 1rem;
+  padding: 10px;
+  margin: 20px 0 10px 0;
+  min-width: 150px;
+  width: 40%;
+  background-color:#00B7FF;
+}

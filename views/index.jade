@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  div.landing-page
+    if user
+      p Hello {user}
+    else
+      block logo 
+        div.logo-container
+          h1.logo HushBook
+          h2.logo-subtext Connect anonymously, share secrets, and make new friends.
+      block login
+        div.login-container
+          div.login-form
+            form(action="/login" method="POST")
+            input.login-input(type="text", name="username" placeholder="Username")
+            br
+            input.login-input(type="text", name="password" placeholder="Password")
+            br
+            input.btn.login-btn(type="submit" value="Log In")
+            br 
+
+          div.login-bottom
+            a(href="/forgot-password") Forgot password?
+            p or
+            a(href="/guest") Sign in as guest
+
+          div.login-divider 
+
+          div.login_new-account
+            div.btn.login_new-account-btn
+              a(href="/create-account") Create new account 
