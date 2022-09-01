@@ -11,6 +11,7 @@ const dbo = require("./db/conn");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var createAccountRouter = require("./routes/createAccount");
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/create-account", createAccountRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
