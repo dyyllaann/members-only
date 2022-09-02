@@ -15,7 +15,31 @@ a {
   color: #00B7FF;
 }
 
+/* FORMS */
+.form-group {
+  display: flex;
+  gap: 10px;
+}
+
+#form-group--gender {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group > input {
+  flex-grow: 1;
+}
+
+input {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 15px;
+}
+
 .btn {
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -26,7 +50,7 @@ a {
 
 /* LANDING PAGE */
 .landing-page {
-  width: 80%;
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -48,7 +72,7 @@ a {
 
 h1.logo {
   color:#54359C;
-  font-size: 6vw;
+  font-size: 4vw;
   font-weight: 900;
 }
 
@@ -62,6 +86,8 @@ h2.logo-subtext {
   min-width: 300px;
   width: 50%;
   background-color: #fff;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%),
+    0 8px 16px rgb(0 0 0 / 10%);
   border: 1px solid #ddd;
   border-radius: 10px;
   text-align: center;
@@ -70,11 +96,7 @@ h2.logo-subtext {
 
 .login-input, .btn {
   width: 90%;
-  margin-top: 10px;
-  padding: 15px;
   font-size: 1.25rem;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
 }
 
 .login-btn {
@@ -109,4 +131,10 @@ h2.logo-subtext {
   min-width: 150px;
   width: 40%;
   background-color:#00B7FF;
+}
+
+/* CREATE ACCOUNT */
+.create-account {
+  display: flex;
+  flex-direction: column;
 }
