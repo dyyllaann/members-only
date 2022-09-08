@@ -4,16 +4,32 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
+var mongoose = require("mongoose");
+
+// const port = process.env.PORT || 5000;
 
 // mongo obfuscation
-require("dotenv").config({ path: "./config.env" });
-const dbo = require("./db/conn");
+// require("dotenv").config({ path: "./config.env" });
+// const dbo = require("./db/conn");
+const mongoDB = "mongodb+srv://admin:pass@cluster0.ie1fhym.mongodb.net/?retryWrites=true&w=majority";
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var createAccountRouter = require("./routes/createAccount");
 
 var app = express();
+
+// // connect to db
+// app.listen(port, () => {
+// 	// perform a database connection when server starts
+// 	dbo.connectToServer(function (err) {
+// 		if (err) console.error(err);
+// 	});
+// 	console.log(`Server is running on port: ${port}`);
+// });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -9,15 +9,19 @@ block content
 
     div.new-user-container
       div.new-user-form
-        form(action="/accounts/create" method="POST")
-        div.form-group
-          input.new-user-input(type="text", name="firstName" placeholder="First Name")
-          input.new-user-input(type="text", name="lastName" placeholder="Last Name")
-        div.form-group
-          input.new-user-input(type="text", name="location" placeholder="Location")
-        div.form-group
-          input.new-user--input(type="text", name="username" placeholder="Username")
-        div.form-group
-          input.new-user--input(type="text", name="password" placeholder="Password")
-        div.form-group
-          input.btn.new-user--btn(type="submit" value="Create Account")
+        if password != passwordConfirm
+          span Passwords don't match
+        form(action="/create-account" method="POST")
+          div.form-group
+            input.new-user-input(type="text", name="firstName" placeholder="First Name")
+            input.new-user-input(type="text", name="lastName" placeholder="Last Name")
+          div.form-group
+            input.new-user-input(type="text", name="location" placeholder="Location")
+          div.form-group
+            input.new-user--input(type="text", name="username" placeholder="Username")
+          div.form-group
+            input.new-user--input(type="password", name="password" placeholder="Password")
+          div.form-group
+            input.new-user--input(type="password", name="passwordConfirm" placeholder="Confirm Password")
+          div.form-group
+            input.btn.new-user--btn(type="submit" value="Create Account")

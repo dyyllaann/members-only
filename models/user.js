@@ -7,7 +7,7 @@ var UserSchema = new Schema({
   lastName: { type: String, required: true, maxLength: 50 },
 	username: { type: String, required: true, maxLength: 50 },
 	password: { type: String, required: true, maxLength: 50 },
-  member: { type: Boolean, required: true }
+  member: { type: Boolean, required: false }
 });
 
 //Export model
