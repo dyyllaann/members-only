@@ -36,8 +36,8 @@ router.post(
 	"/",
 	check("password").exists(),
 	check(
-		"passwordConfirmation",
-		"passwordConfirmation field must have the same value as the password field"
+		"passwordConfirm",
+		"passwordConfirm field must have the same value as the password field"
 	)
 		.exists()
 		.custom((value, { req }) => value === req.body.password),
@@ -46,8 +46,7 @@ router.post(
 		const errors = validationResult(req);
 		// Return 404 if error
 		if (!errors.isEmpty()) {
-			// return res.status(400).json({ errors: errors.array() });
-			return res.redirect("/create-account");
+			return res.status(400).json({ errors: errors.array() });
 		}
 		// Else, return new user
 		const user = new User({

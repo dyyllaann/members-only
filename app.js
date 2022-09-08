@@ -11,7 +11,7 @@ var mongoose = require("mongoose");
 // mongo obfuscation
 // require("dotenv").config({ path: "./config.env" });
 // const dbo = require("./db/conn");
-const mongoDB = "mongodb+srv://admin:pass@cluster0.ie1fhym.mongodb.net/?retryWrites=true&w=majority";
+const mongoDB = "mongodb+srv://admin:pass@cluster0.ie1fhym.mongodb.net/members_only?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
