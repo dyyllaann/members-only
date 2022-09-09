@@ -3,7 +3,7 @@ extends layout
 block content
   div.landing-page
     if user
-      p Hello, {user}
+      h2 Hello, #{user.username}!
     else
       block logo 
         div.logo-container
@@ -13,12 +13,12 @@ block content
         div.login-container
           div.login-form
             form(action="/login" method="POST")
-            input.login-input(type="text", name="username" placeholder="Username or email")
-            br
-            input.login-input(type="text", name="password" placeholder="Password")
-            br
-            input.btn.login-btn(type="submit" value="Log In")
-            br 
+              input.login-input(type="text", name="username" placeholder="Username or email")
+              br
+              input.login-input(type="password", name="password" placeholder="Password")
+              br
+              input.btn.login-btn(type="submit" value="Log In")
+              br 
 
           div.login-bottom
             a(href="/forgot-password") Forgot password?

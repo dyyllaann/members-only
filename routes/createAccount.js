@@ -2,6 +2,12 @@ var express = require("express");
 var router = express.Router();
 const { check, body, validationResult } = require("express-validator");
 
+// Auth & encryption dependencies
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcryptjs");
+
 const User = require("../models/user");
 
 // /* GET users listing. */
@@ -48,17 +54,25 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		// Else, return new user
-		const user = new User({
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			username: req.body.username,
-			password: req.body.password,
-		}).save((err) => {
+		// Encrypt password
+		bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+			// if err, do something
 			if (err) {
-				return next(err);
+				console.log("Error!");
+			} else {
+				// Else, return new user
+				const user = new User({
+					firstName: req.body.firstName,
+					lastName: req.body.lastName,
+					username: req.body.username,
+					password: hashedPassword,
+				}).save((err) => {
+					if (err) {
+						return next(err);
+					}
+					res.redirect("/");
+				});
 			}
-			res.redirect("/");
 		});
 	}
 );
