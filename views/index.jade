@@ -3,7 +3,18 @@ extends layout
 block content
   div.landing-page
     if user
-      h2 Hello, #{user.username}!
+      div.content
+        block greeting
+          div.greeting
+            h2 Hello, #{user.firstName}!
+        block post
+          div.post-container
+            div.post-form
+              form(action="/post" method="POST")
+                div.form-group
+                  input.post-input(type="text", name="message" autocomplete="off" placeholder="What's on your mind, #{user.firstName}?")
+                div.form-group
+                  input.btn.post-btn(type="submit" value="Post")
     else
       block logo 
         div.logo-container
