@@ -1,41 +1,17 @@
 var express = require("express");
 var router = express.Router();
-const { check, body, validationResult } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 
 // Auth & encryption dependencies
-const session = require("express-session");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 
+// Models
 const User = require("../models/user");
 
-// /* GET users listing. */
-// router.get("/", function (req, res, next) {
-// 	res.send("Create new account.");
-// });
-
-// /* GET create account page. */
-// router.get('/', function(req, res, next) {
-//   res.render('createAccount', { title: 'Hushbook - Create Account' });
-// });
-
 /* GET create account page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.render('createAccount', { title: 'Hushbook - Create Account' });
 });
-
-// app.post(
-// 	"/create-user",
-// 	check("password").exists(),
-// 	check(
-// 		"passwordConfirmation",
-// 		"passwordConfirmation field must have the same value as the password field"
-// 	)
-// 		.exists()
-// 		.custom((value, { req }) => value === req.body.password),
-// 	loginHandler
-// );
 
 // POST create account.
 router.post(
