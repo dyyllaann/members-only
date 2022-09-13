@@ -160,13 +160,14 @@ h2.logo-subtext {
 }
 
 /* GREETING */
-.greeting {
+/* .greeting {
   display: block;
   margin: 10px;
-}
+} */
 
 /* POST */
 .post-container {
+  align-self: center;
   width: 490px;
 }
 
@@ -195,4 +196,38 @@ h2.logo-subtext {
 
 .post-input:focus::placeholder {
   color: transparent;
+}
+
+.post-content {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 340px;
+  width: 340px;
+  background: linear-gradient(to bottom, #69e0cd, #5e0eab);
+  background: linear-gradient(to bottom, #a790c1, #c9e6b9);
+  background: linear-gradient(to bottom, #d76214, #660bec);
+  background: linear-gradient(to bottom, #2ca4c7, #dbded1);
+  background: linear-gradient(to bottom, #f16328, #920b5b);
+  background: linear-gradient(to bottom, #a46d5b, #f36670);
+  background: linear-gradient(to bottom, #ed0025, #70daca);
+  background: linear-gradient(to bottom, #85cdde, #51f95e);
+  color: white;
+  font-size: xx-large;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+
+.post-message {
+  flex: 1;
+  align-self: center;
+}
+
+.posts-container {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 340px 340px 340px;
+  column-gap: 20px;
+  grid-template-rows: auto;
 }

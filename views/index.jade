@@ -4,9 +4,9 @@ block content
   div.landing-page
     if user
       div.content
-        block greeting
-          div.greeting
-            h2 Hello, #{user.firstName}!
+        //- block greeting
+        //-   div.greeting
+        //-     h2 Hello, #{user.firstName}!
         block post
           div.post-container
             div.post-form
@@ -20,8 +20,10 @@ block content
             div.posts-container
               each post in post_list
                 div.post
-                  h1 #{post.message}
-                  p #{post.timestamp}
+                  div.post-content
+                    p.post-message #{post.message}
+                  div.post-timestamp
+                    p #{post.timestamp}
     else
       block logo 
         div.logo-container
