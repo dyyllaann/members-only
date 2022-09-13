@@ -2,11 +2,18 @@
 var express = require('express');
 var router = express.Router();
 const passport = require("passport");
-var Message = require("../models/message");
+var Post = require("../models/post");
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { user: req.user, title: 'Members Only' });
+  Post.find()
+    .sort({ timestamp: -1 })
+    .exec(function (err, list_posts) {
+      if (err) {
+        return next(err);
+      }
+      res.render("index", { user: req.user, title: "Members Only", post_list: list_posts });
+    });
 });
 
 /* POST login */
@@ -22,7 +29,7 @@ router.post(
 router.post(
 	"/post",
 	(req, res, next) => {
-    const message = new Message({
+    const message = new Post({
       message: req.body.message,
     }).save((err) => {
       if (err) {

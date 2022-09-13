@@ -15,6 +15,13 @@ block content
                   input.post-input(type="text", name="message" autocomplete="off" placeholder="What's on your mind, #{user.firstName}?")
                 div.form-group
                   input.btn.post-btn(type="submit" value="Post")
+        block posts
+          if post_list
+            div.posts-container
+              each post in post_list
+                div.post
+                  h1 #{post.message}
+                  p #{post.timestamp}
     else
       block logo 
         div.logo-container
