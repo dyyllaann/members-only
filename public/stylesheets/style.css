@@ -1,5 +1,6 @@
 body {
-  padding: 50px;
+  width: 100vw;
+  margin: 0;
   font: 14px "Montserrat", Helvetica, Arial, sans-serif;
   background-color: #f0f2f5;
   display: flex;
@@ -67,7 +68,8 @@ input {
 .landing-page {
   margin: 0 auto;
   display: flex;
-  flex-direction: row;
+  flex-grow: 1;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -157,6 +159,11 @@ h2.logo-subtext {
 .content {
   display: flex;
   flex-direction: column;
+  padding: 50px;
+  margin: 0 auto;
+    /* display: flex; */
+    /* flex-direction: row; */
+    justify-content: center;
 }
 
 /* GREETING */
@@ -194,9 +201,9 @@ h2.logo-subtext {
   border: none;
 }
 
-.post-input:focus::placeholder {
+/* .post-input:focus::placeholder {
   color: transparent;
-}
+} */
 
 .post-content {
   display: flex;
@@ -230,4 +237,29 @@ h2.logo-subtext {
   grid-template-columns: 340px 340px 340px;
   column-gap: 20px;
   grid-template-rows: auto;
+}
+
+/* APP BAR */
+.app-bar {
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  height: 56px;
+  background-color: white;
+  color: red;
+}
+
+.app-bar--center {
+  flex-grow: 1;
+}
+
+.controls {
+  padding-right: 16px;
+}
+
+.profile-image {
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  background-color: #00B7FF;
 }

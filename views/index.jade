@@ -3,10 +3,12 @@ extends layout
 block content
   div.landing-page
     if user
+      block appBar
+        div.app-bar
+          div.app-bar--center 
+          div.controls
+            div.profile-image
       div.content
-        //- block greeting
-        //-   div.greeting
-        //-     h2 Hello, #{user.firstName}!
         block post
           div.post-container
             div.post-form
