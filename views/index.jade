@@ -1,38 +1,39 @@
 extends layout
 
-block content
-  div.landing-page
-    if user
-      block appBar
-        div.app-bar
-          div.app-bar--left
-            div.logo
-          div.app-bar--center
-          div.app-bar--right 
-            div.controls
-              div.control-item
-              div.control-item
-              div.control-item
-              div.control-item.profile-image
-      div.content
-        block post
-          div.post-container
-            div.post-form
-              form(action="/post" method="POST")
-                div.form-group
-                  input.post-input(type="text", name="message" autocomplete="off" placeholder="What's on your mind, #{user.firstName}?")
-                div.form-group
-                  input.btn.post-btn(type="submit" value="Post")
-        block posts
-          if post_list
-            div.posts-container
-              each post in post_list
-                div.post
-                  div.post-content
-                    p.post-message #{post.message}
-                  div.post-timestamp
-                    p #{post.timestamp}
-    else
+if user
+  block content
+    block appBar
+      div.app-bar
+        div.app-bar--left
+          div.logo-icon
+        div.app-bar--center
+        div.app-bar--right 
+          div.controls
+            div.control-item
+            div.control-item
+            div.control-item
+            div.control-item.profile-image
+    div.content
+      block post
+        div.post-container
+          div.post-form
+            form(action="/post" method="POST")
+              div.form-group
+                input.post-input(type="text", name="message" autocomplete="off" placeholder="What's on your mind, #{user.firstName}?")
+              div.form-group
+                input.btn.post-btn(type="submit" value="Post")
+      block posts
+        if post_list
+          div.posts-container
+            each post in post_list
+              div.post
+                div.post-content
+                  p.post-message #{post.message}
+                div.post-timestamp
+                  p #{post.timestamp}
+else
+  block landing-page
+    div.landing-page
       block logo 
         div.logo-container
           h1.logo HushBook
