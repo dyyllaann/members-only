@@ -12,16 +12,16 @@ block content
         div.app-bar--center
         div.app-bar--right 
           div.controls
-            div.control-item
-            div.control-item
-            div.control-item
+            //- div.control-item
+            //- div.control-item
+            //- div.control-item
             div.control-item.profile(onclick='toggleVisible(document.querySelector(`div.user-menu`), `hidden`)')
               span #{user.initials} 
       block userMenu 
         div.user-menu.hidden
           ul 
-            li
-              a(href="/account/settings") Account Settings
+            //- li
+            //-   a(href="/account/settings") Account Settings
             li
               a(href="/logout") Sign Out
     div.content
@@ -41,7 +41,7 @@ block content
                 div.post-content
                   p.post-message #{post.message}
                 div.post-details
-                  p User: #{post.user}
+                  p Posted by #{post.user.username}
                   p #{post.timestamp_formatted}
   else
     block landing-page

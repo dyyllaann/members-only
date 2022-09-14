@@ -8,6 +8,7 @@ var Post = require("../models/post");
 router.get('/', (req, res, next) => {
   Post.find()
     .sort({ timestamp: -1 })
+    .populate("user")
     .exec(function (err, list_posts) {
       if (err) {
         return next(err);
@@ -62,5 +63,8 @@ router.post(
     });
 	}
 );
+
+/* GET forgot password page. */
+router.get('/forgot-password', (req, res) => res.render("forgotPassword", { message: "Bummer, dude." }));
 
 module.exports = router;

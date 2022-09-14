@@ -24,7 +24,8 @@ block content
         div.greeting  
           h2 Welcome, Guest!   
           span While logged in as a guest, you can browse existing posts but you 
-          | can't see existing users until you create an account.    
+          | can't see existing users until you 
+          a(href="/create-account") create your account. 
       block posts
         if post_list
           div.posts-container

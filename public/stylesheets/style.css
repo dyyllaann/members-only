@@ -162,21 +162,19 @@ h2.logo-subtext {
 .content {
   display: flex;
   flex-direction: column;
-  padding: 50px;
   margin: 0 auto;
-    /* display: flex; */
-    /* flex-direction: row; */
-    justify-content: center;
+  justify-content: center;
 }
 
 /* GREETING */
-/* .greeting {
+.greeting {
   display: block;
-  margin: 10px;
-} */
+  margin: 10px 0;
+}
 
 /* POST */
 .post-container {
+  margin: 20px auto;
   align-self: center;
   width: 490px;
 }
@@ -186,7 +184,7 @@ h2.logo-subtext {
   word-break: break-all;
 }
 
-.post-input:focus {
+/* .post-input:focus {
   height: 490px;
   transition: height 5s;
   background: linear-gradient(to bottom, #69e0cd, #5e0eab);
@@ -202,7 +200,7 @@ h2.logo-subtext {
   text-align: center; 
   outline: none;
   border: none;
-}
+} */
 
 /* .post-input:focus::placeholder {
   color: transparent;
