@@ -1,6 +1,7 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 // Auth & encryption dependencies
 const bcrypt = require("bcryptjs");
@@ -38,6 +39,7 @@ router.post(
 			} else {
 				// Else, return new user
 				const user = new User({
+					_id: new mongoose.Types.ObjectId(),
 					firstName: req.body.firstName,
 					lastName: req.body.lastName,
 					username: req.body.username,

@@ -30,6 +30,7 @@ router.post(
 	"/post",
 	(req, res, next) => {
     const message = new Post({
+      user: req.user,
       message: req.body.message,
     }).save((err) => {
       if (err) {
