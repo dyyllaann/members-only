@@ -11,5 +11,9 @@ var UserSchema = new Schema({
 	member: { type: Boolean, required: false },
 });
 
+UserSchema.virtual("initials").get(function () {
+	return (this.firstName[0] + this.lastName[0])
+});
+
 //Export model
 module.exports = mongoose.model("User", UserSchema);

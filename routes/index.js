@@ -25,6 +25,16 @@ router.post(
 	})
 );
 
+/* POST logout */
+router.get("/logout", function (req, res, next) {
+	req.logout(function (err) {
+		if (err) {
+			return next(err);
+		}
+		res.redirect("/");
+	});
+});
+
 /* POST post (message) */
 router.post(
 	"/post",
