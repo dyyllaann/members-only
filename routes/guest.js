@@ -12,7 +12,7 @@ router.get('/guest', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.render("guest", { user: 'Guest', title: "Members Only", post_list: list_posts });
+      res.render("guest", { post_list: list_posts });
     });
 });
 

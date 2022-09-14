@@ -8,6 +8,7 @@ block content
           var toggleVisible = (el, className) => el.classList.toggle(className);
         div.app-bar--left
           div.logo-icon
+            a(href="/") h
         div.app-bar--center
         div.app-bar--right 
           div.controls
@@ -31,34 +32,3 @@ block content
               div.post
                 div.post-content
                   p.post-message #{post.message}
-                //- div.post-details
-                //-   p User: #{post.user}
-                //-   p #{post.timestamp_formatted}
-  //- else
-  //-   block landing-page
-  //-     div.landing-page
-  //-       block logo 
-  //-         div.logo-container
-  //-           h1.logo HushBook
-  //-           h2.logo-subtext Connect anonymously, share secrets, and make new friends.
-  //-       block login
-  //-         div.login-container
-  //-           div.login-form
-  //-             form(action="/login" method="POST")
-  //-               input.login-input(type="text", name="username" placeholder="Username or email")
-  //-               br
-  //-               input.login-input(type="password", name="password" placeholder="Password")
-  //-               br
-  //-               input.btn.login-btn(type="submit" value="Log In")
-  //-               br 
-
-  //-           div.login-bottom
-  //-             a(href="/forgot-password") Forgot password?
-  //-             p or
-  //-             a(href="/guest") Sign in as guest
-
-  //-           div.login-divider 
-
-  //-           div.login_new-account
-  //-             div.btn.login_new-account-btn
-  //-               a(href="/create-account") Create new account 
