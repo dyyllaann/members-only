@@ -27,8 +27,9 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-var loginRouter = require("./routes/login");
+// var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
+var guestRouter = require("./routes/guest");
 // var usersRouter = require("./routes/users");
 var createAccountRouter = require("./routes/createAccount");
 
@@ -87,6 +88,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", indexRouter);
 // app.use("/users", usersRouter);
+app.use("/guest", guestRouter);
 app.use("/create-account", createAccountRouter);
 
 // catch 404 and forward to error handler

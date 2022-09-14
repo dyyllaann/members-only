@@ -16,6 +16,18 @@ router.get('/', (req, res, next) => {
     });
 });
 
+/* GET guest page. */
+router.get('/guest', (req, res, next) => {
+  Post.find()
+    .sort({ timestamp: -1 })
+    .exec(function (err, list_posts) {
+      if (err) {
+        return next(err);
+      }
+      res.render("guest", { user: 'Guest', title: "Members Only", post_list: list_posts });
+    });
+});
+
 /* POST login */
 router.post(
 	"/login",
