@@ -19,8 +19,6 @@ const bcrypt = require("bcryptjs");
 // DB dependencies
 var mongoose = require("mongoose");
 
-// const port = process.env.PORT || 5000;
-
 // mongo obfuscation
 // require("dotenv").config({ path: "./config.env" });
 // const dbo = require("./db/conn");
@@ -31,7 +29,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+// var usersRouter = require("./routes/users");
 var createAccountRouter = require("./routes/createAccount");
 
 passport.use(
@@ -76,15 +74,6 @@ app.use(function (req, res, next) {
 	next();
 });
 
-// // connect to db
-// app.listen(port, () => {
-// 	// perform a database connection when server starts
-// 	dbo.connectToServer(function (err) {
-// 		if (err) console.error(err);
-// 	});
-// 	console.log(`Server is running on port: ${port}`);
-// });
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -92,13 +81,12 @@ app.set("view engine", "jade");
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+// app.use("/users", usersRouter);
 app.use("/create-account", createAccountRouter);
 
 // catch 404 and forward to error handler
