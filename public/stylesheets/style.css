@@ -163,6 +163,52 @@ h2.logo-subtext {
   text-align: center;
 }
 
+.color-choice-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.color-choice {
+  width: 60px;
+  height: 60px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid gray;
+  border-radius: 8px;
+}
+
+.gradient-0 {
+  background: linear-gradient(to bottom, #a790c1, #c9e6b9);
+}
+
+.gradient-1 {
+  background: linear-gradient(to bottom, #69e0cd, #5e0eab);
+}
+
+.gradient-2 {
+  background: linear-gradient(to bottom, #d76214, #660bec);
+}
+
+.gradient-3 {
+  background: linear-gradient(to bottom, #2ca4c7, #dbded1);
+}
+
+.gradient-4 {
+  background: linear-gradient(to bottom, #f16328, #920b5b);
+}
+
+.gradient-5 {
+  background: linear-gradient(to bottom, #a46d5b, #f36670);
+}
+
+.gradient-6 {
+  background: linear-gradient(to bottom, #ed0025, #70daca);
+}
+
+.gradient-7 {
+  background: linear-gradient(to bottom, #85cdde, #51f95e);
+}
+
 /* CONTENT */
 .content {
   display: flex;
@@ -192,8 +238,6 @@ h2.logo-subtext {
 /* .post-input:focus {
   height: 490px;
   transition: height 5s;
-  background: linear-gradient(to bottom, #69e0cd, #5e0eab);
-  background: linear-gradient(to bottom, #a790c1, #c9e6b9);
   background: linear-gradient(to bottom, #d76214, #660bec);
   background: linear-gradient(to bottom, #2ca4c7, #dbded1);
   background: linear-gradient(to bottom, #f16328, #920b5b);
