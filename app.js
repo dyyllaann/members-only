@@ -2,6 +2,8 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 const cors = require("cors");
+const compression = require("compression");
+const helmet = require("helmet");
 
 // Unused dependencies
 var cookieParser = require("cookie-parser");
@@ -15,14 +17,14 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
+const dotenv = require("dotenv").config();
 
 // DB dependencies
 var mongoose = require("mongoose");
 
 // mongo obfuscation
-// require("dotenv").config({ path: "./config.env" });
 // const dbo = require("./db/conn");
-const mongoDB = "mongodb+srv://admin:pass@cluster0.ie1fhym.mongodb.net/members_only?retryWrites=true&w=majority";
+const mongoDB = process.env.ATLAS_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -30,7 +32,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
 var guestRouter = require("./routes/guest");
-// var usersRouter = require("./routes/users");
 var createAccountRouter = require("./routes/createAccount");
 
 passport.use(
@@ -65,6 +66,9 @@ passport.deserializeUser(function (id, done) {
 
 var app = express();
 
+app.use(compression());
+app.use(helmet());
+
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -87,7 +91,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", indexRouter);
-// app.use("/users", usersRouter);
 app.use("/guest", guestRouter);
 app.use("/create-account", createAccountRouter);
 
