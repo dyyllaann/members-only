@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
+const { body, check, validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
 // Auth & encryption dependencies
@@ -15,8 +15,24 @@ router.get('/', function(req, res) {
 });
 
 // POST create account.
-router.post(
-	"/",
+router.post("/", [
+	// Validate and sanitize fields.
+	body("firstName", "First name must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("lastName", "Last name must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("username", "Username must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("password", "Password must not be empty")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
 	check("password").exists(),
 	check(
 		"passwordConfirm",
@@ -24,6 +40,8 @@ router.post(
 	)
 		.exists()
 		.custom((value, { req }) => value === req.body.password),
+
+
 	(req, res, next) => {
 		// Check for validation errors
 		const errors = validationResult(req);
@@ -40,6 +58,10 @@ router.post(
 				// Else, return new user
 				const user = new User({
 					_id: new mongoose.Types.ObjectId(),
+					// firstName: check('firstName').escape().trim().run(req),
+					// lastName: check('lastName').escape().trim().run(req),
+					// username: check('username').escape().trim().run(req),
+					// password: hashedPassword,
 					firstName: req.body.firstName,
 					lastName: req.body.lastName,
 					username: req.body.username,
@@ -52,7 +74,7 @@ router.post(
 				});
 			}
 		});
-	}
-);
+	},
+]);
 
 module.exports = router;

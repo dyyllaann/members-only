@@ -1,8 +1,9 @@
 // Dependencies
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const passport = require("passport");
-var Post = require("../models/post");
+const Post = require("../models/post");
+const { body } = require('express-validator');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -50,7 +51,9 @@ router.get("/logout", function (req, res, next) {
 
 /* POST post (message) */
 router.post(
-	"/post",
+	"/post", [
+  // Validate and sanitize message
+  body('message', 'Message must not be empty.').trim().isLength({ min: 1 }).escape(),
 	(req, res, next) => {
     const message = new Post({
       user: req.user,
@@ -61,7 +64,7 @@ router.post(
       }
       res.redirect("/");
     });
-	}
+	}]
 );
 
 /* GET forgot password page. */
