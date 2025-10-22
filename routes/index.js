@@ -6,28 +6,29 @@ const Post = require("../models/post");
 const { body } = require('express-validator');
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
-  Post.find()
-    .sort({ timestamp: -1 })
-    .populate("user")
-    .exec(function (err, list_posts) {
-      if (err) {
-        return next(err);
-      }
-      res.render("index", { user: req.user, title: "Members Only", post_list: list_posts });
-    });
+router.get('/', async (req, res, next) => {
+  try {
+    const list_posts = await Post.findWithUser();
+    // Sort by timestamp in descending order (newest first)
+    list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    res.render("index", { user: req.user, title: "DubsList", post_list: list_posts });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /* GET guest page. */
-router.get('/guest', (req, res, next) => {
-  Post.find()
-    .sort({ timestamp: -1 })
-    .exec(function (err, list_posts) {
-      if (err) {
-        return next(err);
-      }
-      res.render("guest", { user: 'Guest', title: "Members Only", post_list: list_posts });
-    });
+router.get('/guest', async (req, res, next) => {
+  try {
+    const list_posts = await Post.find();
+    // Sort by timestamp in descending order (newest first)
+    list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    res.render("guest", { user: 'Guest', title: "DubsList", post_list: list_posts });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /* POST login */
@@ -54,16 +55,17 @@ router.post(
 	"/post", [
   // Validate and sanitize message
   body('message', 'Message must not be empty.').trim().isLength({ min: 1 }).escape(),
-	(req, res, next) => {
-    const message = new Post({
-      user: req.user,
-      message: req.body.message,
-    }).save((err) => {
-      if (err) {
-        return next(err);
-      }
+	async (req, res, next) => {
+    try {
+      const message = new Post({
+        user: req.user._id,
+        message: req.body.message,
+      });
+      await message.save();
       res.redirect("/");
-    });
+    } catch (err) {
+      return next(err);
+    }
 	}]
 );
 

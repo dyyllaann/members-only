@@ -7,7 +7,7 @@ var Post = require("../models/post");
 /* GET guest page. */
 router.get('/guest', (req, res, next) => {
   Post.find()
-    .sort({ timestamp: -1 })
+    // .sort({ timestamp: -1 })
     .exec(function (err, list_posts) {
       if (err) {
         return next(err);

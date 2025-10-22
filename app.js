@@ -20,14 +20,7 @@ const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv").config();
 
 // DB dependencies
-var mongoose = require("mongoose");
-
-// mongo obfuscation
-// const dbo = require("./db/conn");
-const mongoDB = process.env.ATLAS_URI;
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+const dbo = require("./db/conn");
 
 // var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
@@ -35,11 +28,9 @@ var guestRouter = require("./routes/guest");
 var createAccountRouter = require("./routes/createAccount");
 
 passport.use(
-	new LocalStrategy((username, password, done) => {
-		User.findOne({ username: username }, (err, user) => {
-			if (err) {
-				return done(err);
-			}
+	new LocalStrategy(async (username, password, done) => {
+		try {
+			const user = await User.findByUsername(username);
 			if (!user) {
 				return done(null, false, { message: "Incorrect Username" });
 			}
@@ -50,21 +41,35 @@ passport.use(
 					return done(null, false, { message: "Incorrect password" });
 				}
 			});
-		});
+		} catch (err) {
+			return done(err);
+		}
 	})
 );
 
 passport.serializeUser(function (user, done) {
-	done(null, user.id);
+	done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-	User.findById(id, function (err, user) {
-		done(err, user);
-	});
+passport.deserializeUser(async function (id, done) {
+	try {
+		const user = await User.findById(id);
+		done(null, user);
+	} catch (err) {
+		done(err);
+	}
 });
 
 var app = express();
+
+// Initialize MongoDB connection
+dbo.connectToServer(function (err) {
+	if (err) {
+		console.error("Failed to connect to MongoDB:", err);
+		process.exit(1);
+	}
+	console.log("Successfully connected to MongoDB");
+});
 
 app.use(compression());
 app.use(helmet());
