@@ -17,6 +17,10 @@ router.get('/', function(req, res) {
 // POST create account.
 router.post("/", [
 	// Validate and sanitize fields.
+	body("username", "Username must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
 	body("firstName", "First name must not be empty.")
 		.trim()
 		.isLength({ min: 1 })
@@ -25,7 +29,15 @@ router.post("/", [
 		.trim()
 		.isLength({ min: 1 })
 		.escape(),
-	body("username", "Username must not be empty.")
+	// body("college", "College must not be empty.")
+	// 	.trim()
+	// 	.isLength({ min: 1 })
+	// 	.escape(),
+	body("major", "Major must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("graduation", "Graduation year must not be empty.")
 		.trim()
 		.isLength({ min: 1 })
 		.escape(),

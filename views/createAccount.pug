@@ -3,7 +3,7 @@ extends layout
 block content
   div.create-account
     div
-      a(href="/") < hushbook
+      a(href="/") < MembersOnly
     div
       h1 Create your account.
 
@@ -15,15 +15,19 @@ block content
           div.form-group
             input.new-user-input(type="text", name="firstName" placeholder="First Name")
             input.new-user-input(type="text", name="lastName" placeholder="Last Name")
-          div.form-group
+          //- div.form-group
             input.new-user-input(type="text", name="location" placeholder="Location")
+          div.form-group
+            //- input.new-user-input(type="text", name="college" placeholder="College")
+            input.new-user-input(type="text", name="major" placeholder="Major")
+            input.new-user-input(type="number", name="graduation" placeholder="Graduation Year")
           div.form-group
             input.new-user--input(type="text", name="username" placeholder="Username")
           div.form-group
             input.new-user--input(type="password", name="password" placeholder="Password")
           div.form-group
             input.new-user--input(type="password", name="passwordConfirm" placeholder="Confirm Password")
-          div.form-group.color-choice-container
+          //- div.form-group.color-choice-container
             div.color-choice.gradient-0   
             div.color-choice.gradient-1 
             div.color-choice.gradient-2 
