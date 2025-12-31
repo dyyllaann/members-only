@@ -39,11 +39,16 @@ block content
           div.posts-container
             each post in post_list
               div.post
+                div.post-details
+                  p.post-details.username #{post.user.username}
+                  p.post-details.major #{post.user.major} 
                 div.post-content
                   p.post-message #{post.message}
                 div.post-details
-                  p Posted by #{post.user.username}
-                  p #{post.timestamp_formatted}
+                  //- p.post-details.username #{post.user.username}
+                  //- pre= JSON.stringify(post.user, null, 2)
+                  //- p.post-details.graduation #{post.user.graduation}
+                  p.post-details.timestamp #{post.timestamp_formatted}
   else
     block landing-page
       div.landing-page
