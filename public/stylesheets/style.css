@@ -82,6 +82,7 @@ input {
   flex-direction: column;
   justify-content: center;
   width: 50%;
+  margin-right: 60px; /* Add margin between logo and login */
 }
 
 @media only screen and (max-width: 700px) {
@@ -93,12 +94,15 @@ input {
 h1.logo {
   color:#54359C;
   font-size: 4vw;
+  max-font-size: 60px; /* This doesn't work - see below */
+  font-size: clamp(32px, 4vw, 60px); /* Use clamp instead for min/max */
   font-weight: 900;
 }
 
 h2.logo-subtext {
   width: 85%;
   font-weight: 400;
+  font-size: clamp(16px, 2vw, 24px); /* Also constrain subtext size */
 }
 
 /* LOGIN */
