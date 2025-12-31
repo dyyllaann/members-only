@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
     // Sort by timestamp in descending order (newest first)
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
-    res.render("index", { user: req.user, title: "DubsList", post_list: list_posts });
+    res.render("index", { user: req.user, title: "MembersOnly", post_list: list_posts });
   } catch (err) {
     return next(err);
   }
@@ -24,8 +24,8 @@ router.get('/guest', async (req, res, next) => {
     const list_posts = await Post.find();
     // Sort by timestamp in descending order (newest first)
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    
-    res.render("guest", { user: 'Guest', title: "DubsList", post_list: list_posts });
+
+    res.render("guest", { user: 'Guest', title: "MembersOnly - Guest", post_list: list_posts });
   } catch (err) {
     return next(err);
   }

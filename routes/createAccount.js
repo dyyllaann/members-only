@@ -11,7 +11,7 @@ const User = require("../models/user");
 
 /* GET create account page. */
 router.get('/', function(req, res) {
-  res.render('createAccount', { title: 'DubsList - Create Account' });
+  res.render('createAccount', { title: 'MembersOnly - Create Account' });
 });
 
 // POST create account.
