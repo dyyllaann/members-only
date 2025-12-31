@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  if user
+    block appBar
+      div.app-bar              
+        script.
+          var toggleVisible = (el, className) => el.classList.toggle(className);
+        div.app-bar--left
+          div.logo-icon
+            a(href="/") h
+        div.app-bar--center
+        div.app-bar--right 
+          div.controls
+            //- div.control-item
+            //- div.control-item
+            //- div.control-item
+            div.control-item.profile(onclick='toggleVisible(document.querySelector(`div.user-menu`), `hidden`)')
+              span #{user.initials} 
+      block userMenu 
+        div.user-menu.hidden
+          ul 
+            //- li
+            //-   a(href="/account/settings") Account Settings
+            li
+              a(href="/logout") Sign Out
+    div.content
+      block post
+        div.post-container
+          div.post-form
+            form(action="/post" method="POST")
+              div.form-group
+                input.post-input(type="text", name="message" autocomplete="off" placeholder="What's on your mind, #{user.firstName}?")
+              div.form-group
+                input.btn.post-btn(type="submit" value="Post")
+      block posts
+        if post_list
+          div.posts-container
+            each post in post_list
+              div.post
+                div.post-content
+                  p.post-message #{post.message}
+                div.post-details
+                  p Posted by #{post.user.username}
+                  p #{post.timestamp_formatted}
+  else
+    block landing-page
+      div.landing-page
+        block logo 
+          div.logo-container
+            h1.logo DubsList
+            h2.logo-subtext Connect with your University of Washington community.
+        block login
+          div.login-container
+            div.login-form
+              form(action="/login" method="POST")
+                input.login-input(type="text", name="username" placeholder="Username or email")
+                br
+                input.login-input(type="password", name="password" placeholder="Password")
+                br
+                input.btn.login-btn(type="submit" value="Log In")
+                br 
+
+            div.login-bottom
+              a(href="/forgot-password") Forgot password?
+              p or
+              a(href="/guest") Sign in as guest
+
+            div.login-divider 
+
+            div.login_new-account
+              div.btn.login_new-account-btn
+                a(href="/create-account") Create new account 

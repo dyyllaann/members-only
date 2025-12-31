@@ -1,19 +1,59 @@
-var mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
+const dbo = require("../db/conn");
 
-var Schema = mongoose.Schema;
+class User {
+	constructor(userData) {
+		this._id = userData._id || new ObjectId();
+		this.firstName = userData.firstName;
+		this.lastName = userData.lastName;
+		this.username = userData.username;
+		this.password = userData.password;
+		this.member = userData.member || false;
+	}
 
-var UserSchema = new Schema({
-	_id: Schema.Types.ObjectId,
-	firstName: { type: String, required: true },
-	lastName: { type: String, required: true },
-	username: { type: String, required: true, maxLength: 50 },
-	password: { type: String, required: true },
-	member: { type: Boolean, required: false },
-});
+	// Virtual property for initials
+	get initials() {
+		return this.firstName[0] + this.lastName[0];
+	}
 
-UserSchema.virtual("initials").get(function () {
-	return (this.firstName[0] + this.lastName[0])
-});
+	// Save user to database
+	async save() {
+		const db = dbo.getDb();
+		const collection = db.collection("users");
+		
+		if (this._id && await collection.findOne({_id: this._id})) {
+			// Update existing user
+			const { _id, ...updateData } = this;
+			return await collection.updateOne({_id: this._id}, {$set: updateData});
+		} else {
+			// Insert new user
+			return await collection.insertOne(this);
+		}
+	}
 
-//Export model
-module.exports = mongoose.model("User", UserSchema);
+	// Find user by ID
+	static async findById(id) {
+		const db = dbo.getDb();
+		const collection = db.collection("users");
+		const userData = await collection.findOne({_id: new ObjectId(id)});
+		return userData ? new User(userData) : null;
+	}
+
+	// Find user by username
+	static async findByUsername(username) {
+		const db = dbo.getDb();
+		const collection = db.collection("users");
+		const userData = await collection.findOne({username: username});
+		return userData ? new User(userData) : null;
+	}
+
+	// Find one user by criteria
+	static async findOne(criteria) {
+		const db = dbo.getDb();
+		const collection = db.collection("users");
+		const userData = await collection.findOne(criteria);
+		return userData ? new User(userData) : null;
+	}
+}
+
+module.exports = User;
