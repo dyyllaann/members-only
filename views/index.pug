@@ -15,13 +15,12 @@ block content
             //- div.control-item
             //- div.control-item
             //- div.control-item
-            div.control-item.profile(onclick='toggleVisible(document.querySelector(`div.user-menu`), `hidden`)')
-              span #{user.initials} 
+            div.control-item.profile
+              span #{user.initials}
+
       block userMenu 
-        div.user-menu.hidden
+        div.user-menu#user-menu
           ul 
-            //- li
-            //-   a(href="/account/settings") Account Settings
             li
               a(href="/logout") Sign Out
     div.content

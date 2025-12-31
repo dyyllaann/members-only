@@ -1,5 +1,4 @@
 body {
-  width: 100vw;
   margin: 0;
   font: 14px "Montserrat", Helvetica, Arial, sans-serif;
   background-color: #f0f2f5;
@@ -328,6 +327,10 @@ h2.logo-subtext {
   background-color: #e4e6eb;
 }
 
+.control-item:hover {
+  background-color: #d1d3d5;
+}
+
 .logo-icon {
   border-radius: 100%;
   width: 40px;
@@ -356,7 +359,7 @@ h2.logo-subtext {
   align-items: center;
   align-items: center;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 .profile > span {
@@ -371,12 +374,16 @@ h2.logo-subtext {
   position: fixed;
   top: 56px;
   right: 16px;
-  display: block;
+  display: none;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin-bottom: -168px;
   /* box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+.user-menu.visible {
+  display: block;
 }
 
 .user-menu > ul {
