@@ -52,10 +52,10 @@ router.get("/logout", function (req, res, next) {
 
 /* POST post (message) */
 router.post(
-	"/post", [
+    "/post", [
   // Validate and sanitize message
-  body('message', 'Message must not be empty.').trim().isLength({ min: 1 }).escape(),
-	async (req, res, next) => {
+  body('message', 'Message must not be empty.').trim().isLength({ min: 1 }),
+    async (req, res, next) => {
     try {
       const message = new Post({
         user: req.user._id,
@@ -66,7 +66,7 @@ router.post(
     } catch (err) {
       return next(err);
     }
-	}]
+    }]
 );
 
 /* GET forgot password page. */
