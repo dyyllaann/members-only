@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  if user
+    div.profile-container
+      h1 Profile
+      p Welcome, #{user.firstName}!
+  else
+    p Please log in to view your profile.
