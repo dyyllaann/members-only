@@ -28,6 +28,8 @@ block content
         if post_list
           div.posts-container
             each post in post_list
-              div.post
-                div.post-content
+              div.post(data-content-type=post.contentType)
+                div.post-content(class=post.contentType === 'image' ? 'image' : 'text')
                   p.post-message #{post.message}
+                div.post-details
+                  p.post-details.timestamp #{post.timestamp_formatted}

@@ -4,6 +4,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+  // View toggle functionality
+  const viewButtons = document.querySelectorAll('.view-btn');
+  const postsContainer = document.querySelector('.posts-container');
+  
+  viewButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const view = this.dataset.view;
+      
+      // Update active button
+      viewButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update container class
+      postsContainer.className = `posts-container ${view}-view`;
+    });
+  });
+
   // Profile dropdown toggle
   const profileButton = document.querySelector('.control-item.profile');
   const userMenu = document.getElementById('user-menu');

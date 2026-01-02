@@ -258,10 +258,15 @@ h2.logo-subtext {
   color: transparent;
 } */
 
+/* Base post content styles */
 .post-content {
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+}
+
+/* Image posts - grid layout */
+.post-content.image {
   height: 340px;
   width: 340px;
   background: linear-gradient(to bottom, #69e0cd, #5e0eab);
@@ -277,6 +282,31 @@ h2.logo-subtext {
   text-align: center;
   outline: none;
   border: none;
+}
+
+/* Text posts - full width (KEEP ONLY THIS ONE) */
+.post-content.text {
+  width: 100%;
+  height: auto;
+  min-height: 120px;
+  background: white;
+  color: #000;
+  font-size: large;
+  text-align: left;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Base post styles */
+.post {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Post container for text posts - spans full width */
+.post[data-content-type="text"] {
+  grid-column: 1 / -1; /* Span all 3 columns (1040px total) */
 }
 
 .post-message {
@@ -321,8 +351,17 @@ h2.logo-subtext {
   padding-left: 16px;
 }
 
+.app-bar--left,
+.app-bar--right {
+  flex: 0 0 auto; /* Don't grow or shrink */
+  min-width: 48px; /* Ensure minimum width for controls */
+}
+
 .app-bar--center {
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .controls {
@@ -362,6 +401,36 @@ h2.logo-subtext {
   font-weight: 600;
   position: relative;
   top: 3px;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.view-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.view-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.view-btn.active {
+  background-color: rgba(84, 53, 156, 0.1);
 }
 
 .profile {

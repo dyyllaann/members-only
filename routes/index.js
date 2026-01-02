@@ -8,11 +8,23 @@ const { body } = require('express-validator');
 /* GET home page. */
 router.get('/', async (req, res, next) => {
   try {
-    const list_posts = await Post.findWithUser();
+    const contentType = req.query.view || 'text';
+    const criteria = {};
+
+    if (contentType && [ 'image', 'text' ].includes(contentType)) {
+      criteria.contentType = contentType;
+    }
+
+    const list_posts = await Post.findWithUser(criteria);
     // Sort by timestamp in descending order (newest first)
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
-    res.render("index", { user: req.user, title: "MembersOnly", post_list: list_posts });
+    res.render("index", { 
+      user: req.user, 
+      title: "MembersOnly", 
+      post_list: list_posts,
+      activeView: contentType || 'text' 
+    });
   } catch (err) {
     return next(err);
   }

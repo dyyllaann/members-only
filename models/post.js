@@ -7,6 +7,7 @@ class Post {
 		this._id = postData._id || new ObjectId();
 		this.user = postData.user;
 		this.message = postData.message;
+		this.contentType = postData.contentType || 'text';
 		this.postImage = postData.postImage || null;
 		this.timestamp = postData.timestamp || new Date();
 		this.private = postData.private !== undefined ? postData.private : true;
@@ -101,7 +102,7 @@ class Post {
 		
 		return posts.map(postData => {
 			const post = new Post(postData);
-			post.user = postData.user; // Keep the populated user data
+			post.user = postData.user;
 			return post;
 		});
 	}
