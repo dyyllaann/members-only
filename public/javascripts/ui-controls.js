@@ -38,4 +38,29 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Like button functionality
+  document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', async function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postId;
+      
+      try {
+        const response = await fetch(`/post/${postId}/like`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        // Update UI
+        this.querySelector('.like-count').textContent = data.likeCount;
+        this.classList.toggle('liked', data.liked);
+      } catch (error) {
+        console.error('Error liking post:', error);
+      }
+    });
+  });
 });

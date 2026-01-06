@@ -9,6 +9,9 @@ class User {
 		this.username = userData.username;
 		this.password = userData.password;
 		this.member = userData.member || false;
+		this.likedPosts = Array.isArray(userData.likedPosts)
+			? userData.likedPosts.map(id => id instanceof ObjectId ? id : new ObjectId(id))
+			: [];
 	}
 
 	// Virtual property for initials

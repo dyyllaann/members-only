@@ -81,6 +81,25 @@ router.post(
     }]
 );
 
+/* POST like/unlike a post */
+router.post('/post/:id/like', async (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    
+    const likeCount = await post.toggleLike(req.user._id);
+    res.json({ likeCount, liked: post.hasUserLiked(req.user._id) });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /* GET forgot password page. */
 router.get('/forgot-password', (req, res) => res.render("forgotPassword", { message: "Bummer, dude." }));
 

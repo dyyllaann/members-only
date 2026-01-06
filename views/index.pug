@@ -33,7 +33,7 @@ block content
           div.post-form
             form(action="/post" method="POST")
               div.form-group
-                input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's on your mind, ${user.firstName}?`)
+                input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
               div.form-group
                 input.btn.post-btn(type="submit" value="Post")
       block posts
@@ -45,14 +45,23 @@ block content
         if post_list
           div.posts-container
             each post in post_list
-              div.post(data-content-type=post.contentType)
-                div.post-details
-                  p.post-details.username #{post.user.username}
-                  p.post-details.major #{post.user.major} 
+              div.post(data-content-type=post.contentType data-post-id=post._id)
+                div.post-header
+                  div.post-author
+                    span.username #{post.user.username}
+                    span.major #{post.user.major}
+                  span.timestamp #{post.timestamp_formatted}
                 div.post-content(class=post.contentType === 'image' ? 'image' : 'text')
                   p.post-message #{post.message}
-                div.post-details
-                  p.post-details.timestamp #{post.timestamp_formatted}
+                div.post-actions
+                  button.like-btn(
+                    class=post.hasUserLiked(user._id) ? 'liked' : ''
+                    data-post-id=post._id
+                  )
+                    span.like-icon
+                      svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                        path(d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z")
+                    span.like-count #{post.likeCount || 0}
   else
     block landing-page
       div.landing-page

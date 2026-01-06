@@ -323,7 +323,7 @@ h2.logo-subtext {
   row-gap: 20px;
 }
 
-.post-details > p {
+/* .post-details > p {
   margin-block-start: 0.75em;
   margin-block-end: 0.75em;
 }
@@ -336,6 +336,32 @@ h2.logo-subtext {
   margin-top: -10px;
   font-style: italic;
   color: #555;
+} */
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.post-author {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: 600;
+}
+
+.major {
+  font-size: 0.9em;
+  color: #657786;
+}
+
+.timestamp {
+  font-size: 1em;
+  color: #657786;
 }
 
 /* APP BAR */
@@ -491,4 +517,58 @@ h2.logo-subtext {
 
 .hidden {
   display: none;
+}
+
+/* LIKE IMPLEMENTATION */
+.post-actions {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.like-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.like-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.like-btn.liked .like-icon {
+  color: #e0245e;
+}
+
+.like-icon {
+  /* font-size: 18px; */
+  color: #657786;
+}
+
+.like-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #657786;
+}
+
+.like-btn.liked .like-icon svg {
+  fill: #e0245e;
+  stroke: #e0245e;
+}
+
+.like-btn:hover .like-icon svg {
+  stroke: #e0245e;
+}
+
+.like-count {
+  color: #657786;
+  font-weight: 500;
 }

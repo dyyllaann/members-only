@@ -12,11 +12,26 @@ class Post {
 		this.timestamp = postData.timestamp || new Date();
 		this.private = postData.private !== undefined ? postData.private : true;
 		this.allowedUsers = postData.allowedUsers || [];
+		this.likes = Array.isArray(postData.likes)
+			? postData.likes.map(id => id instanceof ObjectId ? id : new ObjectId(id))
+			: [];
+		this.likeCount = postData.likeCount || 0;
 	}
 
 	// Virtual property for formatted timestamp
 	get timestamp_formatted() {
-		return DateTime.fromJSDate(this.timestamp).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
+		const time = DateTime.fromJSDate(this.timestamp);
+		const diff = DateTime.now().diff(time, ['days', 'hours', 'minutes']).toObject();
+		
+		if (diff.days >= 1) {
+			return time.toLocaleString(DateTime.DATE_MED);  // "Jan 5, 2026"
+		} else if (diff.hours >= 1) {
+			return `${Math.floor(diff.hours)}h ago`;         // "3h ago"
+		} else if (diff.minutes >= 1) {
+			return `${Math.floor(diff.minutes)}m ago`;       // "45m ago"
+		} else {
+			return 'Just now';
+		}
 	}
 
 	// Save post to database
@@ -105,6 +120,55 @@ class Post {
 			post.user = postData.user;
 			return post;
 		});
+	}
+	
+	// Toggle like
+	async toggleLike(userId) {
+		const db = dbo.getDb();
+		const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);
+
+		const userIndex = this.likes.findIndex(id => id.equals(userObjectId));
+  
+		if (userIndex > -1) {
+			// Unlike
+			this.likes.splice(userIndex, 1);
+			this.likeCount = Math.max(0, this.likeCount - 1);
+		} else {
+			// Like
+			this.likes.push(userObjectId);
+			this.likeCount = (this.likeCount || 0) + 1;
+		}
+		
+		await db.collection("posts").updateOne(
+			{ _id: this._id },
+			{ 
+			$set: { 
+				likes: this.likes,
+				likeCount: this.likeCount 
+			}
+			}
+		);
+		
+		// Update user's likedPosts
+		if (userIndex > -1) {
+			await db.collection("users").updateOne(
+			{ _id: userObjectId },
+			{ $pull: { likedPosts: this._id } }
+			);
+		} else {
+			await db.collection("users").updateOne(
+			{ _id: userObjectId },
+			{ $addToSet: { likedPosts: this._id } }
+			);
+		}
+		
+		return this.likeCount;
+	}
+
+	// Check if user has liked this post
+	hasUserLiked(userId) {
+		const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);
+		return this.likes.some(id => id.equals(userObjectId));
 	}
 }
 
