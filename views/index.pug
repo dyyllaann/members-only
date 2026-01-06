@@ -13,7 +13,7 @@ block content
           div.view-toggle
             a.view-btn(href="/?view=text" class=activeView === 'text' ? 'active' : '')
               img(src="/resources/contentType-text.png" alt="Conversations")
-            a.view-btn(href="/?view=image" class=activeView === 'image' ? 'active' : '')
+            //- a.view-btn(href="/?view=image" class=activeView === 'image' ? 'active' : '')
               img(src="/resources/contentType-image.png" alt="Grid")
         div.app-bar--right 
           div.controls
@@ -29,7 +29,7 @@ block content
               a(href="/logout") Sign Out
     div.content
       block post
-        div.post-container
+        div.create-post
           div.post-form
             form(action="/post" method="POST")
               div.form-group
@@ -37,11 +37,6 @@ block content
               div.form-group
                 input.btn.post-btn(type="submit" value="Post")
       block posts
-
-        // View raw JSON 
-        //- p Total posts: #{post_list ? post_list.length : 'undefined'}
-        //- pre= JSON.stringify(post_list, null, 2)
-
         if post_list
           div.posts-container
             each post in post_list
@@ -51,7 +46,7 @@ block content
                     span.username #{post.user.username}
                     span.major #{post.user.major}
                   span.timestamp #{post.timestamp_formatted}
-                div.post-content(class=post.contentType === 'image' ? 'image' : 'text')
+                div.post-content
                   p.post-message #{post.message}
                 div.post-actions
                   button.like-btn(

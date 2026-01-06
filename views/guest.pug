@@ -29,7 +29,7 @@ block content
           div.posts-container
             each post in post_list
               div.post(data-content-type=post.contentType)
-                div.post-content(class=post.contentType === 'image' ? 'image' : 'text')
+                div.post-content
                   p.post-message #{post.message}
                 div.post-details
-                  p.post-details.timestamp #{post.timestamp_formatted}
+                  p.post-details.timestamp.text-muted #{post.timestamp_formatted}
