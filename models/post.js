@@ -16,6 +16,7 @@ class Post {
 			? postData.likes.map(id => id instanceof ObjectId ? id : new ObjectId(id))
 			: [];
 		this.likeCount = postData.likeCount || 0;
+		this.commentCount = postData.commentCount || 0;
 	}
 
 	// Virtual property for formatted timestamp
@@ -169,6 +170,15 @@ class Post {
 	hasUserLiked(userId) {
 		const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);
 		return this.likes.some(id => id.equals(userObjectId));
+	}
+
+	// Update comment count
+	static async incrementCommentCount(postId) {
+		const db = dbo.getDb();
+		await db.collection("posts").updateOne(
+			{ _id: postId },
+			{ $inc: { commentCount: 1 } }
+		)
 	}
 }
 

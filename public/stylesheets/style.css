@@ -314,6 +314,7 @@ h2.logo-subtext {
 .post {
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .post-message {
@@ -332,14 +333,18 @@ h2.logo-subtext {
   justify-content: center;
 }
 
-.post-header {
+.post-header, .comment-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
 
-.post-author {
+.comment {
+  margin-top: 12px;
+}
+
+.post-author, .comment-author {
   display: flex;
   flex-direction: column;
 }
@@ -518,7 +523,7 @@ h2.logo-subtext {
   padding-bottom: 12px;
 }
 
-.like-btn {
+.like-btn, .comment-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -531,7 +536,7 @@ h2.logo-subtext {
   font-size: 14px;
 }
 
-.like-btn:hover {
+.like-btn:hover, .comment-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -539,16 +544,19 @@ h2.logo-subtext {
   color: #e0245e;
 }
 
-.like-icon {
+.like-icon, .comment-icon {
   /* font-size: 18px; */
   color: #657786;
 }
 
-.like-icon svg {
+.comment-icon {
+  transform: translateY(3px);
+}
+
+.like-icon, .comment-icon svg {
   width: 20px;
   height: 20px;
   fill: none;
-  stroke: #657786;
 }
 
 .like-btn.liked .like-icon svg {
@@ -563,4 +571,75 @@ h2.logo-subtext {
 .like-count {
   color: #657786;
   font-weight: 500;
+}
+
+/* COMMENT INPUT */
+.comment-input-container {
+  padding: 0px;
+  /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
+}
+
+.comment-input-container.hidden {
+  display: none;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column; /* Stack vertically instead of horizontal */
+  gap: 10px;
+}
+
+.comment-input {
+  width: 100%; /* Full width */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  font-size: 14px;
+  outline: none;
+  margin-top: 0;
+}
+
+.comment-submit-btn {
+  align-self: flex-end;
+  padding: 8px 16px; /* Reduced from 10px 20px */
+  width: auto; /* Only as wide as content needs */
+  background-color: #54359C;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.comment-input:focus {
+  border-color: #54359C;
+}
+
+.comment-submit-btn:hover {
+  background-color: #432b7d;
+}
+
+.comment-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* COMMENTS LIST */
+.comments-list {
+  padding-bottom: 12px;
+}
+
+.comment-text {
+  width: 600px; /* Fixed width, not max-width */
+  max-width: calc(100vw - 40px); /* But don't overflow on mobile */
+  height: auto;
+  background: rgba(0, 0, 0, 0.025);
+  color: #000;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  padding: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }

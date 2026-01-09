@@ -4,6 +4,8 @@ const router = express.Router();
 const passport = require("passport");
 const Post = require("../models/post");
 const { body } = require('express-validator');
+const dbo = require("../db/conn");  // ← Add this
+const { ObjectId } = require("mongodb");  // ← Add this
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -97,6 +99,97 @@ router.post('/post/:id/like', async (req, res, next) => {
     res.json({ likeCount, liked: post.hasUserLiked(req.user._id) });
   } catch (err) {
     return next(err);
+  }
+});
+
+/* POST comment on a post */
+router.post('/post/:postId/comment', async (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ success: false, error: 'Not authenticated' });
+  }
+
+  try {
+    const Comment = require('../models/comment');
+    const User = require('../models/user');
+    const postId = req.params.postId;
+    const { text } = req.body;
+    
+    if (!text || !text.trim()) {
+      return res.status(400).json({ success: false, error: 'Comment text required' });
+    }
+    
+    // Create new comment
+    const comment = new Comment({
+      postId: postId,
+      userId: req.user._id,
+      text: text.trim()
+    });
+    
+    await comment.save();
+    
+    // Increment post comment count
+    const db = dbo.getDb();
+    await db.collection('posts').updateOne(
+      { _id: new ObjectId(postId) },
+      { $inc: { commentCount: 1 } }
+    );
+    
+    // Get updated comment count
+    const post = await db.collection('posts').findOne({ _id: new ObjectId(postId) });
+    
+    // Get user data for the response
+    const user = await User.findById(req.user._id);
+    
+    res.json({ 
+      success: true, 
+      commentCount: post.commentCount || 1,
+      comment: {  // ← ADD THIS ENTIRE OBJECT
+        _id: comment._id,
+        text: comment.text,
+        timestamp_formatted: comment.timestamp_formatted,
+        user: {
+          username: user.username,
+          firstName: user.firstName,
+          major: user.major
+        }
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error posting comment:', error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+});
+
+/* GET comments for a post */
+router.get('/post/:postId/comments', async (req, res, next) => {
+  try {
+    const Comment = require('../models/comment');
+    const User = require('../models/user');
+    
+    const comments = await Comment.findByPostId(req.params.postId);
+    
+    // Populate user data for each comment
+    const commentsWithUsers = await Promise.all(
+      comments.map(async (comment) => {
+        const user = await User.findById(comment.userId);
+        return {
+          _id: comment._id,
+          text: comment.text,
+          timestamp_formatted: comment.timestamp_formatted,
+          user: {
+            username: user.username,
+            firstName: user.firstName,
+            major: user.major
+          }
+        };
+      })
+    );
+    
+    res.json(commentsWithUsers);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Failed to load comments' });
   }
 });
 
