@@ -142,17 +142,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = await response.json();
         
         if (data.success) {
-          console.log('POST response:', data);
-          console.log('Comment to add:', data.comment);
+          // console.log('POST response:', data);
+          // console.log('Comment to add:', data.comment);
           
           input.value = '';
           updateCommentCount(postId, data.commentCount);
           
           const post = document.querySelector(`[data-post-id="${postId}"]`);
-          console.log('Found post:', post);
+          // console.log('Found post:', post);
           
           addCommentToDOM(post, data.comment);
-          console.log('Comment should be added now');
+          // console.log('Comment should be added now');
         }
       } catch (error) {
         console.error('Error posting comment:', error);

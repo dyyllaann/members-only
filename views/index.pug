@@ -38,7 +38,7 @@ block content
         if post_list
           div.posts-container
             each post in post_list
-              - console.log(JSON.stringify(post))
+              //- - console.log(JSON.stringify(post))
               div.post(data-content-type=post.contentType data-post-id=post._id)
                 div.post-header
                   div.post-author
