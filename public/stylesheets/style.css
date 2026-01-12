@@ -265,7 +265,6 @@ h2.logo-subtext {
 
 /* POST FEED */
 
-/* Base post content styles */
 .post-content {
   display: flex;
   justify-content: center;
@@ -351,6 +350,7 @@ h2.logo-subtext {
 
 .username {
   font-weight: 600;
+  text-decoration: none;
 }
 
 .major {

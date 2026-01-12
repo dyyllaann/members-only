@@ -1,0 +1,35 @@
+.profile-section, .profile-hero {
+    background-color: white;
+    display: flex;
+    /* justify-content: center; */
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    border-radius: 8px;
+    flex-direction: column;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.profile-hero-header {
+    /* font: 2rem "Montserrat", Helvetica, Arial, sans-serif; */
+    font-size: 2rem;
+}
+
+.profile-hero-name {
+    font-size: 1.1rem; 
+}
+
+.profile-hero-location {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.profile-section-header {
+    text-align: left;
+    font: 1.5rem "Montserrat", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    display: block;
+}
+
+.profile-section p {
+    padding-top: 2px;
+}

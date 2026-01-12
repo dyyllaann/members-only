@@ -21,8 +21,8 @@ block content
       block userMenu 
         div.user-menu#user-menu
           ul 
-            //- li 
-              a(href="/profile") Profile
+            li 
+              a(href=`/profile/${user.username}`) Profile
             li
               a(href="/logout") Sign Out
     div.content
@@ -42,7 +42,7 @@ block content
               div.post(data-content-type=post.contentType data-post-id=post._id)
                 div.post-header
                   div.post-author
-                    span.username #{post.user.username}
+                    a.username(href=`/profile/${post.user.username}`) #{post.user.username}
                     span.major #{post.user.major}
                   span.timestamp #{post.timestamp_formatted}
                 div.post-content
