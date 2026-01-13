@@ -184,7 +184,7 @@ h2.logo-subtext {
 }
 
 .gradient-0 {
-  background: linear-gradient(to bottom, #a790c1, #c9e6b9);
+  background: linear-gradient(to bottom, #32006e, #ff0aff);
 }
 
 .gradient-1 {
@@ -192,7 +192,7 @@ h2.logo-subtext {
 }
 
 .gradient-2 {
-  background: linear-gradient(to bottom, #d76214, #660bec);
+  background: linear-gradient(to bottom, #08ccfd, #660bec);
 }
 
 .gradient-3 {
@@ -200,7 +200,7 @@ h2.logo-subtext {
 }
 
 .gradient-4 {
-  background: linear-gradient(to bottom, #f16328, #920b5b);
+  background: linear-gradient(to bottom, #f16328, #ffbf35);
 }
 
 .gradient-5 {
@@ -208,7 +208,7 @@ h2.logo-subtext {
 }
 
 .gradient-6 {
-  background: linear-gradient(to bottom, #ed0025, #70daca);
+  background: linear-gradient(to bottom, #ed0025, #fc62bc);
 }
 
 .gradient-7 {
@@ -334,13 +334,53 @@ h2.logo-subtext {
 
 .post-header, .comment-header {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   margin-bottom: 8px;
 }
 
 .comment {
   margin-top: 12px;
+}
+
+.post-icon {
+  border-radius: 20px; /* 50% of 40px - more precise than percentage */
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  margin-right: 12px;
+  overflow: hidden;
+  display: flex;
+  transform: translateZ(0); /* Force GPU acceleration */
+  -webkit-backface-visibility: hidden; /* Improve rendering on webkit */
+  backface-visibility: hidden;
+  will-change: transform; /* Optimize for animations/transforms */
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1); /* Subtle shadow smooths jagged edges */
+}
+
+.post-icon img,
+.post-icon svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  shape-rendering: geometricPrecision; /* Better SVG rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.post-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* Remove bottom gap from inline image */
+}
+
+.post-icon a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  line-height: 0; /* Remove extra spacing from inline elements */
 }
 
 .post-author, .comment-author {
@@ -359,6 +399,7 @@ h2.logo-subtext {
 
 .timestamp {
   font-size: 1em;
+  margin-left: auto;
 }
 
 /* APP BAR */

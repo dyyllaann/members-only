@@ -11,6 +11,8 @@ class User {
 		this.major = userData.major;
 		this.graduation = userData.graduation;
 		this.location = userData.location;
+		this.icon = userData.icon;
+		this.colorPreference = userData.colorPreference;
 		this.member = userData.member || false;
 		this.likedPosts = Array.isArray(userData.likedPosts)
 			? userData.likedPosts.map(id => id instanceof ObjectId ? id : new ObjectId(id))

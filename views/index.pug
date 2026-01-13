@@ -16,7 +16,10 @@ block content
         div.app-bar--right 
           div.controls
             div.control-item.profile
-              span #{user.initials}
+              //- span #{user.initials}
+              div.post-icon(class=`gradient-${user.colorPreference}`)
+               a(href=`/profile/${user.username}`)
+                img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
 
       block userMenu 
         div.user-menu#user-menu
@@ -41,6 +44,10 @@ block content
               //- - console.log(JSON.stringify(post))
               div.post(data-content-type=post.contentType data-post-id=post._id)
                 div.post-header
+                  //- - var safeColor = (post.user.colorPreference || '').replace(/[^a-zA-Z0-9\-_]/g, '')
+                  div.post-icon(class=`gradient-${post.user.colorPreference}`)
+                    a(href=`/profile/${post.user.username}`)
+                      img(src=`/resources/icons/${post.user.icon}`, alt=`${post.user.username}'s profile picture`)
                   div.post-author
                     a.username(href=`/profile/${post.user.username}`) #{post.user.username}
                     span.major #{post.user.major}
