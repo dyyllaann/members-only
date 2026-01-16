@@ -18,7 +18,8 @@ block content
             div.control-item.profile
               //- span #{user.initials}
               div.post-icon(class=`gradient-${user.colorPreference}`)
-               a(href=`/profile/${user.username}`)
+                img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
+              //-  a(href=`/profile/${user.username}`)
                 img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
 
       block userMenu 
@@ -30,7 +31,7 @@ block content
               a(href="/logout") Sign Out
     div.content#feed-content
       div.sidebar-tags
-          h3.sidebar-header Tags:
+          span.sidebar-header Tags:
           div.tag-filters
             button.tag-filter-btn.active(data-tag="all") All Posts
             button.tag-filter-btn(data-tag="General") General
