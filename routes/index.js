@@ -65,23 +65,38 @@ router.get("/logout", function (req, res, next) {
 });
 
 /* POST post (message) */
-router.post(
-    "/post", [
-  // Validate and sanitize message
-  body('message', 'Message must not be empty.').trim().isLength({ min: 1 }),
-    async (req, res, next) => {
-    try {
-      const message = new Post({
-        user: req.user._id,
-        message: req.body.message,
-      });
-      await message.save();
-      res.redirect("/");
-    } catch (err) {
-      return next(err);
+router.post('/post', async (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  try {
+    const Post = require('../models/post');
+    const { message, tags } = req.body;
+    
+    // Handle tags - can be string (single) or array (multiple)
+    let tagArray = [];
+    if (Array.isArray(tags)) {
+      tagArray = tags;
+    } else if (tags) {
+      tagArray = [tags];
+    } else {
+      tagArray = ['General']; // Default
     }
-    }]
-);
+    
+    const post = new Post({
+      user: req.user._id,
+      message: message,
+      tags: tagArray,
+      contentType: 'text'
+    });
+    
+    await post.save();
+    res.redirect('/');
+  } catch (err) {
+    return next(err);
+  }
+});
 
 /* POST like/unlike a post */
 router.post('/post/:id/like', async (req, res, next) => {

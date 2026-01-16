@@ -17,6 +17,7 @@ class Post {
 			: [];
 		this.likeCount = postData.likeCount || 0;
 		this.commentCount = postData.commentCount || 0;
+		this.tags = Array.isArray(postData.tags) ? postData.tags : [];
 	}
 
 	// Virtual property for formatted timestamp

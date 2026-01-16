@@ -35,6 +35,9 @@ block content
             form(action="/post" method="POST")
               div.form-group
                 input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
+              div.tag-selector.hidden
+                button.tag-btn(type="button" data-tag="General") General
+                button.tag-btn(type="button" data-tag=user.major)= user.major
               div.form-group
                 input.btn.post-btn(type="submit" value="Post")
       block posts

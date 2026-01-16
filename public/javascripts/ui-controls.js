@@ -247,3 +247,62 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
+// TAG SELECTOR
+const postInput = document.querySelector('.post-input');
+const tagSelector = document.querySelector('.tag-selector');
+const postForm = document.querySelector('.post-form form');
+const selectedTags = new Set();
+
+if (postInput && tagSelector) {
+  // Show tags when input focused
+  postInput.addEventListener('focus', () => {
+    tagSelector.classList.remove('hidden');
+  });
+
+  // Handle tag button clicks
+  tagSelector.querySelectorAll('.tag-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag;
+      
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+        btn.classList.remove('active');
+      } else {
+        selectedTags.add(tag);
+        btn.classList.add('active');
+      }
+    });
+  });
+
+  // Add hidden inputs for selected tags on form submit
+  postForm.addEventListener('submit', (e) => {
+    // Remove any existing tag inputs
+    postForm.querySelectorAll('input[name="tags"]').forEach(input => input.remove());
+    
+    // Add hidden input for each selected tag
+    if (selectedTags.size > 0) {
+      selectedTags.forEach(tag => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'tags';
+        input.value = tag;
+        postForm.appendChild(input);
+      });
+    } else {
+      // Default to 'General' if no tags selected
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'tags';
+      input.value = 'General';
+      postForm.appendChild(input);
+    }
+  });
+
+  // Hide when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!postInput.contains(e.target) && !tagSelector.contains(e.target)) {
+      tagSelector.classList.add('hidden');
+    }
+  });
+}

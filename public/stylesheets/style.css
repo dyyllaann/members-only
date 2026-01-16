@@ -716,3 +716,35 @@ h2.logo-subtext {
   align-items: center;
   margin-bottom: 8px;
 }
+
+/* TAG SELECTOR */
+
+.tag-selector {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.tag-selector.hidden {
+  display: none;
+}
+
+.tag-btn {
+  padding: 6px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.tag-btn:hover {
+  background: rgba(84, 53, 156, 0.1);
+}
+
+.tag-btn.active {
+  background: #54359C;
+  color: white;
+  border-color: #54359C;
+}
