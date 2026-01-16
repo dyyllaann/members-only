@@ -199,8 +199,13 @@ document.addEventListener('DOMContentLoaded', function() {
     div.dataset.commentId = comment._id;
     div.innerHTML = `
       <div class="comment-header">
+        <div class="comment-profile gradient-${comment.user.colorPreference}">
+          <a href="/profile/${comment.user.username}">
+            <img src="/resources/icons/${comment.user.icon}" alt="${comment.user.username}'s profile picture">
+          </a>
+        </div>
         <div class="comment-author">
-          <span class="username">${comment.user.username}</span>
+          <a href="/profile/${comment.user.username}" class="username">${comment.user.username}</a>
           <span class="major">${comment.user.major}</span>
         </div>
         <span class="timestamp">${comment.timestamp_formatted}</span>

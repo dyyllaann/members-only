@@ -413,6 +413,7 @@ h2.logo-subtext {
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
   padding-right: 16px;
   padding-left: 16px;
+  z-index: 9999;
 }
 
 .app-bar--left,
@@ -683,4 +684,35 @@ h2.logo-subtext {
   padding: 15px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+}
+
+.comment-profile {
+  border-radius: 50%;
+  width: 32px;  /* Slightly smaller than post icons */
+  height: 32px;
+  flex-shrink: 0;
+  margin-right: 8px;
+  overflow: hidden;
+  display: flex;
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.comment-profile a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.comment-profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 }

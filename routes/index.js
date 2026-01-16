@@ -143,14 +143,16 @@ router.post('/post/:postId/comment', async (req, res, next) => {
     res.json({ 
       success: true, 
       commentCount: post.commentCount || 1,
-      comment: {  // ← ADD THIS ENTIRE OBJECT
+      comment: {
         _id: comment._id,
         text: comment.text,
         timestamp_formatted: comment.timestamp_formatted,
         user: {
           username: user.username,
           firstName: user.firstName,
-          major: user.major
+          major: user.major,
+          icon: user.icon,                          // ← Add this
+          colorPreference: user.colorPreference     // ← Add this
         }
       }
     });
@@ -165,14 +167,16 @@ router.post('/post/:postId/comment', async (req, res, next) => {
 router.get('/post/:postId/comments', async (req, res, next) => {
   try {
     const Comment = require('../models/comment');
-    const User = require('../models/user');
+    const db = dbo.getDb();
     
     const comments = await Comment.findByPostId(req.params.postId);
     
-    // Populate user data for each comment
     const commentsWithUsers = await Promise.all(
       comments.map(async (comment) => {
-        const user = await User.findById(comment.userId);
+        const user = await db.collection("users").findOne({ 
+          _id: comment.userId 
+        });
+        
         return {
           _id: comment._id,
           text: comment.text,
@@ -180,7 +184,9 @@ router.get('/post/:postId/comments', async (req, res, next) => {
           user: {
             username: user.username,
             firstName: user.firstName,
-            major: user.major
+            major: user.major,
+            icon: user.icon,                          // ← Add this
+            colorPreference: user.colorPreference     // ← Add this
           }
         };
       })
