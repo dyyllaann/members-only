@@ -22,7 +22,7 @@ router.get('/', async (req, res, next) => {
     
     res.render("index", { 
       user: req.user, 
-      title: "MembersOnly", 
+      title: "IvyLink", 
       post_list: list_posts,
       activeView: contentType || 'text' 
     });
@@ -38,7 +38,7 @@ router.get('/guest', async (req, res, next) => {
     // Sort by timestamp in descending order (newest first)
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    res.render("guest", { user: 'Guest', title: "MembersOnly - Guest", post_list: list_posts });
+    res.render("guest", { user: 'Guest', title: "IvyLink - Guest", post_list: list_posts });
   } catch (err) {
     return next(err);
   }
