@@ -5,10 +5,12 @@ block content
     block appBar
       div.app-bar
         div.app-bar--left
-          div.logo-icon
-            a(href="/") m
+          //- div.logo-icon
+          //-   a(href="/") m
         div.app-bar--center
-          div.view-toggle
+          a(href="/")
+            img.center-logo(src="/resources/ivy.png")
+          //- div.view-toggle
             a.view-btn(href="/?view=text" class=activeView === 'text' ? 'active' : '')
               img(src="/resources/contentType-text.png" alt="Conversations")
             //- a.view-btn(href="/?view=image" class=activeView === 'image' ? 'active' : '')
@@ -85,8 +87,9 @@ block content
       div.landing-page
         block logo 
           div.logo-container
-            h1.logo MembersOnly
-            h2.logo-subtext Connect with your community.
+            img(src="/resources/ivy.png" width="200")
+            h1.logo Link
+            h2.logo-subtext Connect with your college community.
         block login
           div.login-container
             div.login-form
