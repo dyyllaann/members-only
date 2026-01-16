@@ -4,8 +4,8 @@ const router = express.Router();
 const passport = require("passport");
 const Post = require("../models/post");
 const { body } = require('express-validator');
-const dbo = require("../db/conn");  // ← Add this
-const { ObjectId } = require("mongodb");  // ← Add this
+const dbo = require("../db/conn");
+const { ObjectId } = require("mongodb");
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
@@ -18,7 +18,6 @@ router.get('/', async (req, res, next) => {
     }
 
     const list_posts = await Post.findWithUser(criteria);
-    // Sort by timestamp in descending order (newest first)
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
     res.render("index", { 

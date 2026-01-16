@@ -1,3 +1,5 @@
+
+
 body {
   margin: 0;
   font: 14px "Montserrat", Helvetica, Arial, sans-serif;
@@ -747,4 +749,39 @@ h2.logo-subtext {
   background: #54359C;
   color: white;
   border-color: #54359C;
+}
+
+/* General content grid for pages with sidebar tags */
+#feed-content {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 700px) 1fr;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  min-height: 100vh;
+}
+
+/* Hide sidebars by default, show only on feed */
+.sidebar-tags {
+  display: block;
+  grid-column: 1;
+}
+
+.main-content {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.right-sidebar {
+  grid-column: 3;
+  /* Optional: add content or leave empty */
+}
+
+/* For profile and other pages, use a single column or different layout */
+#profile-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  display: block;
 }

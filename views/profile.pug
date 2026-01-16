@@ -29,7 +29,7 @@ block content
             li
               a(href="/logout") Sign Out
 
-    div.content
+    div.content#profile-content
       // Check if logged-in user is viewing their own profile
       if user.username === profileUser.username
         //- p Welcome, #{user.firstName}!
@@ -68,7 +68,6 @@ block content
           h1.profile-section-header Posts
           div.posts-container
             each post in post_list
-              // Render posts...
               div.post(data-content-type=post.contentType data-post-id=post._id)
                 div.post-header
                   div.post-author

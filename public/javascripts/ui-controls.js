@@ -306,3 +306,36 @@ if (postInput && tagSelector) {
     }
   });
 }
+
+// TAG FILTERING
+const tagFilterBtns = document.querySelectorAll('.tag-filter-btn');
+const postsContainer = document.querySelector('.posts-container');
+
+if (tagFilterBtns.length > 0 && postsContainer) {
+  tagFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const selectedTag = btn.dataset.tag;
+      
+      // Update active button
+      tagFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Filter posts
+      const posts = postsContainer.querySelectorAll('.post');
+      posts.forEach(post => {
+        if (selectedTag === 'all') {
+          post.style.display = ''; // Show all
+        } else {
+          // Get post tags from data attribute (you'll need to add this)
+          const postTags = post.dataset.tags ? post.dataset.tags.split(',') : [];
+          
+          if (postTags.includes(selectedTag)) {
+            post.style.display = '';
+          } else {
+            post.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
