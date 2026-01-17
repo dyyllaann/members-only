@@ -6,28 +6,7 @@ block stylesheets
 block content
   if user
     block appBar
-      div.app-bar
-        div.app-bar--left
-          div.logo-icon
-            a(href="/") m
-        div.app-bar--center
-          div.view-toggle
-            a.view-btn(href="/?view=text" class=activeView === 'text' ? 'active' : '')
-              img(src="/resources/contentType-text.png" alt="Conversations")
-            //- a.view-btn(href="/?view=image" class=activeView === 'image' ? 'active' : '')
-              img(src="/resources/contentType-image.png" alt="Grid")
-        div.app-bar--right 
-          div.controls
-            div.control-item.profile
-              span #{user.initials}
-
-      block userMenu 
-        div.user-menu#user-menu
-          ul 
-            li 
-              a(href=`/profile/${user.username}`) Profile
-            li
-              a(href="/logout") Sign Out
+      include partials/app-bar.pug
 
     div.content#profile-content
       // Check if logged-in user is viewing their own profile

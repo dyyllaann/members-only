@@ -3,34 +3,7 @@ extends layout
 block content
   if user
     block appBar
-      div.app-bar
-        div.app-bar--left
-          //- div.logo-icon
-          //-   a(href="/") m
-        div.app-bar--center
-          a(href="/")
-            img.center-logo(src="/resources/ivy.png")
-          //- div.view-toggle
-            a.view-btn(href="/?view=text" class=activeView === 'text' ? 'active' : '')
-              img(src="/resources/contentType-text.png" alt="Conversations")
-            //- a.view-btn(href="/?view=image" class=activeView === 'image' ? 'active' : '')
-              img(src="/resources/contentType-image.png" alt="Grid")
-        div.app-bar--right 
-          div.controls
-            div.control-item.profile
-              //- span #{user.initials}
-              div.post-icon(class=`gradient-${user.colorPreference}`)
-                img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
-              //-  a(href=`/profile/${user.username}`)
-                img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
-
-      block userMenu 
-        div.user-menu#user-menu
-          ul 
-            li 
-              a(href=`/profile/${user.username}`) Profile
-            li
-              a(href="/logout") Sign Out
+      include partials/app-bar.pug
     div.content#feed-content
       div.sidebar-tags
           span.sidebar-header Tags:

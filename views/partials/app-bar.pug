@@ -1,0 +1,17 @@
+div.app-bar
+    div.app-bar--left
+    div.app-bar--center
+        a(href="/")
+            img.center-logo(src="/resources/ivy.png")
+    div.app-bar--right
+        div.controls
+            div.control-item.profile
+                div.post-icon(class=`gradient-${user.colorPreference}`)
+                    img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
+    block userMenu
+        div.user-menu#user-menu
+            ul
+                li
+                    a(href=`/profile/${user.username}`) Profile
+                li
+                    a(href="/logout") Sign Out

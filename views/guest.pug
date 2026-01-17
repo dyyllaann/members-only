@@ -3,20 +3,7 @@ extends layout
 block content
   if user
     block appBar
-      div.app-bar              
-        div.app-bar--left
-          div.logo-icon
-            a(href="/") h
-        div.app-bar--center
-        div.app-bar--right 
-          div.controls
-            div.control-item.profile(onclick='toggleVisible(document.querySelector(`div.user-menu`), `hidden`)')
-              span G
-      block userMenu 
-        div.user-menu.hidden
-          ul
-            li
-              a(href="/") Login
+      include partials/app-bar.pug
     div.content
       block greeting
         div.greeting  
