@@ -279,10 +279,19 @@ h2.logo-subtext {
 
 /* POST FEED */
 
-.post-content {
+/* .post-content {
   display: flex;
   justify-content: center;
   align-items: center;
+} */
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;           /* space between text and image */
+  align-items: stretch;
+  overflow: visible;
+  padding: 0;
 }
 
 /* IMAGE VIEW */
@@ -302,6 +311,22 @@ h2.logo-subtext {
   text-align: center;
 }
 
+/* .post-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+} */
+
+.post-image {
+  display: block;
+  width: 100%;       
+  height: auto;      
+  object-fit: cover;  
+  margin-bottom: 20px;
+}
+
 /* TEXT VIEW */
 .post[data-content-type="text"] {
   grid-column: 1 / -1; /* Span all columns */
@@ -312,13 +337,11 @@ h2.logo-subtext {
   width: 600px; /* Fixed width, not max-width */
   max-width: calc(100vw - 40px); /* But don't overflow on mobile */
   height: auto;
-  min-height: 120px;
   background: white;
   color: #000;
   font-size: 16px;
   line-height: 1.5;
   text-align: left;
-  padding: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
@@ -330,9 +353,15 @@ h2.logo-subtext {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.post-message {
+/* .post-message {
   flex: 1;
   align-self: center;
+} */
+
+.post-message {
+  margin: 20px 20px 10px 20px;
+  white-space: pre-wrap;   /* preserve line breaks */
+  word-break: break-word;  /* avoid overflow on long words/links */
 }
 
 .posts-container {
@@ -767,7 +796,6 @@ h2.logo-subtext {
   border-color: var(--color-muted);
 }
 
-/* General content grid for pages with sidebar tags */
 #feed-content {
   display: grid;
   grid-template-columns: 220px minmax(0, 700px) 1fr;
@@ -782,6 +810,7 @@ h2.logo-subtext {
 .sidebar-tags {
   display: block;
   grid-column: 1;
+  position: fixed;
 }
 
 .main-content {

@@ -72,7 +72,27 @@ dbo.connectToServer(function (err) {
 });
 
 app.use(compression());
-app.use(helmet());
+
+// Security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https://i.imgur.com"],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"]
+      }
+    },
+    // disable COEP (prevents the NotSameOriginAfterDefaultedToSameOrigin… error)
+    crossOriginEmbedderPolicy: false,
+    // optional: disable COOP if also set and not needed
+    crossOriginOpenerPolicy: false
+  })
+);
 
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());

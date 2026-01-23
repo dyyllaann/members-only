@@ -40,6 +40,13 @@ block content
                     span.timestamp #{post.timestamp_formatted}
                   div.post-content
                     p.post-message #{post.message}
+                    if post.postImage
+                       img.post-image(
+                         src=post.postImage
+                         alt="Post Image"
+                         loading="lazy"
+                         referrerpolicy="no-referrer"
+                       )
                   div.post-actions
                     button.like-btn(
                       class=post.hasUserLiked(user._id) ? 'liked' : ''
