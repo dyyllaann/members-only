@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  if user
+  if !user
     block appBar
       include partials/app-bar.pug
     div.content
@@ -15,8 +15,18 @@ block content
         if post_list
           div.posts-container
             each post in post_list
-              div.post(data-content-type=post.contentType)
+              div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
+                div.post-header
+                  div.post-author
+                    a.username(href=`/create-account`) Anonymous
+                    span.major #{post.user.major}
+                  span.timestamp #{post.timestamp_formatted}
                 div.post-content
                   p.post-message #{post.message}
-                div.post-details
-                  p.post-details.timestamp.text-muted #{post.timestamp_formatted}
+                  if post.postImage
+                      img.post-image(
+                        src=post.postImage
+                        alt="Post Image"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      )

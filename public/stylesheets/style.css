@@ -237,8 +237,10 @@ h2.logo-subtext {
 
 /* GREETING */
 .greeting {
+  width: 600px;
+  max-width: 100%;
   display: block;
-  margin: 10px 0;
+  margin: 10px auto;
 }
 
 /* CREATE POST */
@@ -451,25 +453,32 @@ h2.logo-subtext {
   top: 0;
   display: flex;
   align-items: center;
+  justify-content: space-between; /* keep left at start and right at end */
   height: 56px;
   background-color: var(--color-light);
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
   padding-right: 16px;
   padding-left: 16px;
   z-index: 9999;
+  position: relative;
 }
 
 .app-bar--left,
 .app-bar--right {
   flex: 0 0 auto;
-  min-width: 48px;
+  display: flex;
+  align-items: center;
 }
 
 .app-bar--center {
-  flex-grow: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1000;
 }
 
 .app-bar--center img {
@@ -602,6 +611,24 @@ h2.logo-subtext {
 
 .hidden {
   display: none;
+}
+
+.login a {
+  background-color: var(--color-white);
+  color: var(--color-secondary);
+  border-radius: 15px;
+  padding: 15px;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.signup a {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border-radius: 15px;
+  padding: 15px;
+  font-size: 1.1rem;
+  text-decoration: none;
 }
 
 /* POST ACTIONS */
