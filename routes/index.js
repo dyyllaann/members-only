@@ -31,6 +31,25 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+/* GET Explore page. */
+router.get('/explore', async (req, res, next) => {
+  try {
+    const list_posts = await Post.findWithUser(
+      {},
+      { "user.accountType": "organization" }
+    );
+    list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    res.render("explore", {
+      user: req.user,
+      title: "IvyLink - Explore",
+      post_list: list_posts
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /* GET guest page. */
 router.get('/guest', async (req, res, next) => {
   try {

@@ -29,13 +29,13 @@ block content
               span Settings
 
       //- div.sidebar-tags
-          span.sidebar-header Tags:
-          div.tag-filters
-            button.tag-filter-btn.active(data-tag="all") All Posts
-            button.tag-filter-btn(data-tag="General") General
-            button.tag-filter-btn(data-tag=user.major)= user.major
+      //-     span.sidebar-header Tags:
+      //-     div.tag-filters
+      //-       button.tag-filter-btn.active(data-tag="all") All Posts
+      //-       button.tag-filter-btn(data-tag="General") General
+      //-       button.tag-filter-btn(data-tag=user.major)= user.major
       div.main-content
-        block post
+        //- block post
           div.create-post
             div.post-form
               form(action="/post" method="POST")
@@ -50,10 +50,8 @@ block content
           if post_list
             div.posts-container
               each post in post_list
-                //- - console.log(JSON.stringify(post))
                 div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
                   div.post-header
-                    //- - var safeColor = (post.user.colorPreference || '').replace(/[^a-zA-Z0-9\-_]/g, '')
                     div.post-icon(class=`gradient-${post.user.colorPreference}`)
                       a(href=`/profile/${post.user.username}`)
                         img(src=`/resources/icons/${post.user.icon}`, alt=`${post.user.username}'s profile picture`)
@@ -80,15 +78,15 @@ block content
                           path(d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z")
                       span.like-count #{post.likeCount || 0}
                     button.comment-btn(data-post-id=post._id)
-                      span.comment-icon 
+                      span.comment-icon
                         svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
                           path(d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z")
-                      span.comment-count #{post.commentCount || 0}  
+                      span.comment-count #{post.commentCount || 0}
       div.right-sidebar
   else
     block landing-page
       div.landing-page
-        block logo 
+        block logo
           div.logo-container
             img(src="/resources/ivy.png" width="200")
             h1.logo Link
@@ -102,15 +100,15 @@ block content
                 input.login-input(type="password", name="password" placeholder="Password")
                 br
                 input.btn.login-btn(type="submit" value="Log In")
-                br 
+                br
 
             div.login-bottom
               a(href="/forgot-password") Forgot password?
               p or
               a(href="/guest") Sign in as guest
 
-            div.login-divider 
+            div.login-divider
 
             div.login_new-account
               div.btn.login_new-account-btn
-                a(href="/create-account") Create new account 
+                a(href="/create-account") Create new account

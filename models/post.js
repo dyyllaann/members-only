@@ -101,11 +101,11 @@ class Post {
 		return populatedPosts;
 	}
 
-	// Find posts with populated user data
-	static async findWithUser(criteria = {}) {
+	// Find posts with populated user data, optionally filtering by author fields
+	static async findWithUser(criteria = {}, userCriteria = {}) {
 		const db = dbo.getDb();
 		const collection = db.collection("posts");
-		const posts = await collection.aggregate([
+		const pipeline = [
 			{ $match: criteria },
 			{
 				$lookup: {
@@ -116,7 +116,13 @@ class Post {
 				}
 			},
 			{ $unwind: "$user" }
-		]).toArray();
+		];
+
+		if (Object.keys(userCriteria).length > 0) {
+			pipeline.push({ $match: userCriteria });
+		}
+
+		const posts = await collection.aggregate(pipeline).toArray();
 		
 		return posts.map(postData => {
 			const post = new Post(postData);
