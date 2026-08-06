@@ -5,6 +5,7 @@
   --color-muted: #9cc5a1ff;
   --color-white: #fff;
   --color-light: #dce1deff;
+  --sidebar-width: 300px;
 }
 
 body {
@@ -638,7 +639,7 @@ h2.logo-subtext {
   padding-bottom: 12px;
 }
 
-.like-btn, .comment-btn {
+.like-btn, .comment-btn, .nav-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -651,7 +652,29 @@ h2.logo-subtext {
   font-size: 14px;
 }
 
-.like-btn:hover, .comment-btn:hover {
+.nav-btn > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 16px;
+  text-decoration: none;
+  color: inherit;
+  font-size: medium;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 0px;
+}
+
+.like-btn:hover, .comment-btn:hover, .nav-btn:hover, .nav-btn.active {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -823,9 +846,9 @@ h2.logo-subtext {
 }
 
 #feed-content {
-  /* display: grid; */
-  /* grid-template-columns: 220px minmax(0, 700px) 1fr; */
-  /* gap: 32px; */
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 700px) minmax(0, 1fr);
+  gap: 0px;
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
@@ -833,6 +856,10 @@ h2.logo-subtext {
 
 /* Small phones */
 @media (max-width: 1000px) {
+  .left-sidebar {
+    display: none;
+  }
+
   .sidebar-tags {
     display: none !important;
     visibility: hidden;
@@ -852,10 +879,22 @@ h2.logo-subtext {
     grid-column: 1;
   }
 }
-/* Hide sidebars by default, show only on feed */
-.sidebar-tags {
+
+/* .sidebar-tags {
   display: block;
   grid-column: 1;
+  position: fixed;
+} */
+
+.sidebar-links {
+  width: var(--sidebar-width);
+  padding: 0 0 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
   position: fixed;
 }
 
@@ -864,9 +903,14 @@ h2.logo-subtext {
   min-width: 0;
 }
 
+.left-sidebar {
+  grid-column: 1;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+}
+
 .right-sidebar {
   grid-column: 3;
-  /* Optional: add content or leave empty */
 }
 
 /* For profile and other pages, use a single column or different layout */
@@ -891,6 +935,7 @@ h2.logo-subtext {
   flex-direction: column;
   align-items: stretch;
   gap: 12px;
+  position: fixed;
 }
 
 .sidebar-header {
@@ -923,4 +968,17 @@ h2.logo-subtext {
 .tag-filter-btn.active {
   background: var(--color-primary);
   color: #fff;
+}
+
+.btn-inactive,
+.btn-inactive * {
+  color: #999;
+}
+
+.btn-inactive .nav-icon {
+  opacity: 0.4;
+}
+
+.btn-inactive > a {
+  cursor: not-allowed;
 }
