@@ -4,29 +4,30 @@ block content
   if !user
     block appBar
       include partials/app-bar.pug
-    div.content
-      block greeting
-        div.greeting  
-          h2 Welcome, Guest!   
-          span While logged in as a guest, you can browse existing posts but you 
-          | can't interact or see existing users until you 
-          a(href="/create-account") create your account. 
-      block posts
-        if post_list
-          div.posts-container
-            each post in post_list
-              div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
-                div.post-header
-                  div.post-author
-                    a.username(href=`/create-account`) Anonymous
-                    span.major #{post.user.major}
-                  span.timestamp #{post.timestamp_formatted}
-                div.post-content
-                  p.post-message #{post.message}
-                  if post.postImage
-                      img.post-image(
-                        src=post.postImage
-                        alt="Post Image"
-                        loading="lazy"
-                        referrerpolicy="no-referrer"
-                      )
+    div.app-shell.app-shell--guest
+      main.main-content
+        block greeting
+          div.greeting  
+            h2 Welcome, Guest!   
+            span While logged in as a guest, you can browse existing posts but you 
+            | can't interact or see existing users until you 
+            a(href="/create-account") create your account. 
+        block posts
+          if post_list
+            div.posts-container
+              each post in post_list
+                div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
+                  div.post-header
+                    div.post-author
+                      a.username(href=`/create-account`) Anonymous
+                      span.major #{post.user.major}
+                    span.timestamp #{post.timestamp_formatted}
+                  div.post-content
+                    p.post-message #{post.message}
+                    if post.postImage
+                        img.post-image(
+                          src=post.postImage
+                          alt="Post Image"
+                          loading="lazy"
+                          referrerpolicy="no-referrer"
+                        )

@@ -5,7 +5,8 @@
   --color-muted: #9cc5a1ff;
   --color-white: #fff;
   --color-light: #dce1deff;
-  --sidebar-width: 300px;
+  --left-sidebar-width: 220px;
+  --right-sidebar-width: 300px;
 }
 
 body {
@@ -652,7 +653,8 @@ h2.logo-subtext {
   font-size: 14px;
 }
 
-.nav-btn > a {
+.nav-btn > a,
+.tag-filter-btn {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -661,6 +663,14 @@ h2.logo-subtext {
   text-decoration: none;
   color: inherit;
   font-size: medium;
+}
+
+.tag-filter-btn {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: none;
+  cursor: pointer;
+  text-align: left;
 }
 
 .nav-icon {
@@ -674,7 +684,8 @@ h2.logo-subtext {
   padding: 0px;
 }
 
-.like-btn:hover, .comment-btn:hover, .nav-btn:hover, .nav-btn.active {
+.like-btn:hover, .comment-btn:hover, .nav-btn:hover, .nav-btn.active,
+.tag-filter-btn:hover, .tag-filter-btn.active {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -825,7 +836,7 @@ h2.logo-subtext {
   display: none;
 }
 
-.tag-btn, .tag-filter-btn {
+.tag-btn {
   padding: 6px 16px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
@@ -835,7 +846,7 @@ h2.logo-subtext {
   transition: all 0.2s;
 }
 
-.tag-btn:hover, .tag-filter-btn:hover {
+.tag-btn:hover {
   background: rgba(84, 53, 156, 0.1);
 }
 
@@ -845,18 +856,23 @@ h2.logo-subtext {
   border-color: var(--color-muted);
 }
 
-#feed-content {
+.app-shell, #feed-content {
   display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 700px) minmax(0, 1fr);
-  gap: 0px;
-  max-width: 1200px;
+  grid-template-columns: var(--left-sidebar-width) minmax(0, 700px) var(--right-sidebar-width);
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
   min-height: 100vh;
+  justify-content: center;
+}
+
+.app-shell--guest {
+  grid-template-columns: minmax(0, 700px);
 }
 
 /* Small phones */
 @media (max-width: 1000px) {
-  .left-sidebar {
+  .left-sidebar, .right-sidebar {
     display: none;
   }
 
@@ -865,14 +881,9 @@ h2.logo-subtext {
     visibility: hidden;
   }
 
-  .right-sidebar {
-    display: none !important;
-  }
-
-  #feed-content {
+  .app-shell {
     grid-template-columns: 1fr;
     padding: 12px;
-    gap: 16px;
   }
 
   .main-content {
@@ -880,22 +891,24 @@ h2.logo-subtext {
   }
 }
 
-/* .sidebar-tags {
-  display: block;
-  grid-column: 1;
-  position: fixed;
-} */
-
-.sidebar-links {
-  width: var(--sidebar-width);
+.sidebar-links, .sidebar-tags {
+  width: 100%;
   padding: 0 0 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 4px;
-  position: fixed;
+  position: sticky;
+  top: 76px;
+}
+
+.sidebar-tags {
+  padding-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .main-content {
@@ -905,12 +918,28 @@ h2.logo-subtext {
 
 .left-sidebar {
   grid-column: 1;
-  flex: 0 0 var(--sidebar-width);
-  width: var(--sidebar-width);
+  min-width: 0;
 }
 
 .right-sidebar {
   grid-column: 3;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  align-self: flex-start;
+  position: sticky;
+  top: 76px;
+}
+
+.sidebar-tags {
+  position: static;
+  top: auto;
+}
+
+.app-shell--guest .main-content {
+  grid-column: 1;
 }
 
 /* For profile and other pages, use a single column or different layout */
@@ -921,26 +950,10 @@ h2.logo-subtext {
   display: block;
 }
 
-/* Sidebar tags styling */
-.sidebar-tags {
-  /* background: #fff; */
-  /* border-radius: 16px; */
-  /* box-shadow: 0 2px 12px rgba(84, 53, 156, 0.06); */
-  padding: 0px 16px 20px 16px;
-  margin-top: 24px;
-  margin-bottom: 24px;
-  min-width: 180px;
-  max-width: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  position: fixed;
-}
-
 .sidebar-header {
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 16px;
+  font-size: x-large;
+  font-weight: 500;
   color:var(--color-text);
   letter-spacing: 0.5px;
 }
@@ -948,26 +961,6 @@ h2.logo-subtext {
 .tag-filters {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-/* .tag-filter-btn {
-  background: #fcfcfc;
-  color: #54359C;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  text-align: left;
-} */
-
-/* .tag-filter-btn:hover, */
-.tag-filter-btn.active {
-  background: var(--color-primary);
-  color: #fff;
 }
 
 .btn-inactive,
