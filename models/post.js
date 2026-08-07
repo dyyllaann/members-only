@@ -8,7 +8,8 @@ class Post {
 		this.user = postData.user;
 		this.message = postData.message;
 		this.contentType = postData.contentType || 'text';
-		this.postImage = postData.postImage || null;
+		this.imageSource = postData.imageSource || postData.postImage || null;
+		this.postImage = this.imageSource;
 		this.timestamp = postData.timestamp || new Date();
 		this.private = postData.private !== undefined ? postData.private : true;
 		this.allowedUsers = postData.allowedUsers || [];
@@ -18,7 +19,6 @@ class Post {
 		this.likeCount = postData.likeCount || 0;
 		this.commentCount = postData.commentCount || 0;
 		this.tags = Array.isArray(postData.tags) ? postData.tags : [];
-		// this.imageSource = postData.
 	}
 
 	// Virtual property for formatted timestamp

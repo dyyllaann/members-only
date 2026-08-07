@@ -81,7 +81,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https://i.imgur.com"],
+		imgSrc: ["'self'", "data:", "blob:", "https://i.imgur.com"],
         connectSrc: ["'self'"],
         fontSrc: ["'self'", "data:"],
         objectSrc: ["'none'"]
@@ -97,7 +97,7 @@ app.use(
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false, limit: "8mb" }));
 
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;

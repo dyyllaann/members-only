@@ -987,3 +987,101 @@ h2.logo-subtext {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
+
+.post-form-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  /* gap: 10px; */
+  margin-top: 10px;
+}
+
+.image-upload-btn, .link-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.image-upload-row {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+}
+
+.image-upload-callout {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.image-upload-btn:hover, .link-upload-btn:hover,
+.image-upload-btn:focus-visible, .link-upload-btn:focus-visible {
+  background-color: rgba(33, 104, 105, 0.1);
+}
+
+.image-upload-btn img, .link-upload-btn img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.post-form-actions .post-btn {
+  width: 100%;
+}
+
+.image-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.image-preview {
+  position: relative;
+  margin-top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-preview-image {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: var(--color-light);
+}
+
+.image-preview-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.72);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.upload-results {
+  min-height: 1.2em;
+  margin: 8px 0 0;
+  color: var(--color-text);
+  text-align: right;
+}

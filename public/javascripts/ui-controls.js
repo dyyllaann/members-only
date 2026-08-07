@@ -339,3 +339,90 @@ if (tagFilterBtns.length > 0 && postsContainer) {
     });
   });
 }
+
+// NAIVE IMAGE UPLOAD BENCHMARK
+const imageUploadButton = document.querySelector('.image-upload-btn');
+const imageFileInput = document.querySelector('.image-file-input');
+const imageSourceInput = document.querySelector('.image-source-input');
+const uploadResults = document.querySelector('.upload-results');
+const imagePreview = document.querySelector('.image-preview');
+const imagePreviewImage = document.querySelector('.image-preview-image');
+const imagePreviewRemove = document.querySelector('.image-preview-remove');
+let imagePreviewUrl;
+
+if (postForm && imageUploadButton && imageFileInput && imageSourceInput) {
+  imageUploadButton.addEventListener('click', () => imageFileInput.click());
+
+  imageFileInput.addEventListener('change', () => {
+    const file = imageFileInput.files[0];
+    if (imagePreviewUrl) {
+      URL.revokeObjectURL(imagePreviewUrl);
+      imagePreviewUrl = undefined;
+    }
+
+    if (!file) {
+      imagePreview.classList.add('hidden');
+      uploadResults.textContent = '';
+      return;
+    }
+
+    imagePreviewUrl = URL.createObjectURL(file);
+    imagePreviewImage.src = imagePreviewUrl;
+    imagePreview.classList.remove('hidden');
+    uploadResults.textContent = `Selected: ${file.name}`;
+  });
+
+  imagePreviewRemove.addEventListener('click', () => {
+    if (imagePreviewUrl) {
+      URL.revokeObjectURL(imagePreviewUrl);
+      imagePreviewUrl = undefined;
+    }
+    imageFileInput.value = '';
+    imageSourceInput.value = '';
+    imagePreviewImage.removeAttribute('src');
+    imagePreview.classList.add('hidden');
+    uploadResults.textContent = '';
+  });
+
+  postForm.addEventListener('submit', async (event) => {
+    const file = imageFileInput.files[0];
+    if (!file || imageSourceInput.value) {
+      return;
+    }
+
+    event.preventDefault();
+    const startedAt = performance.now();
+    imageUploadButton.disabled = true;
+    uploadResults.textContent = 'Uploading image…';
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch('/api/upload-naive', { method: 'POST', body: formData });
+      const responseBody = await response.text();
+      const isJsonResponse = response.headers.get('content-type')?.includes('application/json');
+      const result = isJsonResponse ? JSON.parse(responseBody) : null;
+
+      if (!response.ok || !result?.success) {
+        const message = result?.error || `Upload endpoint returned HTTP ${response.status}, not JSON. Restart the server and try again.`;
+        throw new Error(message);
+      }
+
+      const clientLatencyMs = Number((performance.now() - startedAt).toFixed(2));
+      imageSourceInput.value = result.imageSource;
+      uploadResults.textContent = `Image ready — client: ${clientLatencyMs} ms; server: ${result.serverDurationMs} ms; size: ${result.fileSizeInMB} MB; heap: ${result.memoryUsedMB} MB.`;
+      console.table([{
+        'File Name': result.fileName,
+        'File Size (MB)': result.fileSizeInMB,
+        'Client Latency (ms)': clientLatencyMs,
+        'Server Duration (ms)': result.serverDurationMs,
+        'Server Heap Memory (MB)': result.memoryUsedMB
+      }]);
+
+      postForm.submit();
+    } catch (error) {
+      uploadResults.textContent = error.message;
+      imageUploadButton.disabled = false;
+    }
+  });
+}
