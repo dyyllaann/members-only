@@ -982,3 +982,8 @@ h2.logo-subtext {
 .btn-inactive > a {
   cursor: not-allowed;
 }
+
+.post-btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
