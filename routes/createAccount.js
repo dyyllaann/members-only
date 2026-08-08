@@ -40,6 +40,7 @@ router.post("/", [
 	body("email", "A valid .edu email address is required.")
 		.trim()
 		.isEmail()
+		.withMessage("A valid email address is required.")
 		.custom((value) => value.toLowerCase().endsWith(".edu"))
 		.withMessage("Email must end with .edu"),
 	body("graduation", "Graduation year must not be empty.")
