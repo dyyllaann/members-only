@@ -37,6 +37,11 @@ router.post("/", [
 		.trim()
 		.isLength({ min: 1 })
 		.escape(),
+	body("email", "A valid .edu email address is required.")
+		.trim()
+		.isEmail()
+		.custom((value) => value.toLowerCase().endsWith(".edu"))
+		.withMessage("Email must end with .edu"),
 	body("graduation", "Graduation year must not be empty.")
 		.trim()
 		.isLength({ min: 1 })
@@ -72,6 +77,7 @@ router.post("/", [
 				firstName: req.body.firstName,
 				lastName: req.body.lastName,
 				username: req.body.username,
+				email: req.body.email,
 				password: hashedPassword,
 			});
 			
