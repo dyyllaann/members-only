@@ -17,9 +17,11 @@ function ensureAuth(req, res, next) {
 router.get("/", ensureAuth, async (req, res, next) => {
 	try {
 		const user = req.user;
-		const organizationId = user.organizationId || new ObjectId("6a7a4917be8261a1baef009e");
+		const organizationId = user.organizationId
+			? (user.organizationId instanceof ObjectId ? user.organizationId : new ObjectId(user.organizationId))
+			: new ObjectId("6a7a4917be8261a1baef009e");
 
-		const criteria = { organizationId: new ObjectId(organizationId) };
+		const criteria = { organizationId };
 		if (user.major) {
 			criteria.department = user.major;
 		}
