@@ -1078,3 +1078,137 @@ h2.logo-subtext {
   color: var(--color-text);
   text-align: right;
 }
+
+/* COURSE DISCOVERY */
+#courses-content .main-content,
+#course-hub-content .main-content {
+  padding: 24px;
+}
+
+.courses-header,
+.course-hub-header {
+  padding: 0 0 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.courses-header h1,
+.course-hub-header h1 {
+  margin: 0 0 4px;
+}
+
+.courses-subheader {
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+.courses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.course-card {
+  display: block;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.course-code {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+}
+
+.course-title {
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.course-department {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  margin-top: 4px;
+}
+
+.browse-courses-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: medium;
+}
+
+.browse-courses-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+/* COURSE HUB */
+.course-hub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.course-hub-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.course-hub-department {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.course-hub-code {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.course-hub-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.course-follow-btn {
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 20px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.course-follow-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+.course-follow-btn[data-subscribed="true"] {
+  background-color: var(--color-light);
+  color: var(--color-text);
+}
+
+.course-empty {
+  text-align: center;
+  color: var(--color-secondary);
+  padding: 40px 0;
+}
