@@ -104,11 +104,7 @@ block content
         div.sidebar-tags
           span.sidebar-header Suggested Courses
           div.tag-filters
-            button.tag-filter-btn.active(data-tag="all") All Courses
-            button.tag-filter-btn(data-tag="CSE 391") CSE 391
-            button.tag-filter-btn(data-tag="CSE 351") CSE 351
-            button.tag-filter-btn(data-tag="CSE 331") CSE 331
-            button.tag-filter-btn(data-tag="browse") Browse more courses
+            a.btn.browse-courses-btn(href="/courses/") Browse more courses
   else
     block landing-page
       div.landing-page
