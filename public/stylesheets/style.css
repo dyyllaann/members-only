@@ -1140,22 +1140,6 @@ h2.logo-subtext {
   margin-top: 4px;
 }
 
-.browse-courses-btn {
-  display: block;
-  width: 100%;
-  padding: 16px;
-  text-align: center;
-  text-decoration: none;
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  font-size: medium;
-}
-
-.browse-courses-btn:hover {
-  background-color: var(--color-secondary);
-}
-
 /* COURSE HUB */
 .course-hub-header {
   display: flex;
