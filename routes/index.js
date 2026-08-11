@@ -75,6 +75,17 @@ router.get('/', async (req, res, next) => {
       criteria.contentType = contentType;
     }
 
+    // Personalized home feed: show posts from subscribed courses
+    if (req.user && req.user.subscribedCourses && req.user.subscribedCourses.length > 0) {
+      criteria.courseId = { $in: req.user.subscribedCourses };
+    } else {
+      // If the user is logged in but hasn't subscribed to any courses yet,
+      // default to showing their own major's content as a gentle onboarding step.
+      if (req.user && req.user.major) {
+        criteria.tags = req.user.major;
+      }
+    }
+
     const list_posts = await Post.findWithUser(criteria);
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
@@ -92,10 +103,8 @@ router.get('/', async (req, res, next) => {
 /* GET Explore page. */
 router.get('/explore', async (req, res, next) => {
   try {
-    const list_posts = await Post.findWithUser(
-      {},
-      { "user.accountType": "organization" }
-    );
+    // Explore feed: global campus stream across all departments and courses
+    const list_posts = await Post.findWithUser({});
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     res.render("explore", {

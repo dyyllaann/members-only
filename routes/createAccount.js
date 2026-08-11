@@ -80,6 +80,10 @@ router.post("/", [
 				username: req.body.username,
 				email: req.body.email,
 				password: hashedPassword,
+				major: req.body.major,
+				graduation: req.body.graduation,
+				organizationId: process.env.DEFAULT_ORGANIZATION_ID || "6a7a4917be8261a1baef009e",
+				subscribedCourses: [],
 			});
 			
 			await user.save();

@@ -15,6 +15,12 @@ class User {
 		this.icon = userData.icon;
 		this.colorPreference = userData.colorPreference;
 		this.member = userData.member || false;
+		this.organizationId = userData.organizationId
+			? (userData.organizationId instanceof ObjectId ? userData.organizationId : new ObjectId(userData.organizationId))
+			: null;
+		this.subscribedCourses = Array.isArray(userData.subscribedCourses)
+			? userData.subscribedCourses.map(id => id instanceof ObjectId ? id : new ObjectId(id))
+			: [];
 		this.likedPosts = Array.isArray(userData.likedPosts)
 			? userData.likedPosts.map(id => id instanceof ObjectId ? id : new ObjectId(id))
 			: [];

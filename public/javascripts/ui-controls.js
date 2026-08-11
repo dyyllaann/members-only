@@ -246,6 +246,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // Course follow/unfollow button
+  const followBtn = document.querySelector('.course-follow-btn');
+  if (followBtn) {
+    followBtn.addEventListener('click', async function() {
+      const courseId = this.dataset.courseId;
+      const isSubscribed = this.dataset.subscribed === 'true';
+      const url = isSubscribed ? `/courses/${courseId}/unfollow` : `/courses/${courseId}/follow`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          this.dataset.subscribed = isSubscribed ? 'false' : 'true';
+          this.textContent = isSubscribed ? 'Follow' : 'Following';
+        }
+      } catch (error) {
+        console.error('Error updating course subscription:', error);
+      }
+    });
+  }
+
 });
 
 // TAG SELECTOR

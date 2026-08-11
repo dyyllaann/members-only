@@ -26,6 +26,7 @@ const dbo = require("./db/conn");
 var indexRouter = require("./routes/index");
 var guestRouter = require("./routes/guest");
 var createAccountRouter = require("./routes/createAccount");
+var coursesRouter = require("./routes/courses");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -119,6 +120,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/guest", guestRouter);
 app.use("/create-account", createAccountRouter);
+app.use("/courses", coursesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
