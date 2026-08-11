@@ -27,6 +27,7 @@ var indexRouter = require("./routes/index");
 var guestRouter = require("./routes/guest");
 var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
+const suggestedCourses = require("./data/suggestedCourses.json");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -103,6 +104,7 @@ app.use(express.urlencoded({ extended: false, limit: "8mb" }));
 app.use(function (req, res, next) {
 	res.locals.currentUser = req.user;
 	res.locals.currentPath = req.path;
+	res.locals.suggestedCourses = suggestedCourses;
 	next();
 });
 

@@ -9,6 +9,7 @@ const { ObjectId } = require("mongodb");
 const multer = require("multer");
 const fs = require("fs/promises");
 const path = require("path");
+const suggestedCourses = require("../data/suggestedCourses.json");
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 const UPLOAD_METRICS_LOG = path.join(__dirname, "..", "logs", "image-upload-metrics.log");
@@ -93,7 +94,8 @@ router.get('/', async (req, res, next) => {
       user: req.user, 
       title: "IvyLink", 
       post_list: list_posts,
-      activeView: contentType || 'text' 
+      activeView: contentType || 'text',
+      suggestedCourses: suggestedCourses
     });
   } catch (err) {
     return next(err);

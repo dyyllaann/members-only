@@ -27,6 +27,10 @@ class Course {
 
 	// Find course by ID
 	static async findById(id) {
+		if (!ObjectId.isValid(id)) {
+			return null;
+		}
+
 		const db = dbo.getDb();
 		const collection = db.collection("courses");
 		const courseData = await collection.findOne({ _id: new ObjectId(id) });

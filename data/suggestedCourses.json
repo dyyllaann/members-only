@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "6a7a53fbbe8261a1baef00e9",
+    "organizationId": "6a7a4917be8261a1baef009e",
+    "department": "Computer Science & Engineering",
+    "courseCode": "CSE 344",
+    "title": "Introduction to Data Management"
+  },
+  {
+    "_id": "6a7a53fbbe8261a1baef00ea",
+    "organizationId": "6a7a4917be8261a1baef009e",
+    "department": "Computer Science & Engineering",
+    "courseCode": "CSE 351",
+    "title": "The Hardware/Software Interface"
+  },
+  {
+    "_id": "6a7a53fbbe8261a1baef0100",
+    "organizationId": "6a7a4917be8261a1baef009e",
+    "department": "Computer Science & Engineering",
+    "courseCode": "CSE 452",
+    "title": "Introduction to Distributed Systems"
+  }
+]

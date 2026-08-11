@@ -13,8 +13,6 @@ aside.right-sidebar
   div.sidebar-tags
     span.sidebar-header Suggested Courses
     div.tag-filters
-      button.tag-filter-btn(data-tag="cse451") CSE 451
-      button.tag-filter-btn(data-tag="cse351") CSE 351
-      button.tag-filter-btn(data-tag="engl131") ENGL 131
-      button.tag-filter-btn(data-tag="math124") MATH 124
+      for course in suggestedCourses
+        a.tag-filter-btn(href=`/courses/${course._id}`)= course.courseCode
       a.btn.tag-filter-btn(href="/courses/") Browse more courses
