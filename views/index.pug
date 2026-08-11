@@ -5,28 +5,7 @@ block content
     block appBar
       include partials/app-bar.pug
     div.app-shell#feed-content
-      aside.left-sidebar
-        div.sidebar-links
-          div.nav-btn(class=currentPath === "/" ? "active" : "")
-            a.sidebar-link(href="/" aria-current=currentPath === "/" ? "page" : undefined)
-              img.nav-icon(src="/resources/home.svg" alt="")
-              span Home
-          div.nav-btn(class=currentPath === "/explore" ? "active" : "")
-            a.sidebar-link(href="/explore" aria-current=currentPath === "/explore" ? "page" : undefined)
-              img.nav-icon(src="/resources/explore.svg" alt="")
-              span Explore
-          div.nav-btn.btn-inactive(class=currentPath === "/notifications" ? "active" : "")
-            a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
-              img.nav-icon(src="/resources/notifications.svg" alt="")
-              span Notifications
-          div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
-            a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
-              img.nav-icon(src="/resources/profile.svg" alt="")
-              span Profile
-          div.nav-btn.btn-inactive(class=currentPath === "/settings" ? "active" : "")
-            a.sidebar-link(href="/settings" aria-current=currentPath === "/settings" ? "page" : undefined)
-              img.nav-icon(src="/resources/settings.svg" alt="")
-              span Settings
+      include partials/left-sidebar.pug
       main.main-content
         block post
           include partials/create-post.pug
@@ -68,26 +47,7 @@ block content
                         svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
                           path(d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z")
                       span.comment-count #{post.commentCount || 0}  
-      aside.right-sidebar
-        div.sidebar-tags
-          span.sidebar-header Trending
-          .tag-filters 
-            button.tag-filter-btn(data-tag="#dawgpack") #dawgpack
-        div.sidebar-tags
-          span.sidebar-header Suggested Topics
-          div.tag-filters
-            button.tag-filter-btn.active(data-tag="all") All Posts
-            button.tag-filter-btn(data-tag="ai") AI
-            button.tag-filter-btn(data-tag="huskyfootball") Husky Football
-            button.tag-filter-btn(data-tag=user.major)= user.major
-        div.sidebar-tags
-          span.sidebar-header Suggested Courses
-          div.tag-filters
-            button.tag-filter-btn(data-tag="cse451") CSE 451
-            button.tag-filter-btn(data-tag="cse351") CSE 351
-            button.tag-filter-btn(data-tag="engl131") ENGL 131
-            button.tag-filter-btn(data-tag="math124") MATH 124
-            a.btn.tag-filter-btn(href="/courses/") Browse more courses
+      include partials/right-sidebar.pug
   else
     block landing-page
       div.landing-page

@@ -5,28 +5,7 @@ block content
     block appBar
       include partials/app-bar.pug
     div.app-shell#course-hub-content
-      aside.left-sidebar
-        div.sidebar-links
-          div.nav-btn(class=currentPath === "/" ? "active" : "")
-            a.sidebar-link(href="/" aria-current=currentPath === "/" ? "page" : undefined)
-              img.nav-icon(src="/resources/home.svg" alt="")
-              span Home
-          div.nav-btn(class=currentPath === "/explore" ? "active" : "")
-            a.sidebar-link(href="/explore" aria-current=currentPath === "/explore" ? "page" : undefined)
-              img.nav-icon(src="/resources/explore.svg" alt="")
-              span Explore
-          div.nav-btn.btn-inactive(class=currentPath === "/notifications" ? "active" : "")
-            a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
-              img.nav-icon(src="/resources/notifications.svg" alt="")
-              span Notifications
-          div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
-            a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
-              img.nav-icon(src="/resources/profile.svg" alt="")
-              span Profile
-          div.nav-btn.btn-inactive(class=currentPath === "/settings" ? "active" : "")
-            a.sidebar-link(href="/settings" aria-current=currentPath === "/settings" ? "page" : undefined)
-              img.nav-icon(src="/resources/settings.svg" alt="")
-              span Settings
+      include partials/left-sidebar.pug
       main.main-content
         div.course-hub-header
           div.course-hub-meta
@@ -35,6 +14,7 @@ block content
             h2.course-hub-title= course.title
           button.course-follow-btn.btn(data-course-id=course._id data-subscribed=isSubscribed ? "true" : "false")
             = isSubscribed ? "Following" : "Follow"
+        include partials/create-post.pug
         block posts
           if post_list && post_list.length
             div.posts-container
@@ -73,4 +53,4 @@ block content
                       span.comment-count #{post.commentCount || 0}
           else
             p.course-empty No posts in this course hub yet. Be the first to share!
-      aside.right-sidebar
+      include partials/right-sidebar.pug

@@ -1,0 +1,22 @@
+aside.left-sidebar
+        div.sidebar-links
+          div.nav-btn(class=currentPath === "/" ? "active" : "")
+            a.sidebar-link(href="/" aria-current=currentPath === "/" ? "page" : undefined)
+              img.nav-icon(src="/resources/home.svg" alt="")
+              span Home
+          div.nav-btn(class=currentPath === "/explore" ? "active" : "")
+            a.sidebar-link(href="/explore" aria-current=currentPath === "/explore" ? "page" : undefined)
+              img.nav-icon(src="/resources/explore.svg" alt="")
+              span Explore
+          div.nav-btn.btn-inactive(class=currentPath === "/notifications" ? "active" : "")
+            a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
+              img.nav-icon(src="/resources/notifications.svg" alt="")
+              span Notifications
+          div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
+            a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
+              img.nav-icon(src="/resources/profile.svg" alt="")
+              span Profile
+          div.nav-btn.btn-inactive(class=currentPath === "/settings" ? "active" : "")
+            a.sidebar-link(href="/settings" aria-current=currentPath === "/settings" ? "page" : undefined)
+              img.nav-icon(src="/resources/settings.svg" alt="")
+              span Settings

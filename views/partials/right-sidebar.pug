@@ -1,0 +1,20 @@
+aside.right-sidebar
+  div.sidebar-tags
+    span.sidebar-header Trending
+    .tag-filters 
+      button.tag-filter-btn(data-tag="#dawgpack") #dawgpack
+  div.sidebar-tags
+    span.sidebar-header Suggested Topics
+    div.tag-filters
+      button.tag-filter-btn.active(data-tag="all") All Posts
+      button.tag-filter-btn(data-tag="ai") AI
+      button.tag-filter-btn(data-tag="huskyfootball") Husky Football
+      button.tag-filter-btn(data-tag=user.major)= user.major
+  div.sidebar-tags
+    span.sidebar-header Suggested Courses
+    div.tag-filters
+      button.tag-filter-btn(data-tag="cse451") CSE 451
+      button.tag-filter-btn(data-tag="cse351") CSE 351
+      button.tag-filter-btn(data-tag="engl131") ENGL 131
+      button.tag-filter-btn(data-tag="math124") MATH 124
+      a.btn.tag-filter-btn(href="/courses/") Browse more courses
