@@ -87,7 +87,8 @@ router.get('/', async (req, res, next) => {
       }
     }
 
-    const list_posts = await Post.findWithUser(criteria);
+    // const list_posts = await Post.findWithUser(criteria);
+    const list_posts = await Post.findWithUser({});
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
     res.render("index", { 
