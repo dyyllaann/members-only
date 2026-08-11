@@ -29,28 +29,7 @@ block content
               span Settings
       main.main-content
         block post
-          div.create-post
-            div.post-form
-              form(action="/post" method="POST")
-                div.form-group
-                  input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
-                div.tag-selector.hidden
-                  button.tag-btn(type="button" data-tag="General") General
-                  button.tag-btn(type="button" data-tag=user.major)= user.major
-                div.image-preview.hidden
-                  img.image-preview-image(alt="Selected image preview")
-                  button.image-preview-remove(type="button" aria-label="Remove selected image") Remove image
-                div.post-form-actions
-                  input.image-file-input(type="file" accept="image/*" aria-label="Choose an image")
-                  input.image-source-input(type="hidden" name="imageSource")
-                  div.image-upload-row
-                    button.image-upload-btn(type="button" aria-label="Add an image")
-                      img(src="/resources/image.svg" alt="" aria-hidden="true")
-                    span.image-upload-callout
-                      strong ← New! 
-                    p Share an image of your world.
-                  input.btn.post-btn(type="submit" value="Post")
-                p.upload-results(role="status" aria-live="polite")
+          include partials/create-post.pug
         block posts
           if post_list
             div.posts-container
@@ -104,10 +83,11 @@ block content
         div.sidebar-tags
           span.sidebar-header Suggested Courses
           div.tag-filters
-            button.tag-filter-btn(data-tag="cse142") CSE 142
-            button.tag-filter-btn(data-tag="cse311") CSE 311
+            button.tag-filter-btn(data-tag="cse451") CSE 451
+            button.tag-filter-btn(data-tag="cse351") CSE 351
             button.tag-filter-btn(data-tag="engl131") ENGL 131
             button.tag-filter-btn(data-tag="math124") MATH 124
+            a.btn.tag-filter-btn(href="/courses/") Browse more courses
   else
     block landing-page
       div.landing-page
