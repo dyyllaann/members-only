@@ -343,18 +343,29 @@ h2.logo-subtext {
   text-align: left;
 }
 
-/* Base post styles */
+/* Mobile first */
 .post {
   display: flex;
   flex-direction: column;
-  width: 600px;
-  max-width: calc(100vw - 40px);
+  width:100%;
+}
+
+.post {
+  /* max-width: calc(100vw - 40px); */
   height: auto;
   border: 1px solid rgba(0, 0, 0, 0.1);
   justify-self: center;
   border-radius: 8px;
   overflow: hidden;
   padding: 20px 20px 5px 20px;
+}
+
+/* Base post styles */
+@media (min-width: 1150px) {
+  .post {
+    width: 600px;
+    max-width: calc(100vw - 40px);
+  }
 }
 
 /* .post-message {
@@ -857,22 +868,31 @@ h2.logo-subtext {
   border-color: var(--color-muted);
 }
 
-.app-shell, #feed-content {
-  display: grid;
-  grid-template-columns: var(--left-sidebar-width) minmax(0, 700px) var(--right-sidebar-width);
-  width: 100%;
-  max-width: none;
-  margin: 0 auto;
-  min-height: 100vh;
-  justify-content: center;
+/* Mobile View */
+#feed-content {
+  display: block;
 }
+
+@media (min-width: 1150px) {
+  .app-shell, #feed-content {
+    display: grid;
+    grid-template-columns: var(--left-sidebar-width) minmax(0, 700px) var(--right-sidebar-width);
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    min-height: 100vh;
+    justify-content: center;
+  }
+}
+
+
 
 .app-shell--guest {
   grid-template-columns: minmax(0, 700px);
 }
 
 /* Small phones */
-@media (max-width: 1000px) {
+@media (max-width: 1150px) {
   .left-sidebar, .right-sidebar {
     display: none;
   }
