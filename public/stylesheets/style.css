@@ -88,6 +88,24 @@ input {
 
 /* LANDING PAGE */
 .landing-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100svh;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .landing-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+}
+/* .landing-page {
   margin: 0 auto;
   display: flex;
   flex-grow: 1;
@@ -95,22 +113,27 @@ input {
   justify-content: center;
   align-items: center;
   height: 100vh;
-}
+} */
 
 /* LOGO */
-.logo-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 50%;
-  margin-right: 60px; /* Add margin between logo and login */
-}
+/* Mobile */
 
-@media only screen and (max-width: 700px) {
+
+@media (min-width: 768px) {
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    margin-right: 60px; /* Add margin between logo and login */
+  }
+}
+  
+/* @media only screen and (max-width: 700px) {
   .logo-container {
     display: none;
   }
-}
+} */
 
 h1.logo {
   margin-top: -60px;
