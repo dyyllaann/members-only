@@ -300,8 +300,8 @@ h2.logo-subtext {
 
 /* IMAGE VIEW */
 .post[data-content-type="image"] .post-content {
-  height: 280px;
-  width: 280px;
+  height: auto;
+  width: 100%;
   background: linear-gradient(to bottom, #69e0cd, #5e0eab);
   background: linear-gradient(to bottom, #a790c1, #c9e6b9);
   background: linear-gradient(to bottom, #d76214, #660bec);
@@ -373,7 +373,7 @@ h2.logo-subtext {
   width: 100%;
   max-width: 880px; /* 280px * 3 + 20px * 2 */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   column-gap: 20px;
   row-gap: 20px;
   justify-content: center;
