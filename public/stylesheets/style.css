@@ -300,7 +300,6 @@ h2.logo-subtext {
 
 /* IMAGE VIEW */
 .post[data-content-type="image"] .post-content {
-  height: auto;
   width: 100%;
   background: linear-gradient(to bottom, #69e0cd, #5e0eab);
   background: linear-gradient(to bottom, #a790c1, #c9e6b9);
@@ -338,9 +337,6 @@ h2.logo-subtext {
 }
 
 .post[data-content-type="text"] .post-content {
-  width: 600px; /* Fixed width, not max-width */
-  max-width: calc(100vw - 40px); /* But don't overflow on mobile */
-  height: auto;
   background: white;
   color: #000;
   font-size: 16px;
@@ -354,6 +350,9 @@ h2.logo-subtext {
 .post {
   display: flex;
   flex-direction: column;
+  width: 600px;
+  max-width: calc(100vw - 40px);
+  height: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
