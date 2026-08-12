@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const router = express.Router();
 const { body, check, validationResult } = require("express-validator");
 const { ObjectId } = require("mongodb");
@@ -9,13 +10,20 @@ const bcrypt = require("bcryptjs");
 // Models
 const User = require("../models/user");
 
+// Rate limiting middleware for account creation
+const checkLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 30,
+	message: { available: false, message: "Too many attempts. Please try again later." }
+});
+
 /* GET create account page. */
 router.get('/', function(req, res) {
   res.render('createAccount', { title: 'IvyLink - Create Account' });
 });
 
 /* GET check username availability. */
-router.get('/check-username', async (req, res) => {
+router.get('/check-username', checkLimiter, async (req, res) => {
   try {
     const { username } = req.query;
 
@@ -46,7 +54,7 @@ router.get('/check-username', async (req, res) => {
 });
 
 /* GET check email availability. */
-router.get('/check-email', async (req, res) => {
+router.get('/check-email', checkLimiter, async (req, res) => {
   try {
     const { email } = req.query;
 

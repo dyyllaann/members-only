@@ -19,6 +19,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.2",
     "express": "~4.16.1",
+    "express-rate-limit": "^7.5.1",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "helmet": "^6.0.0",
