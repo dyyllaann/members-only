@@ -14,7 +14,71 @@ router.get('/', function(req, res) {
   res.render('createAccount', { title: 'IvyLink - Create Account' });
 });
 
-// POST create account.
+/* GET check username availability. */
+router.get('/check-username', async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    if (!username || username.length < 3) {
+      return res.json({ available: false, message: 'Username too short' });
+    }
+
+    // Using projection { _id: 1 } means we only fetch the ID, saving memory
+    // const existingUser = await db.collection('users').findOne(
+    //   { username: username.toLowerCase() },
+    //   { projection: { _id: 1 } }
+    // );
+
+		const existingUser = await User.findOne(
+      { username: username.toLowerCase() },
+      { _id: 1 }
+    );
+
+    if (existingUser) {
+      return res.json({ available: false, message: `${username} is not available` });
+    } else {
+      return res.json({ available: true, message: `${username} is available!` });
+    }
+
+  } catch (error) {
+    res.status(500).json({ error: 'Server error checking username' });
+  }
+});
+
+/* GET check email availability. */
+router.get('/check-email', async (req, res) => {
+  try {
+    const { email } = req.query;
+
+		const normalizedEmail = email?.trim().toLowerCase();
+
+		if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.edu$/.test(normalizedEmail)) {
+			return res.json({ available: false, message: 'Enter a valid .edu email address' });
+    }
+
+    // Using projection { _id: 1 } means we only fetch the ID, saving memory
+    // const existingUser = await db.collection('users').findOne(
+    //   { email: email.toLowerCase() },
+    //   { projection: { _id: 1 } }
+    // );
+
+		const existingUser = await User.findOne(
+      { email: normalizedEmail },
+      { _id: 1 }
+    );
+
+    if (existingUser) {
+			return res.json({ available: false, message: `${normalizedEmail} is not available` });
+    } else {
+			return res.json({ available: true, message: `${normalizedEmail} is available!` });
+    }
+
+  } catch (error) {
+    res.status(500).json({ error: 'Server error checking email' });
+  }
+});
+
+/* POST create account. */
 router.post("/", [
 	// Validate and sanitize fields.
 	body("username", "Username must not be empty.")
@@ -80,9 +144,9 @@ router.post("/", [
 				username: req.body.username,
 				email: req.body.email,
 				password: hashedPassword,
-				major: req.body.major,
+				major: "Computer Science & Engineering", //req.body.major,
 				graduation: req.body.graduation,
-				icon: "icon_computer-science.svg",
+				icon: "icon_computer-science.svg", // Default icon
 				organizationId: process.env.DEFAULT_ORGANIZATION_ID || "6a7a4917be8261a1baef009e",
 				subscribedCourses: [],
 			});

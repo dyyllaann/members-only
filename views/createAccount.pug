@@ -11,24 +11,31 @@ block content
       div.new-user-form
         if password != passwordConfirm
           span Passwords don't match
-        form(action="/create-account" method="POST")
+        form#create-account-form(action="/create-account" method="POST")
           div.form-group
-            input.new-user-input(type="text", name="firstName" placeholder="First Name")
-            input.new-user-input(type="text", name="lastName" placeholder="Last Name")
+            input.new-user-input(type="text", name="firstName" placeholder="First Name" required)
+            input.new-user-input(type="text", name="lastName" placeholder="Last Name" required)
           //- div.form-group
             input.new-user-input(type="text", name="location" placeholder="Location")
           div.form-group
             //- input.new-user-input(type="text", name="college" placeholder="College")
-            input.new-user-input(type="text", name="major" placeholder="Major")
-            input.new-user-input(type="number", name="graduation" placeholder="Graduation Year")
-          div.form-group
+            input.new-user-input(type="text", name="major" placeholder="Major" value="Computer Science & Engineering" readonly required)
+            input.new-user-input(type="number", name="graduation" placeholder="Graduation Year" required)
+          //- div.form-group
             input.new-user-input(type="email", name="email" placeholder="University Email (.edu)")
+          div.form-group.form-group--email
+            input.new-user-input#email-input(type="email", name="email" placeholder="University Email (.edu)" required)
+            span#email-feedback.feedback-text(style="color: red; font-size: 0.9em; margin-top: 5px; display: none;")
+          //- div.form-group
+          //-   input.new-user--input(type="text", name="username" placeholder="Username")
+          div.form-group.form-group--username
+            //- label(for="username") Username
+            input.new-user--input#username-input(type="text" name="username" placeholder="Choose a username" minlength="3" required)
+            span#username-feedback.feedback-text(style="color: red; font-size: 0.9em; margin-top: 5px; display: none;")
           div.form-group
-            input.new-user--input(type="text", name="username" placeholder="Username")
+            input.new-user--input#password-input(type="password", name="password" placeholder="Password" required)
           div.form-group
-            input.new-user--input(type="password", name="password" placeholder="Password")
-          div.form-group
-            input.new-user--input(type="password", name="passwordConfirm" placeholder="Confirm Password")
+            input.new-user--input#password-confirm-input(type="password", name="passwordConfirm" placeholder="Confirm Password" required)
           //- div.form-group.color-choice-container
             div.color-choice.gradient-0   
             div.color-choice.gradient-1 
@@ -39,4 +46,7 @@ block content
             div.color-choice.gradient-6 
             div.color-choice.gradient-7 
           div.form-group
-            input.btn.new-user--btn(type="submit" value="Create Account")
+            input.btn.new-user--btn#create-account-submit(type="submit" value="Create Account" disabled)
+
+block scripts
+  script(src="/javascripts/validate-login.js")

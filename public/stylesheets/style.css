@@ -38,6 +38,12 @@ a {
   gap: 10px;
 }
 
+.form-group--email,
+.form-group--username {
+  flex-direction: column;
+  gap: 0;
+}
+
 #form-group--gender {
   margin-top: 10px;
   display: flex;
