@@ -4,7 +4,8 @@ block content
   if !user
     block appBar
       include partials/app-bar.pug
-    div.app-shell.app-shell--guest
+    div.app-shell
+      include partials/left-sidebar.pug
       main.main-content
         block greeting
           div.greeting  
@@ -31,3 +32,4 @@ block content
                           loading="lazy"
                           referrerpolicy="no-referrer"
                         )
+      include partials/right-sidebar.pug

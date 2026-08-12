@@ -12,10 +12,16 @@ aside.left-sidebar
             a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
               img.nav-icon(src="/resources/notifications.svg" alt="")
               span Notifications
-          div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
-            a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
-              img.nav-icon(src="/resources/profile.svg" alt="")
-              span Profile
+          if user
+            div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
+              a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
+                img.nav-icon(src="/resources/profile.svg" alt="")
+                span Profile
+          else 
+            div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
+              a.sidebar-link(href="/create-account" aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
+                img.nav-icon(src="/resources/profile.svg" alt="")
+                span Profile
           div.nav-btn.btn-inactive(class=currentPath === "/settings" ? "active" : "")
             a.sidebar-link(href="/settings" aria-current=currentPath === "/settings" ? "page" : undefined)
               img.nav-icon(src="/resources/settings.svg" alt="")

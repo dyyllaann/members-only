@@ -8,7 +8,8 @@ aside.right-sidebar
     div.tag-filters
       button.tag-filter-btn(data-tag="ai") AI
       button.tag-filter-btn(data-tag="huskyfootball") Husky Football
-      button.tag-filter-btn(data-tag=user.major)= user.major
+      if user 
+        button.tag-filter-btn(data-tag=user.major)= user.major
   div.sidebar-tags
     span.sidebar-header Suggested Courses
     div.tag-filters

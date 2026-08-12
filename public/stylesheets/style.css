@@ -132,14 +132,19 @@ h2.logo-subtext {
   padding: 10px 0;
 }
 
-.login-input, .btn {
+.login-input {
   width: 90%;
+  font-size: 1rem;
+}
+
+.btn {
   font-size: 1rem;
 }
 
 .login-btn {
   background-color: var(--color-primary);
   color: #fff;
+  width: 90%;
 }
 
 .login-bottom {
@@ -330,7 +335,6 @@ h2.logo-subtext {
   font-size: 16px;
   line-height: 1.5;
   text-align: left;
-  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Base post styles */
@@ -340,10 +344,11 @@ h2.logo-subtext {
   width: 600px;
   max-width: calc(100vw - 40px);
   height: auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   justify-self: center;
   border-radius: 8px;
   overflow: hidden;
+  padding: 20px 20px 5px 20px;
 }
 
 /* .post-message {
@@ -352,7 +357,7 @@ h2.logo-subtext {
 } */
 
 .post-message {
-  margin: 20px 20px 10px 20px;
+  margin: 20px 0px 10px 50px;
   white-space: pre-wrap;   /* preserve line breaks */
   word-break: break-word;  /* avoid overflow on long words/links */
 }
@@ -364,7 +369,7 @@ h2.logo-subtext {
   display: grid;
   grid-template-columns: 1fr;
   column-gap: 20px;
-  row-gap: 20px;
+  row-gap: 8px;
   justify-content: center;
 }
 
@@ -625,8 +630,9 @@ h2.logo-subtext {
 .post-actions {
   display: flex;
   gap: 12px;
-  padding-top: 2px;
-  padding-bottom: 12px;
+  padding: 2px 0px 12px 50px;
+  /* padding-top: 2px; */
+  /* padding-bottom: 12px; */
 }
 
 .like-btn, .comment-btn, .nav-btn {
@@ -636,7 +642,7 @@ h2.logo-subtext {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 8px 8px;
   border-radius: 8px;
   transition: background-color 0.2s;
   font-size: 14px;
