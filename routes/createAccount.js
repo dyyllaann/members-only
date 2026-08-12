@@ -82,6 +82,7 @@ router.post("/", [
 				password: hashedPassword,
 				major: req.body.major,
 				graduation: req.body.graduation,
+				icon: "icon_computer-science.svg",
 				organizationId: process.env.DEFAULT_ORGANIZATION_ID || "6a7a4917be8261a1baef009e",
 				subscribedCourses: [],
 			});
