@@ -154,34 +154,41 @@ router.get("/logout", function (req, res, next) {
 
 /* POST post (message) */
 router.post('/post', async (req, res, next) => {
-  if (!req.user) {
+  if (!req.isAuthenticated()) {
     return res.redirect('/');
   }
 
   try {
-    const Post = require('../models/post');
-    const { message, tags, imageSource } = req.body;
-    
-    // Handle tags - can be string (single) or array (multiple)
+    const { message, tags, imageSource, courseId } = req.body;
+
+    if (!message?.trim() && !imageSource) {
+      return res.status(400).send('A post needs text or an image.');
+    }
+
+    if (courseId && !ObjectId.isValid(courseId)) {
+      return res.status(400).send('Invalid course ID.');
+    }
+
     let tagArray = [];
     if (Array.isArray(tags)) {
       tagArray = tags;
     } else if (tags) {
       tagArray = [tags];
     } else {
-      tagArray = ['General']; // Default
+      tagArray = ['General'];  // Default tag if none provided. I'd rather get rid of this.
     }
-    
+
     const post = new Post({
       user: req.user._id,
-      message: message,
+      message: message?.trim() || '',
       tags: tagArray,
-      contentType: 'text',
-      imageSource: imageSource || null
+      courseId: courseId || null,
+      imageSource: imageSource || null,
+      contentType: imageSource ? 'image' : 'text'
     });
-    
+
     await post.save();
-    res.redirect('/');
+    res.redirect('back');
   } catch (err) {
     return next(err);
   }
@@ -208,7 +215,7 @@ router.post('/post/:id/like', async (req, res, next) => {
 
 /* POST comment on a post */
 router.post('/post/:postId/comment', async (req, res, next) => {
-  if (!req.user) {
+  if (!req.isAuthenticated()) {
     return res.status(401).json({ success: false, error: 'Not authenticated' });
   }
 
