@@ -301,17 +301,6 @@ h2.logo-subtext {
 /* IMAGE VIEW */
 .post[data-content-type="image"] .post-content {
   width: 100%;
-  background: linear-gradient(to bottom, #69e0cd, #5e0eab);
-  background: linear-gradient(to bottom, #a790c1, #c9e6b9);
-  background: linear-gradient(to bottom, #d76214, #660bec);
-  background: linear-gradient(to bottom, #2ca4c7, #dbded1);
-  background: linear-gradient(to bottom, #f16328, #920b5b);
-  background: linear-gradient(to bottom, #a46d5b, #f36670);
-  background: linear-gradient(to bottom, #ed0025, #70daca);
-  background: linear-gradient(to bottom, #85cdde, #51f95e);
-  color: white;
-  font-size: xx-large;
-  text-align: center;
 }
 
 /* .post-image {
@@ -332,8 +321,7 @@ h2.logo-subtext {
 
 /* TEXT VIEW */
 .post[data-content-type="text"] {
-  grid-column: 1 / -1; /* Span all columns */
-  justify-self: center; /* Center within the grid span */
+  grid-column: 1 / -1;
 }
 
 .post[data-content-type="text"] .post-content {
@@ -343,7 +331,6 @@ h2.logo-subtext {
   line-height: 1.5;
   text-align: left;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
 }
 
 /* Base post styles */
@@ -354,6 +341,9 @@ h2.logo-subtext {
   max-width: calc(100vw - 40px);
   height: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  justify-self: center;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* .post-message {
