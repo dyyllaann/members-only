@@ -4,7 +4,7 @@ IvyLink is a college-focused social-feed application. Registered users can creat
 
 ## Preview
 
-<img src="https://www.dylanarveson.com/static/media/members-screen.4ee3af56a92762fc0a44.png" alt="IvyLink feed preview" />
+<img src="public/resources/ivylink-preview_2026_08_02.png" alt="IvyLink feed preview" />
 
 ## Features
 
