@@ -341,7 +341,6 @@ h2.logo-subtext {
 .post-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;           /* space between text and image */
   align-items: stretch;
   overflow: visible;
   padding: 0;
@@ -386,6 +385,7 @@ h2.logo-subtext {
   display: flex;
   flex-direction: column;
   width:100%;
+  padding: 0;
 }
 
 .post {
@@ -393,9 +393,7 @@ h2.logo-subtext {
   height: auto;
   border: 1px solid rgba(0, 0, 0, 0.1);
   justify-self: center;
-  border-radius: 8px;
   overflow: hidden;
-  padding: 20px 20px 5px 20px;
 }
 
 /* Base post styles */
@@ -403,6 +401,8 @@ h2.logo-subtext {
   .post {
     width: 600px;
     max-width: calc(100vw - 40px);
+    border-radius: 8px;
+    /* padding: 20px 20px 5px 20px; */
   }
 }
 
@@ -412,7 +412,7 @@ h2.logo-subtext {
 } */
 
 .post-message {
-  margin: 20px 0px 10px 50px;
+  margin: 0px 12px 0px 64px;
   white-space: pre-wrap;   /* preserve line breaks */
   word-break: break-word;  /* avoid overflow on long words/links */
 }
@@ -432,11 +432,12 @@ h2.logo-subtext {
   display: flex;
   /* justify-content: space-between; */
   align-items: center;
-  margin-bottom: 8px;
+  margin: 12px;
 }
 
 .comment {
   margin-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .post-icon {
@@ -784,7 +785,7 @@ h2.logo-subtext {
 
 /* COMMENT INPUT */
 .comment-input-container {
-  padding: 0px;
+  padding: 12px;
   /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
 }
 
@@ -843,14 +844,14 @@ h2.logo-subtext {
   width: 600px; /* Fixed width, not max-width */
   max-width: calc(100vw - 40px); /* But don't overflow on mobile */
   height: auto;
-  background: rgba(0, 0, 0, 0.025);
+  /* background: rgba(0, 0, 0, 0.025); */
   color: #000;
   font-size: 14px;
   line-height: 1.5;
   text-align: left;
-  padding: 15px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  padding: 15px 15px 15px 52px;
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
+  /* border-radius: 8px; */
 }
 
 .comment-profile {
@@ -930,10 +931,15 @@ h2.logo-subtext {
     margin: 0 auto;
     min-height: 100vh;
     justify-content: center;
+    padding: 0 8px;
   }
 }
 
-
+@media (min-width: 1150px) {
+  .app-shell {
+    padding: 12px;
+  }
+}
 
 .app-shell--guest {
   grid-template-columns: minmax(0, 700px);
@@ -952,7 +958,7 @@ h2.logo-subtext {
 
   .app-shell {
     grid-template-columns: 1fr;
-    padding: 12px;
+    /* padding: 12px; */
   }
 
   .main-content {
@@ -986,23 +992,25 @@ h2.logo-subtext {
   min-width: 0;
 }
 
-.left-sidebar {
-  grid-column: 1;
+.left-sidebar, .right-sidebar {
+  /* Stick in one position */
+  position: sticky;
+  top: 20px;
+  align-self: start;
   min-width: 0;
   margin-top: 20px;
 }
 
+.left-sidebar {
+  grid-column: 1;
+}
+
 .right-sidebar {
   grid-column: 3;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 20px;
-  align-self: flex-start;
-  position: sticky;
-  /* top: 76px; */
-  margin-top: 20px;
 }
 
 .sidebar-tags {
@@ -1023,9 +1031,9 @@ h2.logo-subtext {
 }
 
 .sidebar-header {
-  padding: 16px;
-  font-size: x-large;
-  font-weight: 500;
+  padding: 16px 12px 4px 16px;
+  font-size: large;
+  font-weight: 600;
   color:var(--color-text);
   letter-spacing: 0.5px;
 }
