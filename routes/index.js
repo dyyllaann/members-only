@@ -107,7 +107,6 @@ router.get('/', async (req, res, next) => {
 /* GET Explore page. */
 router.get('/explore', async (req, res, next) => {
   try {
-    // Explore feed: global campus stream across all departments and courses
     const list_posts = await Post.findWithUser({});
     list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
@@ -115,6 +114,27 @@ router.get('/explore', async (req, res, next) => {
       user: req.user,
       title: "IvyLink - Explore",
       post_list: list_posts
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/* GET Notifications page. */
+router.get('/notifications', async (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+
+  try {
+    // const Notification = require('../models/notification');
+    // const notifications = await Notification.findByUserId(req.user._id);
+    // notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    res.render("notifications", {
+      user: req.user,
+      title: "IvyLink - Notifications",
+      notifications: []
     });
   } catch (err) {
     return next(err);

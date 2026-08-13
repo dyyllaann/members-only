@@ -584,6 +584,12 @@ h2.logo-subtext {
   align-items: center;
 }
 
+@media (min-width: 1150px) {
+  .app-bar {
+    display: none; /* Hide app bar on large screens */
+  }
+}
+
 .view-btn {
   display: flex;
   align-items: center;
@@ -964,7 +970,8 @@ h2.logo-subtext {
   align-items: stretch;
   gap: 4px;
   position: sticky;
-  top: 76px;
+  /* top: 76px; */
+  /* margin-top: 20px; */
 }
 
 .sidebar-tags {
@@ -982,6 +989,7 @@ h2.logo-subtext {
 .left-sidebar {
   grid-column: 1;
   min-width: 0;
+  margin-top: 20px;
 }
 
 .right-sidebar {
@@ -993,7 +1001,8 @@ h2.logo-subtext {
   gap: 20px;
   align-self: flex-start;
   position: sticky;
-  top: 76px;
+  /* top: 76px; */
+  margin-top: 20px;
 }
 
 .sidebar-tags {
@@ -1258,4 +1267,27 @@ h2.logo-subtext {
   text-align: center;
   color: var(--color-secondary);
   padding: 40px 0;
+}
+
+/* NOTIFICATIONS */
+.notifications-title {
+  padding: 16px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.no-notifications {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-secondary);
+  padding: 20px 0;
+}
+
+.notifications-image {
+  display: block;
+  margin: 0 auto;
+  width: 10%;
+  height: 10%;
+  object-fit: contain;
 }

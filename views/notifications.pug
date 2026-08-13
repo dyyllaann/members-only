@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  if user
+    block appBar
+      include partials/app-bar.pug
+    div.app-shell#feed-content
+      include partials/left-sidebar.pug
+      main.main-content
+        block notifications
+          h1.notifications-title Notifications
+          //- if notifications.length > 0
+          //-   ul.notifications-list
+          //-     each notification in notifications
+          //-       li.notification-item
+          //-         p.notification-text= notification.text
+          //-         span.notification-time= notification.time
+          //- else
+          img.notifications-image(src="/resources/notifications.svg" alt="No Notifications")
+          p.no-notifications No notifications yet!
+      include partials/right-sidebar.pug
+  else
+    block landing-page
+      include partials/landing-page.pug
