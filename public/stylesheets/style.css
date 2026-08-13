@@ -386,22 +386,29 @@ h2.logo-subtext {
   flex-direction: column;
   width:100%;
   padding: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .post {
   /* max-width: calc(100vw - 40px); */
   height: auto;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   justify-self: center;
   overflow: hidden;
 }
 
 /* Base post styles */
+@media (min-width: 890px) {
+  .post {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+}
+
 @media (min-width: 1150px) {
   .post {
     width: 600px;
     max-width: calc(100vw - 40px);
-    border-radius: 8px;
     /* padding: 20px 20px 5px 20px; */
   }
 }
