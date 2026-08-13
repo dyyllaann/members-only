@@ -2,12 +2,15 @@
     background-color: white;
     display: flex;
     /* justify-content: center; */
-    border: 1px rgba(0, 0, 0, 0.1) solid;
-    border-radius: 8px;
+    /* border: 1px rgba(0, 0, 0, 0.1) solid; */
+    /* border-radius: 8px; */
     flex-direction: column;
-    padding: 12px;
     margin-top: 12px;
 }
+
+/* .profile-hero {
+    padding: 16px;
+} */
 
 .profile-hero-header {
     /* font: 2rem "Montserrat", Helvetica, Arial, sans-serif; */
@@ -24,6 +27,7 @@
 }
 
 .profile-section-header {
+    /* padding: 0 16px; */
     text-align: left;
     font: 1.5rem "Montserrat", Helvetica, Arial, sans-serif;
     font-weight: 500;
@@ -32,4 +36,14 @@
 
 .profile-section p {
     padding-top: 2px;
+}
+
+#profile-content {
+  display: block;
+}
+
+@media (min-width: 890px) {
+  #profile-content {
+    margin: 0 16px;
+  }
 }

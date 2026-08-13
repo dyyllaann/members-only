@@ -4,70 +4,81 @@ block stylesheets
   link(rel='stylesheet', href='/stylesheets/profile.css')
 
 block content
-  if user
-    block appBar
-      include partials/app-bar.pug
+  div.app-shell
+    include partials/left-sidebar.pug
+    main.main-content
+      if user
+        block appBar
+          include partials/app-bar.pug
 
-    div.content#profile-content
-      // Check if logged-in user is viewing their own profile
-      if user.username === profileUser.username
-        //- p Welcome, #{user.firstName}!
-        // Show edit button, private info, etc.
-        //- button.btn Edit Profile
-        - console.log("Viewing logged in user's profile.");
+        div#profile-content
+          // Check if logged-in user is viewing their own profile
+          //- if user.username === profileUser.username
+            //- p Welcome, #{user.firstName}!
+            // Show edit button, private info, etc.
+            //- button.btn Edit Profile
+            - console.log("Viewing logged in user's profile.");
+          //- else
+            h1 #{profileUser.firstName} #{profileUser.lastName}'s Profile
+            p @#{profileUser.username}
+            // Show public view only
+            
+          // Display profile header
+          div.profile-hero
+            span.profile-hero-header @#{profileUser.username}
+            span.profile-hero-name #{profileUser.firstName} #{profileUser.lastName}
+            if profileUser.location 
+              if profileUser.location.city && profileUser.location.state && profileUser.location.country
+                span.profile-hero-location #{profileUser.location.city}, #{profileUser.location.state}, #{profileUser.location.country}
+              else if profileUser.location.state && profileUser.location.country
+                span.profile-hero-location #{profileUser.location.state}, #{profileUser.location.country}
+              else if profileUser.location.country
+                span.profile-hero-location #{profileUser.location.country}
+            else 
+              span Location Private
+            span Major: #{profileUser.major}
+            span Graduation: #{profileUser.graduation}
+          
+          // Display user's posts
+          div.profile-section
+            h1.profile-section-header Posts
+            div.posts-container
+              if post_list
+                each post in post_list
+                  div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
+                    div.post-header
+                      div.post-icon(class=`gradient-${post.user.colorPreference}`)
+                        a(href=`/profile/${post.user.username}`)
+                          img(src=`/resources/icons/${post.user.icon}`, alt=`${post.user.username}'s profile picture`)
+                      div.post-author
+                        a.username(href=`/profile/${post.user.username}`) #{post.user.username}
+                        span.major #{post.user.major}
+                      span.timestamp #{post.timestamp_formatted}
+                    div.post-content
+                      p.post-message #{post.message}
+                      if post.postImage
+                          img.post-image(
+                            src=post.postImage
+                            alt="Post Image"
+                            loading="lazy"
+                            referrerpolicy="no-referrer"
+                          )
+                    div.post-actions
+                      button.like-btn(
+                        class=post.hasUserLiked(user._id) ? 'liked' : ''
+                        data-post-id=post._id
+                      )
+                        span.like-icon
+                          svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                            path(d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z")
+                        span.like-count #{post.likeCount || 0}
+                      button.comment-btn(data-post-id=post._id)
+                        span.comment-icon
+                          svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                            path(d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z")
+                        span.comment-count #{post.commentCount || 0}
       else
-        h1 #{profileUser.firstName} #{profileUser.lastName}'s Profile
-        p @#{profileUser.username}
-        // Show public view only
-        
-      // Display profile header
-      div.profile-hero
-        span.profile-hero-header #{profileUser.username}
-        span.profile-hero-name #{profileUser.firstName} #{profileUser.lastName}
-        if profileUser.location 
-          if profileUser.location.city && profileUser.location.state && profileUser.location.country
-            span.profile-hero-location #{profileUser.location.city}, #{profileUser.location.state}, #{profileUser.location.country}
-          else if profileUser.location.state && profileUser.location.country
-            span.profile-hero-location #{profileUser.location.state}, #{profileUser.location.country}
-          else if profileUser.location.country
-            span.profile-hero-location #{profileUser.location.country}
-        else 
-          span Location Private
-
-      // Display profile info
-      div.profile-section
-        h1.profile-section-header About
-        div 
-          p Major: #{profileUser.major}
-          p Graduation: #{profileUser.graduation}
-      
-      // Display user's posts
-      if post_list && post_list.length
-        div.profile-section
-          h1.profile-section-header Posts
-          div.posts-container
-            each post in post_list
-              div.post(data-content-type=post.contentType data-post-id=post._id)
-                div.post-header
-                  div.post-author
-                    span.username #{post.user.username}
-                    span.major #{post.user.major}
-                  span.timestamp #{post.timestamp_formatted}
-                div.post-content
-                  p.post-message #{post.message}
-                div.post-actions
-                  button.like-btn(
-                    class=post.hasUserLiked(user._id) ? 'liked' : ''
-                    data-post-id=post._id
-                  )
-                    span.like-icon
-                      svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
-                        path(d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z")
-                    span.like-count #{post.likeCount || 0}
-                  button.comment-btn(data-post-id=post._id)
-                    span.comment-icon 
-                      svg(xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
-                        path(d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z")
-                    span.comment-count #{post.commentCount || 0}  
-  else
-    p Please log in to view profiles.
+        h2(style="text-align: center; margin-top: 20px;") Profiles are private until you 
+          a(href="/create-account") create an account
+          | .
+    include partials/right-sidebar.pug

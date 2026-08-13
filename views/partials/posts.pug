@@ -1,5 +1,5 @@
-if post_list
-  div.posts-container
+div.posts-container
+  if post_list
     each post in post_list
       div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
         div.post-header
