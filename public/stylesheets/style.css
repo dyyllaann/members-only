@@ -27,6 +27,12 @@ a {
   color: var(--color-secondary);
 }
 
+/* incognito */
+/* img, svg, video {
+  filter: blur(25px) grayscale(100%);
+  pointer-events: none;
+} */
+
 /* UTILITY */
 .text-muted {
   color: var(--color-secondary);
@@ -118,13 +124,16 @@ input {
 /* LOGO */
 /* Mobile */
 
+.logo-container {
+  display: flex;
+  flex-direction: column;    
+  justify-content: center;
+  width: 50%;
+}
+
 
 @media (min-width: 768px) {
   .logo-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 50%;
     margin-right: 60px; /* Add margin between logo and login */
   }
 }
@@ -206,14 +215,20 @@ h2.logo-subtext {
 }
 
 /* CREATE ACCOUNT */
+/* Mobile */
 .create-account {
   height: 100vh;
-  width: 580px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .create-account {
+    min-width: 600px;
+  }
 }
 
 .color-choice-container {
@@ -514,6 +529,10 @@ h2.logo-subtext {
   justify-content: center;
   pointer-events: none;
   z-index: 1000;
+}
+
+.app-bar--center a {
+  pointer-events: auto;
 }
 
 .app-bar--center img {
