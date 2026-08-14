@@ -120,6 +120,14 @@ router.get('/explore', async (req, res, next) => {
   }
 });
 
+/* GET Nearby page. */
+router.get('/nearby', async (req, res, next) => {
+  res.render("nearby", {
+    user: req.user,
+    title: "IvyLink - Nearby"
+  });
+});
+
 /* GET Notifications page. */
 router.get('/notifications', async (req, res, next) => {
   if (!req.isAuthenticated()) {

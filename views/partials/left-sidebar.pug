@@ -8,6 +8,10 @@ aside.left-sidebar
             a.sidebar-link(href="/explore" aria-current=currentPath === "/explore" ? "page" : undefined)
               img.nav-icon(src="/resources/explore.svg" alt="")
               span Explore
+          div.nav-btn(class=currentPath === "/nearby" ? "active" : "")
+            a.sidebar-link(href="/nearby" aria-current=currentPath === "/nearby" ? "page" : undefined)
+              img.nav-icon(src="/resources/nearby.svg" alt="")
+              span Nearby
           div.nav-btn(class=currentPath === "/notifications" ? "active" : "")
             a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
               img.nav-icon(src="/resources/notifications.svg" alt="")

@@ -24,6 +24,7 @@ const dbo = require("./db/conn");
 
 // var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
+var nearbyRouter = require("./routes/nearby");
 var guestRouter = require("./routes/guest");
 var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
@@ -123,6 +124,7 @@ app.use("/", indexRouter);
 app.use("/guest", guestRouter);
 app.use("/create-account", createAccountRouter);
 app.use("/courses", coursesRouter);
+app.use("/", nearbyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

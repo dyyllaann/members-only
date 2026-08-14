@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  if user
+    block appBar
+      include partials/app-bar.pug
+    div.app-shell#feed-content
+      include partials/left-sidebar.pug
+      main.main-content
+        block post
+          include partials/create-nearby-post.pug
+        block posts
+          include partials/posts.pug
+      include partials/right-sidebar.pug
+  else
+    block landing-page
+      include partials/landing-page.pug

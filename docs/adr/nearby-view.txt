@@ -1,0 +1,64 @@
+# Design Document: IvyLink Proximity View
+
+## 1. Objective
+
+To implement a "Nearby" feed that allows students to view and discover hyper-local events. The system must prioritize user safety by completely neutralizing triangulation attacks, utilizing context-aware location precision, and ensuring both the location data and the content itself are strictly ephemeral.
+
+## 2. Data Modeling & Architecture
+
+**Decision:** Implement a denormalized, ephemeral architecture. Geospatial posts will be stored in a dedicated `nearby_posts` collection, keeping them entirely isolated from the standard, persistent `posts` collection.
+
+**The `nearby_post` Schema:**
+A `nearby_post` object will be identical to a standard `post` object, maintaining the exact same fields for content, author associations, and metadata, with the addition of a spatial index field.
+
+* Standard fields (e.g., `_id`, `authorId`, `content`, `createdAt`)
+* `location`: A GeoJSON Point (coordinates truncated prior to insertion).
+
+**The Data Lifecycle (Strict Ephemerality):**
+The `nearby_posts` collection will utilize a 24-hour Time-To-Live (TTL) index on the `createdAt` field. Because the geographic data and the post content are unified in a single document, the database engine will automatically and permanently destroy the *entire* post after 24 hours. These posts will not persist on the user's profile or the standard campus feed.
+
+## 3. Privacy & Security Protocol
+
+The backend will enforce a strict defense-in-depth strategy to prevent bad actors from mapping user locations.
+
+### A. Context-Aware Truncation (Fuzzing at Write)
+
+User coordinates will never be saved with raw GPS fidelity. Precision is dynamically throttled by the Node server based on the user's proximity to a defined campus center point (e.g., Drumheller Fountain).
+
+* **On-Campus (Within ~1.5km of center):** Coordinates truncated to 3 decimal places (~111-meter precision). Allows differentiation between campus buildings while obscuring exact rooms.
+* **Off-Campus (Beyond 1.5km of center):** Coordinates truncated to 2 decimal places (~1.1-kilometer precision). Protects off-campus housing by only revealing general neighborhood zones.
+
+### B. Output Sanitization (Fuzzing at Read)
+
+All distance math occurs on the server. Before the payload is transmitted to the client, the backend will:
+
+1. Strip the raw GeoJSON `location` coordinates from the response entirely.
+2. Convert the exact calculated distance (in meters) into a categorical UI string (e.g., "Under 1 mile away", "1-3 miles away").
+3. Strip the exact meter integer from the payload.
+
+## 4. Query Execution Flow
+
+Because the architecture embeds the content directly alongside the location data, the read path is highly optimized and requires no database joins.
+
+1. **Distance Calculation & Retrieval:** Execute a `$geoNear` aggregation against the `nearby_posts` collection using the client's coordinates. This mathematically maps the 5-mile radius and automatically sorts the array from closest to furthest.
+2. **Sanitization Shield:** Execute a `$project` stage immediately following `$geoNear` to strip the `location` field before the array enters Node.js memory.
+3. **Delivery:** Apply the string-based distance fuzzing logic and deliver the JSON to the frontend.
+
+## 5. Client-Side UX & State Machine
+
+The Vanilla JS frontend must gracefully handle browser permission states without breaking the core application loop.
+
+* **State 1: Navigation & Request**
+* User selects the "Nearby" tab.
+* UI renders a skeleton loader.
+* Frontend triggers the browser's Geolocation API.
+
+
+* **State 2: Denied / Timeout**
+* If permission is denied or a GPS lock fails (e.g., 5-second timeout), the network request to the backend is aborted.
+* UI renders an educational empty state explaining why the feed requires location access, with instructions on how to enable it.
+
+
+* **State 3: Success**
+* Coordinates are captured and transmitted to the backend.
+* UI renders the feed ordered by proximity, displaying the post content, timestamp, and fuzzy distance label.
