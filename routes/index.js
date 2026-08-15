@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require("passport");
 const Post = require("../models/post");
+const NearbyPost = require("../models/nearby_post");
 const { body } = require('express-validator');
 const dbo = require("../db/conn");
 const { ObjectId } = require("mongodb");
@@ -122,10 +123,22 @@ router.get('/explore', async (req, res, next) => {
 
 /* GET Nearby page. */
 router.get('/nearby', async (req, res, next) => {
-  res.render("nearby", {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+
+  try {
+    const list_posts = await NearbyPost.findWithUser({});
+    list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+    res.render("nearby", {
     user: req.user,
-    title: "IvyLink - Nearby"
+    title: "IvyLink - Nearby",
+    post_list: list_posts
   });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /* GET Notifications page. */
