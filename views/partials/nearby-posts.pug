@@ -9,7 +9,8 @@ div.posts-container
           div.post-author
             a.username(href=`/profile/${post.user.username}`) #{post.user.username}
             span.major #{post.user.major}
-          span.timestamp #{post.timestamp_formatted}
+          //- span.timestamp #{post.timestamp_formatted}
+          span.timestamp= post.location.coordinates
         div.post-content
           p.post-message #{post.message}
           if post.postImage
@@ -19,7 +20,7 @@ div.posts-container
                 loading="lazy"
                 referrerpolicy="no-referrer"
               )
-        div.post-actions
+        //- div.post-actions
           button.like-btn(
             class=post.hasUserLiked(user._id) ? 'liked' : ''
             data-post-id=post._id

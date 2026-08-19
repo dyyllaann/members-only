@@ -207,10 +207,12 @@ router.post('/post', async (req, res, next) => {
       return res.status(400).send('A post needs text or an image.');
     }
 
+    /* Not necessary. */
     if (courseId && !ObjectId.isValid(courseId)) {
       return res.status(400).send('Invalid course ID.');
     }
 
+    /* Handle tags as an array */
     let tagArray = [];
     if (Array.isArray(tags)) {
       tagArray = tags;
@@ -304,8 +306,8 @@ router.post('/post/:postId/comment', async (req, res, next) => {
           username: user.username,
           firstName: user.firstName,
           major: user.major,
-          icon: user.icon,                          // ← Add this
-          colorPreference: user.colorPreference     // ← Add this
+          icon: user.icon,
+          colorPreference: user.colorPreference
         }
       }
     });

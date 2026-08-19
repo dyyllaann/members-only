@@ -11,7 +11,7 @@ class NearbyPost {
     this.postImage = this.imageSource; 
     this.timestamp = postData.timestamp || new Date();
 
-    // -- NEW: Geospatial Construction & Security --
+    // -- Geospatial Construction & Security --
     // If creating a new post, convert raw lat/lng into fuzzed GeoJSON
     if (postData.lat && postData.lng && !postData.location) {
       this.location = NearbyPost.formatSecureLocation(postData.lat, postData.lng);
@@ -21,7 +21,7 @@ class NearbyPost {
       this.location = postData.location;
     }
 
-    // Attach the fuzzy distance label for the UI (only exists on read)
+    /* Doesn't actually exist in the database */
     if (postData.distanceLabel) {
       this.distanceLabel = postData.distanceLabel;
     }
@@ -55,7 +55,7 @@ class NearbyPost {
     }
   }
 
-  // --- NEW: Security & Fuzzing Methods ---
+  // --- Security & Fuzzing Methods ---
 
   static getDistanceInMeters(lat1, lon1, lat2, lon2) {
     const R = 6371e3; 
@@ -73,7 +73,7 @@ class NearbyPost {
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
     
-    // Drumheller Fountain coordinates
+    // Example: Drumheller Fountain coordinates
     const distanceToCampus = this.getDistanceInMeters(parsedLat, parsedLng, 47.6538, -122.3078);
     
     // On-campus = 3 decimals. Off-campus = 2 decimals.
@@ -88,14 +88,14 @@ class NearbyPost {
     };
   }
 
-  // --- NEW: Proximity Query ---
+  // --- Proximity Query ---
 
   static async findNearby(lat, lng) {
     const db = dbo.getDb();
     const collection = db.collection("nearby_posts");
     
     const pipeline = [
-      // 1. Geospatial sort & filter (MUST be first stage)
+      // Geospatial sort & filter
       {
         $geoNear: {
           near: { type: "Point", coordinates: [ parseFloat(lng), parseFloat(lat) ] },
@@ -104,7 +104,7 @@ class NearbyPost {
           spherical: true
         }
       },
-      // 2. Populate User Data
+      // Populate User Data
       {
         $lookup: {
           from: "users",
@@ -114,17 +114,17 @@ class NearbyPost {
         }
       },
       { $unwind: "$user" },
-      // 3. Output Sanitization Shield
+      // Output Sanitization Shield
       {
         $project: {
-          location: 0 // Annihilate raw coordinates before sending to Node memory
+          location: 0 // Overwrite raw coordinates before sending to memory
         }
       }
     ];
 
     const postsData = await collection.aggregate(pipeline).toArray();
 
-    // 4. Map to Model and apply Fuzzy Distance text
+    // Map to Model and apply Fuzzy Distance text
     return postsData.map(postData => {
       let fuzzy = "Under 1 mile away";
       if (postData.distanceInMeters > 4828) fuzzy = "3-5 miles away";

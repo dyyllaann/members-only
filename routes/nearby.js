@@ -52,7 +52,7 @@ router.get('/nearby', async (req, res, next) => {
 /* POST create a nearby post */
 router.post('/nearby', async (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Not authenticated' });
+    return res.redirect('/');
   }
 
   try {
@@ -76,7 +76,8 @@ router.post('/nearby', async (req, res, next) => {
     });
 
     await nearbyPost.save();
-    res.status(201).json({ success: true, post: nearbyPost });
+    // res.status(201).json({ success: true, post: nearbyPost });
+    res.redirect('/nearby');
   } catch (err) {
     return next(err);
   }
