@@ -41,9 +41,3 @@
 #profile-content {
   display: block;
 }
-
-@media (min-width: 890px) {
-  #profile-content {
-    margin: 0 16px;
-  }
-}
