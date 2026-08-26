@@ -18,6 +18,12 @@ body {
   justify-content: center;
 }
 
+@media (min-width: 1150px) {
+  html {
+    overflow-y: scroll;
+  }
+}
+
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -939,12 +945,6 @@ h2.logo-subtext {
     min-height: 100vh;
     justify-content: center;
     padding: 0 8px;
-  }
-}
-
-@media (min-width: 1150px) {
-  .app-shell {
-    padding: 12px;
   }
 }
 

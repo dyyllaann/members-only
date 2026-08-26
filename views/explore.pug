@@ -7,17 +7,8 @@ block content
     div.app-shell#feed-content
       include partials/left-sidebar.pug
       div.main-content
-        //- block post
-          div.create-post
-            div.post-form
-              form(action="/post" method="POST")
-                div.form-group
-                  input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
-                div.tag-selector.hidden
-                  button.tag-btn(type="button" data-tag="General") General
-                  button.tag-btn(type="button" data-tag=user.major)= user.major
-                div.form-group
-                  input.btn.post-btn(type="submit" value="Post")
+        block post
+          include partials/create-post.pug
         block posts
           include partials/posts.pug
       include partials/right-sidebar.pug

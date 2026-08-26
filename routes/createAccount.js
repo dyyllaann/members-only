@@ -13,7 +13,7 @@ const User = require("../models/user");
 // Rate limiting middleware for account creation
 const checkLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 30,
+	max: 50,
 	message: { available: false, message: "Too many attempts. Please try again later." }
 });
 
