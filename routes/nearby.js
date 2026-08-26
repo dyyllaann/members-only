@@ -12,42 +12,46 @@ const User = require('../models/user');
    PAGE RENDER ROUTE
 ========================================= */
 
-/* GET Nearby page (Renders the shell, frontend fetches data) */
-router.get('/nearby', (req, res) => {
+/* GET Nearby page. */
+router.get('/nearby', async (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect('/');
   }
-  
-  res.render("nearby", {
-    user: req.user,
-    title: "IvyLink - Nearby"
-  });
+
+  const { lat, lng } = req.query;
+  console.log(`Received coordinates: lat=${lat}, lng=${lng}`);
+
+  // No coordinates yet — render the page empty so the client script can
+  // supply them and reload.
+  if (!lat || !lng) {
+    return res.render("nearby", {
+      user: req.user,
+      title: "IvyLink - Nearby",
+      post_list: []
+    });
+    console.log("No coordinates provided. Rendering empty nearby page.");
+  }
+
+  try {
+    const list_posts = await NearbyPost.findNearby(lat, lng);
+    console.log(`findNearby returned ${list_posts.length} posts`);
+    list_posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    res.render("nearby", {
+      user: req.user,
+      title: "IvyLink - Nearby",
+      post_list: list_posts,
+      lat: lat,
+      lng: lng
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /* =========================================
    API ROUTES
 ========================================= */
-
-/* GET nearby posts (Frontend provides coordinates) */
-router.get('/nearby', async (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-
-  try {
-    const { lat, lng } = req.query;
-    
-    if (!lat || !lng) {
-      return res.status(400).json({ error: 'Location coordinates are required.' });
-    }
-
-    // Leverages the static $geoNear method we built into the model
-    const localFeed = await NearbyPost.findNearby(lat, lng);
-    res.json(localFeed);
-  } catch (err) {
-    return next(err);
-  }
-});
 
 /* POST create a nearby post */
 router.post('/nearby', async (req, res, next) => {
@@ -190,4 +194,5 @@ router.get('/nearby/:postId/comments', async (req, res, next) => {
   }
 });
 
+console.log("Nearby router loaded successfully.");
 module.exports = router;

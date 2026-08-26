@@ -64,6 +64,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Nearby Like button functionality
+  document.querySelectorAll('.nearby-like-btn').forEach(button => {
+    button.addEventListener('click', async function(e) {
+      e.preventDefault();
+      const postId = this.dataset.postId;
+      
+      try {
+        const response = await fetch(`/nearby/${postId}/like`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        // Update UI
+        this.querySelector('.like-count').textContent = data.likeCount;
+        this.classList.toggle('liked', data.liked);
+      } catch (error) {
+        console.error('Error liking post:', error);
+      }
+    });
+  });
+
   // Comment button functionality
   document.querySelectorAll('.comment-btn').forEach(button => {
     button.addEventListener('click', function(e) {

@@ -708,7 +708,7 @@ h2.logo-subtext {
   /* padding-bottom: 12px; */
 }
 
-.like-btn, .comment-btn, .nav-btn {
+.like-btn, .comment-btn, .nav-btn, .nearby-like-btn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -753,7 +753,7 @@ h2.logo-subtext {
 }
 
 .like-btn:hover, .comment-btn:hover, .nav-btn:hover, .nav-btn.active,
-.tag-filter-btn:hover, .tag-filter-btn.active {
+.tag-filter-btn:hover, .tag-filter-btn.active, .nearby-like-btn:hover, .nearby-like-btn.active {
   background-color: rgba(0, 0, 0, 0.05);
 }
 

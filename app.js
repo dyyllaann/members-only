@@ -120,11 +120,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
+app.use("/", nearbyRouter);
 app.use("/", indexRouter);
 app.use("/guest", guestRouter);
 app.use("/create-account", createAccountRouter);
 app.use("/courses", coursesRouter);
-app.use("/", nearbyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

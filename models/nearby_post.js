@@ -8,42 +8,35 @@ class NearbyPost {
     this.user = postData.user;
     this.message = postData.message;
     this.imageSource = postData.imageSource || postData.postImage || null;
-    this.postImage = this.imageSource; 
+    this.postImage = this.imageSource;
     this.timestamp = postData.timestamp || new Date();
-
-    // -- Geospatial Construction & Security --
-    // If creating a new post, convert raw lat/lng into fuzzed GeoJSON
-    if (postData.lat && postData.lng && !postData.location) {
-      this.location = NearbyPost.formatSecureLocation(postData.lat, postData.lng);
-    } 
-    // If fetching from DB, map the existing location
-    else if (postData.location) {
-      this.location = postData.location;
-    }
-
-    /* Doesn't actually exist in the database */
-    if (postData.distanceLabel) {
-      this.distanceLabel = postData.distanceLabel;
-    }
-
-    this.private = postData.private !== undefined ? postData.private : true;
-    this.allowedUsers = postData.allowedUsers || [];
+    this.tags = Array.isArray(postData.tags) ? postData.tags : [];
     this.likes = Array.isArray(postData.likes)
       ? postData.likes.map(id => id instanceof ObjectId ? id : new ObjectId(id))
       : [];
     this.likeCount = postData.likeCount || 0;
     this.commentCount = postData.commentCount || 0;
-    this.tags = Array.isArray(postData.tags) ? postData.tags : [];
-    this.courseId = postData.courseId
-      ? (postData.courseId instanceof ObjectId ? postData.courseId : new ObjectId(postData.courseId))
-      : null;
+
+    // New post: convert raw lat/lng into GeoJSON.
+    // Existing post: carry the stored location through.
+    if (postData.lat && postData.lng && !postData.location) {
+      this.location = NearbyPost.formatLocation(postData.lat, postData.lng);
+    } else if (postData.location) {
+      this.location = postData.location;
+    }
+
+    // Computed at query time by findNearby; not stored in the database.
+    if (postData.distanceLabel) {
+      this.distanceLabel = postData.distanceLabel;
+    }
   }
 
-  // Virtual property for formatted timestamp
+  // Virtual property for formatted timestamp. If we're switching to 24 hour
+  // expiration, then this will need to be updated.
   get timestamp_formatted() {
     const time = DateTime.fromJSDate(this.timestamp);
     const diff = DateTime.now().diff(time, ['days', 'hours', 'minutes']).toObject();
-    
+
     if (diff.days >= 1) {
       return time.toLocaleString(DateTime.DATE_MED);
     } else if (diff.hours >= 1) {
@@ -55,154 +48,43 @@ class NearbyPost {
     }
   }
 
-  // --- Security & Fuzzing Methods ---
+  /* LOCATION FORMATTING */
 
-  static getDistanceInMeters(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; 
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a = 
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
-  static formatSecureLocation(lat, lng) {
+  static formatLocation(lat, lng) {
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
-    
-    // Example: Drumheller Fountain coordinates
-    const distanceToCampus = this.getDistanceInMeters(parsedLat, parsedLng, 47.6538, -122.3078);
-    
-    // On-campus = 3 decimals. Off-campus = 2 decimals.
-    const precision = distanceToCampus <= 1500 ? 1000 : 100;
-    
+
     return {
       type: "Point",
-      coordinates: [
-        Math.round(parsedLng * precision) / precision, // MongoDB requires Lng first
-        Math.round(parsedLat * precision) / precision
-      ]
+      coordinates: [parsedLng, parsedLat] // MongoDB requires Lng first
     };
   }
 
-  // --- Proximity Query ---
+  /* PROXIMITY QUERY */
 
   static async findNearby(lat, lng) {
+    const parsedLat = parseFloat(lat);
+    const parsedLng = parseFloat(lng);
+
+    if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) {
+      throw new Error(`findNearby requires numeric coordinates. Received lat=${lat}, lng=${lng}`);
+    }
+
     const db = dbo.getDb();
     const collection = db.collection("nearby_posts");
-    
+
     const pipeline = [
-      // Geospatial sort & filter
+      // Geospatial sort & filter. Must be the first stage, and requires a
+      // 2dsphere index on `location`.
       {
         $geoNear: {
-          near: { type: "Point", coordinates: [ parseFloat(lng), parseFloat(lat) ] },
+          near: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
           distanceField: "distanceInMeters",
-          maxDistance: 8046, // ~5 miles
+          maxDistance: 10000, // 10 km
           spherical: true
         }
       },
-      // Populate User Data
-      {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      { $unwind: "$user" },
-      // Output Sanitization Shield
-      {
-        $project: {
-          location: 0 // Overwrite raw coordinates before sending to memory
-        }
-      }
-    ];
-
-    const postsData = await collection.aggregate(pipeline).toArray();
-
-    // Map to Model and apply Fuzzy Distance text
-    return postsData.map(postData => {
-      let fuzzy = "Under 1 mile away";
-      if (postData.distanceInMeters > 4828) fuzzy = "3-5 miles away";
-      else if (postData.distanceInMeters > 1609) fuzzy = "1-3 miles away";
-
-      postData.distanceLabel = fuzzy;
-      
-      const post = new NearbyPost(postData);
-      post.user = postData.user; // Ensure populated user persists
-      return post;
-    });
-  }
-
-  // Save post to database
-  async save() {
-    const db = dbo.getDb();
-    const collection = db.collection('nearby_posts');
-    
-    // Prevent the fuzzy UI label from ever saving to the database
-    const { distanceLabel, ...dataToSave } = this;
-    
-    if (this._id && await collection.findOne({_id: this._id})) {
-      const { _id, ...updateData } = dataToSave;
-      return await collection.updateOne({_id: this._id}, {$set: updateData});
-    } else {
-      return await collection.insertOne(dataToSave);
-    }
-  }
-
-  // Find post by ID
-  static async findById(id) {
-    const db = dbo.getDb();
-    const collection = db.collection('nearby_posts');
-    return await collection.findOne({_id: new ObjectId(id)});
-  }
-
-  // Find all posts
-  static async findAll() {
-    const db = dbo.getDb();
-    const collection = db.collection('nearby_posts');
-    return await collection.find({}).toArray();
-  }
-
-  // Populate user data for this post instance
-  async populate(field = 'user') {
-    if (field === 'user' && this.user) {
-      const db = dbo.getDb();
-      const usersCollection = db.collection('users');
-
-      // If user is an ObjectId, fetch the user data
-      const userData = await usersCollection.findOne({_id: new ObjectId(this.user)});
-      if (userData) {
-        this.user = userData;  // Replace ObjectId with user data
-      }
-    }
-    return this;
-  }
-
-
-  // Static method to populate multiple posts
-  static async populate(posts, field = 'user') {
-    if (!Array.isArray(posts)) {
-      posts = [posts];
-    }
-    
-    const populatedPosts = await Promise.all(
-      posts.map(post => post.populate(field))
-    );
-    
-    return populatedPosts;
-  }
-
-  // Find posts with populated user data, optionally filtering by author fields
-  static async findWithUser(criteria = {}, userCriteria = {}) {
-    const db = dbo.getDb();
-    const collection = db.collection("nearby_posts");
-    const pipeline = [
-      { $match: criteria },
+      // Populate user data
       {
         $lookup: {
           from: "users",
@@ -214,19 +96,81 @@ class NearbyPost {
       { $unwind: "$user" }
     ];
 
-    if (Object.keys(userCriteria).length > 0) {
-      pipeline.push({ $match: userCriteria });
-    }
+    const postsData = await collection.aggregate(pipeline).toArray();
 
-    const posts = await collection.aggregate(pipeline).toArray();
-    
-    return posts.map(postData => {
+    return postsData.map(postData => {
+      const meters = Math.round(postData.distanceInMeters);
+      if (meters < 50) {
+        postData.distanceLabel = "Nearby";
+      } else if (meters < 1000) {
+        postData.distanceLabel = `${meters}m`;
+      } else {
+        postData.distanceLabel = `${(meters / 1000).toFixed(1)}km`;
+      }
+
       const post = new NearbyPost(postData);
       post.user = postData.user;
       return post;
     });
   }
-  
+
+  /* PERSISTENCE */
+
+  // Save post to database
+  async save() {
+    const db = dbo.getDb();
+    const collection = db.collection('nearby_posts');
+
+    // Keep the query-time label out of the stored document
+    const { distanceLabel, ...dataToSave } = this;
+
+    if (this._id && await collection.findOne({ _id: this._id })) {
+      const { _id, ...updateData } = dataToSave;
+      return await collection.updateOne({ _id: this._id }, { $set: updateData });
+    } else {
+      return await collection.insertOne(dataToSave);
+    }
+  }
+
+  // Find all posts
+  static async findAll() {
+    const db = dbo.getDb();
+    const collection = db.collection('nearby_posts');
+    return await collection.find({}).toArray();
+  }
+
+  // Find a single nearby post by ID and return a NearbyPost instance
+  static async findById(id) {
+    const db = dbo.getDb();
+    const collection = db.collection('nearby_posts');
+    const _id = id instanceof ObjectId ? id : new ObjectId(id);
+    const postData = await collection.findOne({ _id });
+    return postData ? new NearbyPost(postData) : null;
+  }
+
+  // Increment the commentCount for a given post id
+  static async incrementCommentCount(postId) {
+    const db = dbo.getDb();
+    const collection = db.collection('nearby_posts');
+    const _id = postId instanceof ObjectId ? postId : new ObjectId(postId);
+    await collection.updateOne({ _id }, { $inc: { commentCount: 1 } });
+  }
+
+  // Populate user data for this post instance
+  async populate(field = 'user') {
+    if (field === 'user' && this.user) {
+      const db = dbo.getDb();
+      const usersCollection = db.collection('users');
+
+      // If user is an ObjectId, fetch the user data
+      const userData = await usersCollection.findOne({ _id: new ObjectId(this.user) });
+      if (userData) {
+        this.user = userData; // Replace ObjectId with user data
+      }
+    }
+    return this;
+  }
+
   // Toggle like
   async toggleLike(userId) {
     const db = dbo.getDb();
@@ -271,19 +215,11 @@ class NearbyPost {
   }
 
   // Check if user has liked this post
-  hasUserLiked(userId) {
-    const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);
-    return this.likes.some(id => id.equals(userObjectId));
-  }
-
-  // Update comment count
-  static async incrementCommentCount(postId) {
-    const db = dbo.getDb();
-    await db.collection("nearby_posts").updateOne(
-      { _id: postId },
-      { $inc: { commentCount: 1 } }
-    )
-  }
+	hasUserLiked(userId) {
+    if (!Array.isArray(this.likes)) return false;
+		const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);
+		return this.likes.some(id => id.equals(userObjectId));
+	}
 }
 
 module.exports = NearbyPost;
