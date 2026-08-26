@@ -19,6 +19,9 @@ block content
               each post in post_list
                 div.post(data-content-type=post.contentType data-post-id=post._id data-tags=post.tags.join(','))
                   div.post-header
+                    div.post-icon(class=`gradient-7`)
+                      a(href=`/create-account`)
+                        img(src=`/resources/icons/icon_computer-science.svg`, alt=`Anonymous profile picture`)
                     div.post-author
                       a.username(href=`/create-account`) Anonymous
                       span.major #{post.user.major}
