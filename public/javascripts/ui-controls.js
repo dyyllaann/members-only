@@ -21,9 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  /*
   // Profile dropdown toggle
   const profileButton = document.querySelector('.control-item.profile');
-  const userMenu = document.getElementById('user-menu');
+  const userMenu = document.getElementById('mobile-menu');
   
   if (profileButton && userMenu) {
     profileButton.addEventListener('click', function(e) {
@@ -36,6 +37,31 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!profileButton.contains(event.target) && !userMenu.contains(event.target)) {
         userMenu.classList.remove('visible');
       }
+    });
+  }
+  */
+
+  // Mobile menu toggle
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+
+  if (toggle && menu && backdrop) {
+    const setMenu = (open) => {
+      menu.classList.toggle('visible', open);
+      backdrop.classList.toggle('visible', open);
+      document.body.classList.toggle('menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle.addEventListener('click', () => {
+      setMenu(!menu.classList.contains('visible'));
+    });
+
+    backdrop.addEventListener('click', () => setMenu(false));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setMenu(false);
     });
   }
 

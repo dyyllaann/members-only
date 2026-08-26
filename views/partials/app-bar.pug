@@ -1,24 +1,47 @@
+mixin navItem(href, icon, label, isActive)
+  div.mobile-nav-btn(class=isActive ? "active" : "")
+    a.sidebar-link(href=href aria-current=isActive ? "page" : undefined)
+      img.nav-icon(src=`/resources/${icon}` alt="")
+      span= label
+
 div.app-bar
-    div.app-bar--left
-    div.app-bar--center
-        a(href="/")
-            img.center-logo(src="/resources/ivy.png")
-    div.app-bar--right
-        if user
-            div.controls
-                div.control-item.profile
-                    div.post-icon(class=`gradient-${user.colorPreference}`)
-                        img(src=`/resources/icons/${user.icon}`, alt=`${user.username}'s profile picture`)
-            block userMenu
-                div.user-menu#user-menu
-                    ul
-                        li
-                            a(href=`/profile/${user.username}`) Profile
-                        li
-                            a(href="/logout") Sign Out
-        //- else
-        //-     div.controls
-        //-         div.login
-        //-             a(href="/") Log In
-        //-         div.signup
-        //-             a(href="/create-account") Sign Up
+  div.app-bar--left
+  div.app-bar--center
+    a(href="/")
+      img.center-logo(src="/resources/ivy.png")
+  div.app-bar--right
+    if user
+      div.controls
+        button.control-item.profile#mobile-menu-toggle(
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        )
+          //- div.post-icon(class=`gradient-${user.colorPreference}`)
+          //-   img(src=`/resources/icons/${user.icon}`, alt="")
+
+  if user
+    div.mobile-menu-backdrop#mobile-menu-backdrop
+      div.mobile-menu#mobile-menu
+        div.mobile-menu-header
+            div.post-icon(class=`gradient-${user.colorPreference}`)
+              a(href=`/profile/${user.username}`)
+                img(src=`/resources/icons/${user.icon}`, alt="")
+            div.profile-hero
+              span.profile-hero-header @#{user.username}
+              span.profile-hero-name #{user.firstName} #{user.lastName}
+        div.sidebar-links
+          +navItem("/", "home.svg", "Home", currentPath === "/")
+          +navItem("/explore", "explore.svg", "Explore", currentPath === "/explore")
+          +navItem("/nearby", "nearby.svg", "Nearby", currentPath === "/nearby")
+          +navItem("/notifications", "notifications.svg", "Notifications", currentPath === "/notifications")
+          +navItem(`/profile/${user.username}`, "profile.svg", "Profile", currentPath.startsWith("/profile/"))
+          div.mobile-nav-btn.btn-inactive
+            a.sidebar-link(href="/settings")
+              img.nav-icon(src="/resources/settings.svg" alt="")
+              span Settings
+          div.mobile-nav-btn
+            a.sidebar-link(href="/logout")
+              //- img.nav-icon(src="/resources/logout.svg" alt="")
+              span(style="text-align: center;") Sign Out
