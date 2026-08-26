@@ -18,8 +18,6 @@ div.app-bar
           aria-controls="mobile-menu"
           aria-label="Open menu"
         )
-          //- div.post-icon(class=`gradient-${user.colorPreference}`)
-          //-   img(src=`/resources/icons/${user.icon}`, alt="")
 
   if user
     div.mobile-menu-backdrop#mobile-menu-backdrop
@@ -38,10 +36,9 @@ div.app-bar
           +navItem("/notifications", "notifications.svg", "Notifications", currentPath === "/notifications")
           +navItem(`/profile/${user.username}`, "profile.svg", "Profile", currentPath.startsWith("/profile/"))
           div.mobile-nav-btn.btn-inactive
-            a.sidebar-link(href="/settings")
+            a.sidebar-link(href="/")
               img.nav-icon(src="/resources/settings.svg" alt="")
               span Settings
           div.mobile-nav-btn
             a.sidebar-link(href="/logout")
-              //- img.nav-icon(src="/resources/logout.svg" alt="")
-              span(style="text-align: center;") Sign Out
+              span Sign Out

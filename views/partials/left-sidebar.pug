@@ -1,32 +1,25 @@
+mixin navItem(href, icon, label, isActive)
+  div.mobile-nav-btn(class=isActive ? "active" : "")
+    a.sidebar-link(href=href aria-current=isActive ? "page" : undefined)
+      img.nav-icon(src=`/resources/${icon}` alt="")
+      span= label
+
 aside.left-sidebar
   div.sidebar-links
-    div.nav-btn(class=currentPath === "/" ? "active" : "")
-      a.sidebar-link(href="/" aria-current=currentPath === "/" ? "page" : undefined)
-        img.nav-icon(src="/resources/home.svg" alt="")
-        span Home
-    div.nav-btn(class=currentPath === "/explore" ? "active" : "")
-      a.sidebar-link(href="/explore" aria-current=currentPath === "/explore" ? "page" : undefined)
-        img.nav-icon(src="/resources/explore.svg" alt="")
-        span Explore
-    div.nav-btn(class=currentPath === "/nearby" ? "active" : "")
-      a.sidebar-link(href="/nearby" aria-current=currentPath === "/nearby" ? "page" : undefined)
-        img.nav-icon(src="/resources/nearby.svg" alt="")
-        span Nearby
-    div.nav-btn(class=currentPath === "/notifications" ? "active" : "")
-      a.sidebar-link(href="/notifications" aria-current=currentPath === "/notifications" ? "page" : undefined)
-        img.nav-icon(src="/resources/notifications.svg" alt="")
-        span Notifications
+    +navItem("/", "home.svg", "Home", currentPath === "/")
+    +navItem("/explore", "explore.svg", "Explore", currentPath === "/explore")
+    +navItem("/nearby", "nearby.svg", "Nearby", currentPath === "/nearby")
+    +navItem("/notifications", "notifications.svg", "Notifications", currentPath === "/notifications")
     if user
-      div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
-        a.sidebar-link(href=`/profile/${user.username}` aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
-          img.nav-icon(src="/resources/profile.svg" alt="")
-          span Profile
-    else 
-      div.nav-btn(class=currentPath.startsWith("/profile/") ? "active" : "")
-        a.sidebar-link(href="/create-account" aria-current=currentPath.startsWith("/profile/") ? "page" : undefined)
-          img.nav-icon(src="/resources/profile.svg" alt="")
-          span Profile
-    div.nav-btn.btn-inactive(class=currentPath === "/settings" ? "active" : "")
-      a.sidebar-link(href="/settings" aria-current=currentPath === "/settings" ? "page" : undefined)
+      +navItem(`/profile/${user.username}`, "profile.svg", "Profile", currentPath.startsWith("/profile/"))
+    else
+      +navItem("/create-account", "profile.svg", "Profile", currentPath.startsWith("/profile/"))
+    +navItem("/settings", "settings.svg", "Settings", currentPath === "/settings")
+    div.mobile-nav-btn.btn-inactive
+      a.sidebar-link(href="/")
         img.nav-icon(src="/resources/settings.svg" alt="")
         span Settings
+    if user
+      div.mobile-nav-btn
+        a.sidebar-link(href="/logout")
+          span Sign Out
