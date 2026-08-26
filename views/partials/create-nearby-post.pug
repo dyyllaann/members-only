@@ -11,19 +11,19 @@ div.create-post
         button.tag-btn(type="button" data-tag="cse351") CSE 351
         button.tag-btn(type="button" data-tag="cse451") CSE 451
       
-      div.image-preview.hidden
+      //- div.image-preview.hidden
         img.image-preview-image(alt="Selected image preview")
         button.image-preview-remove(type="button" aria-label="Remove selected image") Remove image
       
       div.post-form-actions
-        input.image-file-input(type="file" accept="image/*" aria-label="Choose an image")
-        input.image-source-input(type="hidden" name="imageSource")
+        //- input.image-file-input(type="file" accept="image/*" aria-label="Choose an image")
+        //- input.image-source-input(type="hidden" name="imageSource")
         
         // Auto-populated hidden inputs for latitude and longitude
         input#lat-input(type="hidden" name="lat")
         input#lng-input(type="hidden" name="lng")
 
-        div.image-upload-row
+        //- div.image-upload-row
           button.image-upload-btn(type="button" aria-label="Add an image")
             img(src="/resources/image.svg" alt="" aria-hidden="true")
           span.image-upload-callout
