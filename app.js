@@ -22,10 +22,12 @@ const dotenv = require("dotenv").config();
 // DB dependencies
 const dbo = require("./db/conn");
 
-// var loginRouter = require("./routes/login");
 var indexRouter = require("./routes/index");
 var nearbyRouter = require("./routes/nearby");
-var guestRouter = require("./routes/guest");
+var authRouter = require("./routes/auth");
+var postsRouter = require("./routes/posts");
+var profileRouter = require("./routes/profile");
+var uploadRouter = require("./routes/upload");
 var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
 const suggestedCourses = require("./data/suggestedCourses.json");
@@ -122,7 +124,10 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", nearbyRouter);
 app.use("/", indexRouter);
-app.use("/guest", guestRouter);
+app.use("/", authRouter);
+app.use("/", postsRouter);
+app.use("/profile", profileRouter);
+app.use("/api", uploadRouter);
 app.use("/create-account", createAccountRouter);
 app.use("/courses", coursesRouter);
 
