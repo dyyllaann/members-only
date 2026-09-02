@@ -177,6 +177,18 @@ class Post {
 		return this.likeCount;
 	}
 
+	// Delete this post, its comments, and dangling likedPosts references
+	async delete() {
+		const db = dbo.getDb();
+
+		await db.collection("comments").deleteMany({ postId: this._id });
+		await db.collection("users").updateMany(
+			{ likedPosts: this._id },
+			{ $pull: { likedPosts: this._id } }
+		);
+		await db.collection("posts").deleteOne({ _id: this._id });
+	}
+
 	// Check if user has liked this post
 	hasUserLiked(userId) {
 		const userObjectId = userId instanceof ObjectId ? userId : new ObjectId(userId);

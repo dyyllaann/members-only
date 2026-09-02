@@ -115,6 +115,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // Delete button functionality
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', async function(e) {
+      e.preventDefault();
+
+      if (!confirm('Delete this post? This cannot be undone.')) {
+        return;
+      }
+
+      const postId = this.dataset.postId;
+
+      try {
+        const response = await fetch(`/post/${postId}`, { method: 'DELETE' });
+        const data = await response.json();
+
+        if (data.success) {
+          this.closest('.post').remove();
+        } else {
+          alert(data.error || 'Failed to delete post.');
+        }
+      } catch (error) {
+        console.error('Error deleting post:', error);
+      }
+    });
+  });
+
   // Comment button functionality
   document.querySelectorAll('.comment-btn').forEach(button => {
     button.addEventListener('click', function(e) {

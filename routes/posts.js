@@ -73,6 +73,29 @@ router.post('/post/:id/like', async (req, res, next) => {
   }
 });
 
+/* DELETE a post */
+router.delete('/post/:id', async (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ success: false, error: 'Not authenticated' });
+  }
+
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ success: false, error: 'Post not found' });
+    }
+
+    if (!post.user.equals(req.user._id)) {
+      return res.status(403).json({ success: false, error: 'Not authorized to delete this post' });
+    }
+
+    await post.delete();
+    res.json({ success: true });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 /* POST comment on a post */
 router.post('/post/:postId/comment', async (req, res, next) => {
   if (!req.isAuthenticated()) {

@@ -978,6 +978,7 @@ body.menu-open {
 
 .like-btn,
 .comment-btn,
+.delete-btn,
 .nav-btn,
 .nearby-like-btn {
   display: flex;
@@ -1025,6 +1026,7 @@ body.menu-open {
 
 .like-btn:hover,
 .comment-btn:hover,
+.delete-btn:hover,
 .nav-btn:hover,
 .nav-btn.active,
 .tag-filter-btn:hover,
@@ -1032,6 +1034,10 @@ body.menu-open {
 .nearby-like-btn:hover,
 .nearby-like-btn.active {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.delete-btn:hover {
+  color: #e0245e;
 }
 
 .like-btn.liked .like-icon {
