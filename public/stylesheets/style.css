@@ -993,6 +993,12 @@ body.menu-open {
   font-size: 14px;
 }
 
+.delete-btn {
+  color: #657786;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
 .nav-btn {
   width: 100%;
   padding: 0px;
