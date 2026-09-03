@@ -14,7 +14,7 @@ aside.left-sidebar
       +navItem(`/profile/${user.username}`, "profile.svg", "Profile", currentPath.startsWith("/profile/"))
     else
       +navItem("/create-account", "profile.svg", "Profile", currentPath.startsWith("/profile/"))
-    +navItem("/settings", "settings.svg", "Settings", currentPath === "/settings")
+    //- +navItem("/settings", "settings.svg", "Settings", currentPath === "/settings")
     div.mobile-nav-btn.btn-inactive
       a.sidebar-link(href="/")
         img.nav-icon(src="/resources/settings.svg" alt="")
