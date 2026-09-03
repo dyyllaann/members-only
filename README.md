@@ -44,7 +44,7 @@ IvyLink is a college-focused social platform. Registered students create an acco
 3. Feed routes join post records with their authors via MongoDB aggregation (`$lookup`) and render newest-first.
 4. Courses are scoped to an `organizationId`; a user's home feed and the `/courses` index can filter by their `major`/department, and following a course adds its ID to the user's `subscribedCourses`.
 5. The Nearby feed stores each post's coordinates as a GeoJSON `Point` and uses a MongoDB `$geoNear` aggregation stage (requiring a `2dsphere` index on `location`) to return posts within a fixed radius, annotated with a distance label computed at query time.
-6. Browser-side code in `public/javascripts/ui-controls.js` (plus `location.js`/`distance.js` for Nearby) sends `fetch()` requests for likes, comments, deletes, course follows, and geolocation, patching the DOM in place rather than reloading the page.
+6. Browser-side code in `public/javascripts/ui-controls.js` (plus `location.js` for Nearby) sends `fetch()` requests for likes, comments, deletes, course follows, and geolocation, patching the DOM in place rather than reloading the page.
 
 ## Data model
 
