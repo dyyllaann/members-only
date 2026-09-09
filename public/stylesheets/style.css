@@ -1139,6 +1139,11 @@ body.menu-open {
    .post-input box model so they stay pixel-aligned. */
 .tag-highlight-wrapper {
   position: relative;
+  /* .form-group is a flex row that grows a direct <input> child to fill the
+     row (see ".form-group > input"). The wrapper is now that direct child
+     instead of the input, so it has to take over the same flex-grow. */
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .tag-highlight-wrapper .tag-highlight-overlay {
@@ -1157,7 +1162,10 @@ body.menu-open {
   color: var(--color-accent);
 }
 
-.tag-highlight-wrapper .post-input {
+/* Tag qualifier (not just .post-input) so this doesn't also match the
+   overlay div, which now shares the .post-input class for box-model
+   purposes (padding, border, width) but must stay visually distinct. */
+.tag-highlight-wrapper input.post-input {
   position: relative;
   z-index: 2;
   background: transparent;

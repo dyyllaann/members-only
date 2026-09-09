@@ -4,7 +4,7 @@ div.create-post
     form#nearby-post-form(action="/nearby" method="POST")
       div.form-group
         div.tag-highlight-wrapper
-          div.tag-highlight-overlay(aria-hidden="true")
+          div.tag-highlight-overlay.post-input(aria-hidden="true")
           input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
       
       div.tag-selector.hidden

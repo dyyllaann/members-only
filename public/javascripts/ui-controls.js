@@ -384,7 +384,10 @@ function renderHashtagOverlay(overlay, text) {
 }
 
 document.querySelectorAll('.tag-highlight-wrapper').forEach((wrapper) => {
-  const input = wrapper.querySelector('.post-input');
+  // Tag-qualified: the overlay div also carries .post-input (for shared box
+  // model in CSS) and comes first in the markup, so a bare '.post-input'
+  // query would match the overlay instead of the real input.
+  const input = wrapper.querySelector('input.post-input');
   const overlay = wrapper.querySelector('.tag-highlight-overlay');
   if (!input || !overlay) return;
 
@@ -401,7 +404,11 @@ document.querySelectorAll('.tag-highlight-wrapper').forEach((wrapper) => {
 });
 
 // TAG SELECTOR
-const postInput = document.querySelector('.post-input');
+// input.post-input, not '.post-input' -- the highlight overlay div also
+// carries that class and comes first in the DOM, so a bare class query
+// would match the overlay (which can't receive focus and isn't a real
+// containment boundary for the real input) instead of the input itself.
+const postInput = document.querySelector('input.post-input');
 const tagSelector = document.querySelector('.tag-selector');
 const postForm = document.querySelector('.post-form form');
 const selectedTags = new Set();
