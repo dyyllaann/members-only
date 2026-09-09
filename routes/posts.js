@@ -35,8 +35,6 @@ router.post('/post', ensureAuth, async (req, res, next) => {
       tagArray = tags;
     } else if (tags) {
       tagArray = [tags];
-    } else {
-      tagArray = ['General'];  // Default tag if none provided. I'd rather get rid of this.
     }
 
     // Merge in any #hashtags typed into the message, alongside the category

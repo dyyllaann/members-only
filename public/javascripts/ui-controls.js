@@ -432,23 +432,16 @@ if (postInput && tagSelector) {
     // Remove any existing tag inputs
     postForm.querySelectorAll('input[name="tags"]').forEach(input => input.remove());
     
-    // Add hidden input for each selected tag
-    if (selectedTags.size > 0) {
-      selectedTags.forEach(tag => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'tags';
-        input.value = tag;
-        postForm.appendChild(input);
-      });
-    } else {
-      // Default to 'General' if no tags selected
+    // Add hidden input for each selected tag. If none are selected, no
+    // tags input is added at all -- the server no longer defaults to
+    // 'General'.
+    selectedTags.forEach(tag => {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = 'tags';
-      input.value = 'General';
+      input.value = tag;
       postForm.appendChild(input);
-    }
+    });
   });
 
   // Hide when clicking outside
