@@ -77,7 +77,9 @@ Update both the `posts` and `nearby_posts` collections to include a dedicated `t
 
 ### Clarifications
 
-_None yet._
+- **How to highlight inside a plain `<input>`:** the PRD doesn't specify a rendering mechanism, and a native `<input>` can't style part of its own text. Implemented the standard mirror-overlay technique: the real `.post-input` keeps its true value (so form submission is untouched) but has its text color made transparent, while a same-shaped `.tag-highlight-overlay` div sits behind it and mirrors the input's text with `#hashtag` tokens wrapped in colored spans, using the exact regex (`/#[\w]+/g`) the PRD specifies for server-side extraction so the two stay consistent about what counts as a tag.
+- **Which post-composer instances got this:** the PRD's data model section only names the `posts`/`nearby_posts` collections, but there's a third `.post-input` on the course hub page (`views/courseHub.pug`) that also posts into the standard `posts` collection (with an extra `courseId` field). Applied the highlighting there too, since it's the same underlying compose experience, not a separate feature.
+- **Open question for the server-extraction stage, not resolved here:** `posts`/`nearby_posts` already have a `tags` array populated by the existing category-tag selector (General/major/course code buttons in `ui-controls.js`). The PRD's data model section describes adding hashtags to "the document's `tags` array" -- it's not yet decided whether extracted hashtags merge into that same array alongside category tags, or need a separate field. Flagging now since it'll matter once server-side extraction is implemented.
 
 ## Features
 

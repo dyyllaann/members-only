@@ -23,6 +23,7 @@
   --color-muted: #9cc5a1ff;
   --color-white: #fff;
   --color-light: #dce1deff;
+  --color-accent: #682d63ff;
 
   --left-sidebar-width: 220px;
   --left-sidebar-width-collapsed: 64px;
@@ -1130,6 +1131,38 @@ body.menu-open {
 .post-input:focus,
 .comment-input:focus {
   border-color: #54359c;
+}
+
+/* Hashtag highlighting: the real input keeps its text transparent (only the
+   caret shows) so the overlay div behind it, which mirrors the same text
+   with hashtags colored, is what the user actually sees. Both share the
+   .post-input box model so they stay pixel-aligned. */
+.tag-highlight-wrapper {
+  position: relative;
+}
+
+.tag-highlight-wrapper .tag-highlight-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  white-space: pre;
+  pointer-events: none;
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.tag-highlight-overlay .tag-highlight {
+  color: var(--color-accent);
+}
+
+.tag-highlight-wrapper .post-input {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--color-text);
 }
 
 .comment-submit-btn {

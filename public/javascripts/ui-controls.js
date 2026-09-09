@@ -350,6 +350,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+// HASHTAG HIGHLIGHTING
+// Detects the same #tag tokens the server will extract (see routes' hashtag
+// regex) and mirrors the post-input's text into a same-shaped overlay div,
+// coloring the tag spans with --color-accent while the real input's own
+// text stays transparent (see .tag-highlight-wrapper in style.css).
+const HASHTAG_PATTERN = /#[\w]+/g;
+
+function escapeHtmlForOverlay(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function renderHashtagOverlay(overlay, text) {
+  let html = '';
+  let lastIndex = 0;
+  let match;
+
+  HASHTAG_PATTERN.lastIndex = 0;
+  while ((match = HASHTAG_PATTERN.exec(text)) !== null) {
+    html += escapeHtmlForOverlay(text.slice(lastIndex, match.index));
+    html += `<span class="tag-highlight">${escapeHtmlForOverlay(match[0])}</span>`;
+    lastIndex = match.index + match[0].length;
+  }
+  html += escapeHtmlForOverlay(text.slice(lastIndex));
+
+  // A trailing space collapses in HTML, which would let the overlay's box
+  // shrink and desync from the input's scroll width while the user is still
+  // typing it -- &nbsp; keeps it measured.
+  overlay.innerHTML = html.replace(/ $/, '&nbsp;');
+}
+
+document.querySelectorAll('.tag-highlight-wrapper').forEach((wrapper) => {
+  const input = wrapper.querySelector('.post-input');
+  const overlay = wrapper.querySelector('.tag-highlight-overlay');
+  if (!input || !overlay) return;
+
+  const sync = () => {
+    renderHashtagOverlay(overlay, input.value);
+    overlay.scrollLeft = input.scrollLeft;
+  };
+
+  input.addEventListener('input', sync);
+  input.addEventListener('scroll', () => {
+    overlay.scrollLeft = input.scrollLeft;
+  });
+  sync();
+});
+
 // TAG SELECTOR
 const postInput = document.querySelector('.post-input');
 const tagSelector = document.querySelector('.tag-selector');

@@ -3,7 +3,9 @@ div.create-post
     //- 1. Added ID and updated action route
     form#nearby-post-form(action="/nearby" method="POST")
       div.form-group
-        input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
+        div.tag-highlight-wrapper
+          div.tag-highlight-overlay(aria-hidden="true")
+          input.post-input(type="text", name="message" autocomplete="off" placeholder=`What's new, ${user.firstName}?`)
       
       div.tag-selector.hidden
         button.tag-btn(type="button" data-tag="General") General
