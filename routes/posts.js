@@ -6,6 +6,7 @@ const Comment = require("../models/comment");
 const User = require("../models/user");
 const dbo = require("../db/conn");
 const { ObjectId } = require("mongodb");
+const { extractHashtags } = require("../utils/hashtags");
 
 function ensureAuth(req, res, next) {
 	if (req.isAuthenticated && req.isAuthenticated()) {
@@ -36,6 +37,15 @@ router.post('/post', ensureAuth, async (req, res, next) => {
       tagArray = [tags];
     } else {
       tagArray = ['General'];  // Default tag if none provided. I'd rather get rid of this.
+    }
+
+    // Merge in any #hashtags typed into the message, alongside the category
+    // tags above -- both live in the same `tags` array (see the PRD's own
+    // data model example, which mixes course-code-style and hashtag-style
+    // tags in one array).
+    const hashtags = extractHashtags(message);
+    if (hashtags.length > 0) {
+      tagArray = Array.from(new Set([...tagArray, ...hashtags]));
     }
 
     const post = new Post({

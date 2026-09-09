@@ -9,7 +9,8 @@
     "seed": "node scripts/seedUsers.js",
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=members-only:* npm run devstart"
+    "serverstart": "DEBUG=members-only:* npm run devstart",
+    "test": "node --test"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

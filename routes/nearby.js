@@ -7,6 +7,7 @@ const dbo = require('../db/conn');
 const NearbyPost = require('../models/nearby_post');
 const Comment = require('../models/comment');
 const User = require('../models/user');
+const { extractHashtags } = require('../utils/hashtags');
 
 /* =========================================
    PAGE RENDER ROUTE
@@ -76,7 +77,8 @@ router.post('/nearby', async (req, res, next) => {
       message: message?.trim() || '',
       imageSource: imageSource || null,
       lat: lat,
-      lng: lng
+      lng: lng,
+      tags: extractHashtags(message)
     });
 
     await nearbyPost.save();
