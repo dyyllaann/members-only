@@ -1,8 +1,12 @@
 aside.right-sidebar
   div.sidebar-tags
     span.sidebar-header Trending
-    .tag-filters 
-      button.tag-filter-btn(data-tag="#dawgpack") #dawgpack
+    .tag-filters
+      if trendingTags && trendingTags.length
+        each t in trendingTags
+          button.tag-filter-btn(data-tag=t.tag)= `#${t.tag}`
+      else
+        span.tag-filters-empty No trending tags yet.
   div.sidebar-tags
     span.sidebar-header Suggested Topics
     div.tag-filters

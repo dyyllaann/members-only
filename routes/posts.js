@@ -50,6 +50,7 @@ router.post('/post', ensureAuth, async (req, res, next) => {
       user: req.user._id,
       message: message?.trim() || '',
       tags: tagArray,
+      hashtags: hashtags,
       courseId: courseId || null,
       imageSource: imageSource || null,
       contentType: imageSource ? 'image' : 'text'

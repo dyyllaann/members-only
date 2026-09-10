@@ -19,6 +19,10 @@ class Post {
 		this.likeCount = postData.likeCount || 0;
 		this.commentCount = postData.commentCount || 0;
 		this.tags = Array.isArray(postData.tags) ? postData.tags : [];
+		// Hashtags specifically, kept separate from `tags` (which also holds
+		// category-selector tags) so trending can count hashtags cleanly
+		// without a common category tag dominating the results.
+		this.hashtags = Array.isArray(postData.hashtags) ? postData.hashtags : [];
 		this.courseId = postData.courseId
 			? (postData.courseId instanceof ObjectId ? postData.courseId : new ObjectId(postData.courseId))
 			: null;

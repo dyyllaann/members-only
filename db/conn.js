@@ -14,10 +14,14 @@ var _db;
 // every startup rather than only once against a fresh database.
 async function ensureIndexes(db) {
 	// Multikey index: MongoDB indexes each array element separately, so this
-	// turns `find({ tags: "..." })` into a normal index seek instead of a
-	// full collection scan of every post's tags array.
-	await db.collection("posts").createIndex({ tags: 1 });
-	await db.collection("nearby_posts").createIndex({ tags: 1 });
+	// turns `find({ hashtags: "..." })` into a normal index seek instead of
+	// a full collection scan. Not yet exercised by any point-lookup query
+	// (today's only reader, trending's $unwind+$group, has no preceding
+	// $match and still COLLSCANs regardless), but hashtags is the one
+	// array field we intend to query by going forward, unlike `tags` --
+	// see the tags_1 index removed alongside this comment.
+	await db.collection("posts").createIndex({ hashtags: 1 });
+	await db.collection("nearby_posts").createIndex({ hashtags: 1 });
 
 	// Required for the $geoNear aggregation in NearbyPost.findNearby --
 	// $geoNear errors outright without a geospatial index on the field it
@@ -46,7 +50,7 @@ module.exports = {
 
 				try {
 					await ensureIndexes(_db);
-					console.log("Indexes verified (posts.tags, nearby_posts.tags, nearby_posts.location).");
+					console.log("Indexes verified (posts.hashtags, nearby_posts.hashtags, nearby_posts.location).");
 				} catch (indexErr) {
 					console.error("Failed to create one or more indexes:", indexErr.message);
 				}

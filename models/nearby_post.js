@@ -11,6 +11,10 @@ class NearbyPost {
     this.postImage = this.imageSource;
     this.timestamp = postData.timestamp || new Date();
     this.tags = Array.isArray(postData.tags) ? postData.tags : [];
+    // Identical to tags today (no category-tag selector for nearby posts),
+    // but kept as its own field so trending can query one uniform field
+    // name across both collections.
+    this.hashtags = Array.isArray(postData.hashtags) ? postData.hashtags : [];
     this.likes = Array.isArray(postData.likes)
       ? postData.likes.map(id => id instanceof ObjectId ? id : new ObjectId(id))
       : [];

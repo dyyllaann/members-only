@@ -31,6 +31,7 @@ var uploadRouter = require("./routes/upload");
 var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
 const suggestedCourses = require("./data/suggestedCourses.json");
+const { getTrendingTags } = require("./utils/trending");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -120,6 +121,22 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+// Placed after express.static so a real static-file hit short-circuits
+// there and never reaches this -- otherwise every CSS/JS/image request
+// would also trigger the trending aggregation query.
+app.use(async function (req, res, next) {
+	if (req.method !== "GET") {
+		return next();
+	}
+	try {
+		res.locals.trendingTags = await getTrendingTags(3);
+	} catch (err) {
+		console.error("Failed to compute trending tags:", err.message);
+		res.locals.trendingTags = [];
+	}
+	next();
+});
 
 // Routes
 app.use("/", nearbyRouter);

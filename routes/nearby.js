@@ -71,14 +71,19 @@ router.post('/nearby', async (req, res, next) => {
       return res.status(400).json({ error: 'Location coordinates are required.' });
     }
 
-    // The constructor handles the truncation and GeoJSON mapping
+    // The constructor handles the truncation and GeoJSON mapping.
+    // tags and hashtags are identical here since nearby posts have no
+    // category-tag selector, but hashtags is kept as its own field so
+    // trending can query one uniform field name across both collections.
+    const hashtags = extractHashtags(message);
     const nearbyPost = new NearbyPost({
       user: req.user._id,
       message: message?.trim() || '',
       imageSource: imageSource || null,
       lat: lat,
       lng: lng,
-      tags: extractHashtags(message)
+      tags: hashtags,
+      hashtags: hashtags
     });
 
     await nearbyPost.save();
