@@ -36,6 +36,14 @@ Triggered by the user saying "begin \<slug\>" (or clearly asking to start a new 
      branch if it only exists on `origin`).
    - If it doesn't exist, create it from an up-to-date `main`: `git fetch origin main && git
      switch -c feature/<slug> origin/main`.
+   - **Immediately fix the upstream this creates**: using `origin/main` as the start point also
+     sets it as the new branch's tracked upstream (git's default "track what you branched from"
+     behavior) -- so a bare `git push` or a "Sync"/"Publish" click in an editor's git UI would
+     target `origin main`, not a `feature/<slug>` branch on the remote, which is exactly backward
+     from what a feature branch needs. Immediately after creating the branch, either clear the
+     tracking (`git branch --unset-upstream`) so a push requires an explicit destination, or set
+     it correctly once the branch is first pushed (`git push -u origin feature/<slug>`). Don't
+     skip this -- it silently turns every future sync into a direct push to main.
    - If the trigger slug has a `prd-` prefix (e.g. "begin prd-hashtagging"), strip it before
      naming the branch -- the branch is always `feature/<slug>` without the doc-type prefix.
 3. Resolve the governing doc(s):
