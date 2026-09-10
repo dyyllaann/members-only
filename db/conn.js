@@ -12,17 +12,13 @@ var _db;
 // Creates indexes if they don't already exist -- createIndex is a no-op
 // when an identical index is already present, so this is safe to run on
 // every startup rather than only once against a fresh database.
+//
+// No index on tags/hashtags right now: nothing in the app does a
+// point-lookup query on either field (trending's $unwind+$group has no
+// preceding $match, so it COLLSCANs either way -- confirmed via .explain(),
+// and 0 usage in Atlas's index stats). Add one back when an actual
+// query shaped like find({ hashtags: "..." }) exists to justify it.
 async function ensureIndexes(db) {
-	// Multikey index: MongoDB indexes each array element separately, so this
-	// turns `find({ hashtags: "..." })` into a normal index seek instead of
-	// a full collection scan. Not yet exercised by any point-lookup query
-	// (today's only reader, trending's $unwind+$group, has no preceding
-	// $match and still COLLSCANs regardless), but hashtags is the one
-	// array field we intend to query by going forward, unlike `tags` --
-	// see the tags_1 index removed alongside this comment.
-	await db.collection("posts").createIndex({ hashtags: 1 });
-	await db.collection("nearby_posts").createIndex({ hashtags: 1 });
-
 	// Required for the $geoNear aggregation in NearbyPost.findNearby --
 	// $geoNear errors outright without a geospatial index on the field it
 	// queries.
@@ -50,7 +46,7 @@ module.exports = {
 
 				try {
 					await ensureIndexes(_db);
-					console.log("Indexes verified (posts.hashtags, nearby_posts.hashtags, nearby_posts.location).");
+					console.log("Indexes verified (nearby_posts.location).");
 				} catch (indexErr) {
 					console.error("Failed to create one or more indexes:", indexErr.message);
 				}
