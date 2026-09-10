@@ -11,7 +11,7 @@ div.posts-container
             span.major #{post.user.major}
           span.timestamp #{post.timestamp_formatted}
         div.post-content
-          p.post-message #{post.message}
+          p.post-message !{renderMessageWithHashtags(post.message)}
           if post.postImage
               img.post-image(
                 src=post.postImage

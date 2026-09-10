@@ -32,6 +32,7 @@ var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
 const suggestedCourses = require("./data/suggestedCourses.json");
 const { getTrendingTags } = require("./utils/trending");
+const { renderMessageWithHashtags } = require("./utils/hashtags");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -115,6 +116,12 @@ app.use(function (req, res, next) {
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+
+// app.locals (unlike res.locals) is available to every template without
+// any per-route wiring -- lets templates call renderMessageWithHashtags(msg)
+// directly instead of every route that renders a post list having to pass
+// it through.
+app.locals.renderMessageWithHashtags = renderMessageWithHashtags;
 
 app.use(cors());
 app.use(logger("dev"));

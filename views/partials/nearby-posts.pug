@@ -15,7 +15,7 @@ div.posts-container
             //- span.timestamp= post.location.coordinates
           span.timestamp #{post.distanceLabel || 'Calculating...'}
         div.post-content
-          p.post-message #{post.message}
+          p.post-message !{renderMessageWithHashtags(post.message)}
           //- Do not expose raw coordinates in the UI; show server-computed label.
           //- p.post-message Distance: #{post.distanceLabel || 'Calculating...'}
           if post.postImage

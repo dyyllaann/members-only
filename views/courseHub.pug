@@ -55,7 +55,7 @@ block content
                       span.major #{post.user.major}
                     span.timestamp #{post.timestamp_formatted}
                   div.post-content
-                    p.post-message #{post.message}
+                    p.post-message !{renderMessageWithHashtags(post.message)}
                     if post.imageSource
                       img.post-image(
                         src=post.imageSource

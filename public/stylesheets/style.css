@@ -1031,6 +1031,26 @@ body.menu-open {
   color: var(--color-secondary);
 }
 
+/* Hashtags inline within post text reuse .tag-filter-btn purely so the
+   existing click-to-filter JS (which queries for that class) picks them
+   up -- but that class is styled as a full-width sidebar row, so it has
+   to be undone back to plain inline text here. */
+.post-message .hashtag-link.tag-filter-btn {
+  display: inline;
+  width: auto;
+  padding: 0;
+  border-top: none;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.post-message .hashtag-link.tag-filter-btn:hover {
+  background: none;
+  text-decoration: underline;
+}
+
 .nav-icon {
   width: 20px;
   height: 20px;
