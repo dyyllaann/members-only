@@ -6,82 +6,19 @@ IvyLink is a college-focused social platform. Registered students create an acco
 
 <img src="public/resources/ivylink-preview_2026_08_02.png" alt="IvyLink feed preview" />
 
-## Feature branch: hashtagging
+## Hashtagging
 
 PRD: `docs/product/prd-hashtagging.md`
 
-<details>
-<summary>Full PRD text</summary>
+Posts and nearby posts support `#hashtag` detection end to end:
 
-# Product Requirements Document: Hashtag Detection and Tagging
+- **Composing:** as you type, a mirror-overlay behind the (visually transparent) real `<input>` highlights `#hashtag` tokens live, using the same regex the server uses for extraction (`utils/hashtags.js`) so what you see while typing matches what gets saved.
+- **Storage:** hashtags are saved in a dedicated `hashtags` array on each post/nearby-post document, kept separate from `tags` (which also holds category-selector tags like a major name) specifically so features like trending can count hashtags without category tags crowding them out. `tags` is still what feed-filtering reads from, so hashtags are merged into it too -- both fields get written on every post.
+- **Trending:** the right sidebar's Trending widget (`utils/trending.js`) shows the 3 most-used hashtags, counted as "number of distinct posts containing this tag" (not raw mentions -- a hashtag repeated many times in one post only counts once, by design, so one post can't fake a trend). This is an all-time frequency count, not a time-decayed score.
+- **Rendering:** hashtags inside post text render as clickable spans (`renderMessageWithHashtags` in `utils/hashtags.js`) that filter the feed via the same click handler the sidebar's tag buttons already used.
+- **Indexes:** none on `tags`/`hashtags` -- nothing in the app does a point-lookup query on either field, confirmed via `.explain()` (the trending aggregation has no `$match` to accelerate, so it scans regardless). Add one back if a query that would actually use it gets built. The `2dsphere` index on `nearby_posts.location` is unrelated and genuinely required for `$geoNear`.
 
-## Problem Statement
-#### What user problems are we solving?
-Users lack a lightweight way to categorize their thoughts, contribute to, or surface trending discussions. Current rigid category selectors create friction during authoring, which prevents emergent campus conversations (e.g., `#midterms`, `#dubhacks2026`, `#redsquare`) from naturally surfacing across feeds.
-
-## Proposed Solution
-#### What are we building?
-
-**1. Real-Time Client-Side Tag Highlighting**
-In the post creation interface, as the user types, a Vanilla JS text-processing utility detects words prefixed with `#` and dynamically styles the symbol and text with `--color-accent` to provide immediate visual confirmation that the token will be registered as a tag.
-
-**2. Automated Ingestion & Tag Extraction Pipeline**
-On form submission, the server extracts all hashtagged terms (`/#[\w]+/g`), normalizes them (lowercasing, deduplicating instances within the same post, and stripping the `#` symbol), and stores them directly in the document's `tags` array.
-
-**3. Cross-Collection Tag Persistence**
-Support hashtag tagging identically across both standard persistent posts and ephemeral nearby posts, ensuring both communication channels can be cataloged and filtered by topic.
-
-### Data Model Updates
-Update both the `posts` and `nearby_posts` collections to include a dedicated `tags` field:
-
-**`posts` Collection Schema:**
-* `_id`: ObjectId
-* `authorId`: ObjectId (Reference to `users` collection)
-* `content`: String
-* `tags`: Array of Strings (e.g., `["finals", "cse311", "studygroup"]`)
-* `createdAt`: Date / ISO String
-* *(Existing fields: `likes`, `commentCount`, etc.)*
-
-**`nearby_posts` Collection Schema:**
-* `_id`: ObjectId
-* `authorId`: ObjectId (Reference to `users` collection)
-* `content`: String
-* `location`: GeoJSON Point Object
-* `tags`: Array of Strings (e.g., `["odegaard", "coffee"]`)
-* `createdAt`: Date / ISO String (TTL index: 24-hour expiration)
-* *(Existing fields: `likes`, `distanceLabel`, etc.)*
-
-*Note: Both collections maintain a multikey index on `{ tags: 1 }` to support low-latency array lookup queries.*
-
-## Acceptance Criteria
-#### How do we test that this works?
-* [ ] Typing a hashtag (`#`) followed by alphanumeric characters in the post composer immediately applies `--color-accent` styling to the token in real time.
-* [ ] Submitting a standard post containing hashtags parses, lowercases, and saves the tokens into the `tags` array in the `posts` collection.
-* [ ] Submitting an ephemeral post via `/api/nearby` parses and saves the tokens into the `tags` array in the `nearby_posts` collection.
-* [ ] Multiple identical hashtags in a single post (e.g., `#dawgs ... #dawgs`) are deduplicated into a single entry in `tags`.
-* [ ] Posts with no hashtags initialize with an empty array (`tags: []`) rather than `null` or `undefined`.
-* [ ] Rendered post cards display detected tags as distinct highlighted text (`--color-accent`) linking to/filtering by that tag.
-
-## Success Metrics (Theoretical)
-#### How do we know this feature is valuable?
-* **Adoption:** Posts created on both standard and nearby feeds contain at least one valid hashtag within 14 days of deployment.
-
-## Out of Scope
-#### What are we deliberately NOT building right now?
-* **Post Editing & Tag Removal:** Since post editing is not yet implemented, removing or modifying tags post-publication is deferred to a future post-management release.
-* **Decay & Trending Scoring Algorithm:** Background jobs calculating 7-day momentum and gravity decay are deferred to the Discovery Engine Technical Spec.
-* **Unsupervised NLP Topic Extraction:** Parsing non-hashtagged contextual keywords will be handled in a later phase.
-* **Tag Autocomplete / Typeahead:** Suggesting existing tags while typing `#` will be handled after tag usage volume justifies an index search endpoint.
-
-</details>
-
-### Clarifications
-
-- **How to highlight inside a plain `<input>`:** the PRD doesn't specify a rendering mechanism, and a native `<input>` can't style part of its own text. Implemented the standard mirror-overlay technique: the real `.post-input` keeps its true value (so form submission is untouched) but has its text color made transparent, while a same-shaped `.tag-highlight-overlay` div sits behind it and mirrors the input's text with `#hashtag` tokens wrapped in colored spans, using the exact regex (`/#[\w]+/g`) the PRD specifies for server-side extraction so the two stay consistent about what counts as a tag.
-- **Which post-composer instances got this:** the PRD's data model section only names the `posts`/`nearby_posts` collections, but there's a third `.post-input` on the course hub page (`views/courseHub.pug`) that also posts into the standard `posts` collection (with an extra `courseId` field). Applied the highlighting there too, since it's the same underlying compose experience, not a separate feature.
-- **Resolved: hashtags merge into the same `tags` array as category tags, not a separate field.** `posts`/`nearby_posts` already have a `tags` array populated by the existing category-tag selector (General/major/course code buttons in `ui-controls.js`). The PRD's own data model example mixes course-code-style and hashtag-style values in one `tags` array (`["finals", "cse311", "studygroup"]`), which reads as the PRD's actual intent rather than an oversight -- so `routes/posts.js`'s `POST /post` now dedupes `[...categoryTags, ...extractedHashtags]` into one array (see `utils/hashtags.js`). `routes/nearby.js`'s `POST /nearby` never had category tags wired up to begin with (a pre-existing gap, left alone -- out of scope here), so its `tags` is just the extracted hashtags.
-- **`/nearby`'s route path differs from the PRD's acceptance criteria text**, which says "via `/api/nearby`" -- the actual route is `POST /nearby` (no `/api` prefix). Extraction was wired to the real route; the PRD text is just slightly stale on the path.
-- **Removed the `'General'` default category tag** (both `routes/posts.js`'s server-side fallback and the matching client-side default in `ui-controls.js`'s tag-selector submit handler -- the client one is what actually fired for real browser submissions, since it added a hidden `tags=General` input before the request ever reached the server). Not part of the hashtag PRD itself, but came up while reviewing hashtag-extraction test output and the removed server line already carried a "I'd rather get rid of this" comment. A post with no category tag selected and no hashtags now correctly gets `tags: []`.
+**Deferred, not built here:** hashtags on comments (the lazy-loaded, client-rendered comment architecture needs its own design pass first -- filtering, escaping, and dynamic composer wiring all get more involved there); tag autocomplete; time-decayed/momentum-based trending (the original "Discovery Engine" work this PRD is stage 1 of).
 
 ## Features
 
