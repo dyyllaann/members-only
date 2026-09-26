@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const dbo = require('../db/conn');
 const { getTrendingTags } = require('../utils/trending');
+const { coalesce } = require('../utils/coalesce');
 
 // How often the trending computation re-runs. Candidate default from the
 // design doc (Section 7) -- adjust based on observed load and how quickly
@@ -30,6 +31,19 @@ async function runTrendingJob(limit = 3) {
   return tags;
 }
 
+// Refreshes the cache right after a new post, so it shows up in the
+// sidebar on the page the poster is redirected to, instead of at the next
+// cron tick. Coalesced: a burst of posts triggers at most one extra run.
+// Never rejects -- a failure is logged, not surfaced to the poster, and
+// the cron job still catches up.
+const refreshTrending = coalesce(() => runTrendingJob());
+
+function requestTrendingRefresh() {
+  return refreshTrending().catch((err) => {
+    console.error('Post-triggered trending refresh failed:', err.message);
+  });
+}
+
 // Reads the cached result. This is what app.js's per-request middleware
 // should call instead of getTrendingTags directly -- O(1) instead of a
 // full aggregation on every GET.
@@ -54,4 +68,4 @@ function startTrendingJob(schedule = DEFAULT_SCHEDULE) {
   });
 }
 
-module.exports = { runTrendingJob, getCachedTrendingTags, startTrendingJob, CACHE_DOC_ID };
+module.exports = { runTrendingJob, requestTrendingRefresh, getCachedTrendingTags, startTrendingJob, CACHE_DOC_ID };

@@ -69,4 +69,31 @@ function extractTopics(message, hashtags = []) {
   return [...topics.entries()].map(([topic, isHashtag]) => ({ topic, isHashtag }));
 }
 
-module.exports = { extractTopics, tokenizeMessage, STOPWORDS };
+// Possible singular forms of a plural-looking word, most specific rule
+// first: "parties" -> "party", "classes" -> "class", "internships" ->
+// "internship". These are only guesses -- canonicalTopics accepts one
+// only if it was actually used.
+function singularCandidates(word) {
+  const candidates = [];
+  if (word.endsWith('ies')) candidates.push(`${word.slice(0, -3)}y`);
+  if (word.endsWith('es')) candidates.push(word.slice(0, -2));
+  if (word.endsWith('s') && !word.endsWith('ss')) candidates.push(word.slice(0, -1));
+  return candidates.filter((c) => c.length >= MIN_TOKEN_LENGTH);
+}
+
+// Maps each topic to the form it should be counted under. A plural merges
+// into its singular only when the singular is itself among `topics`, so
+// the sidebar always shows a word someone actually wrote. That's why this
+// isn't a stemmer or natural's NounInflector, which turn "campus" into
+// "campu" and "courses" into "cours".
+function canonicalTopics(topics) {
+  const seen = new Set(topics);
+  const canonical = new Map();
+  for (const topic of seen) {
+    const singular = singularCandidates(topic).find((c) => seen.has(c));
+    canonical.set(topic, singular || topic);
+  }
+  return canonical;
+}
+
+module.exports = { extractTopics, tokenizeMessage, canonicalTopics, singularCandidates, STOPWORDS };

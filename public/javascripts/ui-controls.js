@@ -479,14 +479,18 @@ if (tagFilterBtns.length > 0 && postsContainer) {
           post.style.display = ''; // Show all
         } else {
           const postTags = post.dataset.tags ? post.dataset.tags.split(',') : [];
+          // Trending buttons list every form merged into the topic (e.g.
+          // internship,internships -- see utils/topics.js canonicalTopics);
+          // other buttons match just their own tag.
+          const variants = btn.dataset.variants ? btn.dataset.variants.split(',') : [selectedTag];
           // Free-text trending topics (utils/topics.js) aren't stored in
           // data-tags, so also match them as a whole word in the message.
           const messageEl = post.querySelector('.post-message');
           const messageText = messageEl ? messageEl.textContent.toLowerCase() : '';
-          const escapedTag = selectedTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          const inMessage = new RegExp(`\\b${escapedTag}\\b`).test(messageText);
+          const escaped = variants.map((v) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+          const inMessage = new RegExp(`\\b(${escaped.join('|')})\\b`).test(messageText);
 
-          if (postTags.includes(selectedTag) || inMessage) {
+          if (variants.some((v) => postTags.includes(v)) || inMessage) {
             post.style.display = '';
           } else {
             post.style.display = 'none';

@@ -43,3 +43,23 @@ test('handles empty lists and no arguments', () => {
   assert.equal(scoreTopics([[], []]).size, 0);
   assert.equal(scoreTopics().size, 0);
 });
+
+test('merges a plural hashtag into its singular and records both variants', () => {
+  const result = scoreTopics([[occ('internship', true), occ('internships', true)]], { now: NOW });
+  assert.equal(result.has('internships'), false);
+  const entry = result.get('internship');
+  assert.equal(entry.score, 2 * HASHTAG_WEIGHT);
+  assert.equal(entry.postCount, 2);
+  assert.deepEqual([...entry.variants].sort(), ['internship', 'internships']);
+});
+
+test('merges across lists and lets a plural free-text word clear minTextPosts', () => {
+  const result = scoreTopics([[occ('exam', false)], [occ('exams', false)]], { now: NOW });
+  assert.equal(result.get('exam').postCount, 2);
+  assert.equal(result.has('exams'), false);
+});
+
+test('a lone plural keeps its own form', () => {
+  const result = scoreTopics([[occ('internships', true)]], { now: NOW });
+  assert.deepEqual([...result.get('internships').variants], ['internships']);
+});

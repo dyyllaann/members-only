@@ -8,6 +8,7 @@ const NearbyPost = require('../models/nearby_post');
 const Comment = require('../models/comment');
 const User = require('../models/user');
 const { extractHashtags } = require('../utils/hashtags');
+const { requestTrendingRefresh } = require('../jobs/trendingJob');
 
 /* =========================================
    PAGE RENDER ROUTE
@@ -87,6 +88,7 @@ router.post('/nearby', async (req, res, next) => {
     });
 
     await nearbyPost.save();
+    await requestTrendingRefresh();
     // res.status(201).json({ success: true, post: nearbyPost });
     res.redirect('/nearby');
   } catch (err) {

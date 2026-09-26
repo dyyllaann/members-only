@@ -1,5 +1,5 @@
 const dbo = require('../db/conn');
-const { extractTopics } = require('./topics');
+const { extractTopics, canonicalTopics } = require('./topics');
 
 // A topic's contribution to trending halves every 12h. Tunable once real
 // usage data exists -- see design doc "Integrate NLP tokenization",
@@ -45,16 +45,21 @@ async function getTopicOccurrences(collectionName, windowHours = DEFAULT_WINDOW_
 }
 
 // Merges any number of occurrence lists (as returned by
-// getTopicOccurrences) into topic -> { score, postCount, isHashtag }. Each
-// occurrence contributes weight * e^(-ln2/halfLifeHours * ageHours).
+// getTopicOccurrences) into topic -> { score, postCount, isHashtag,
+// variants }. Each occurrence contributes weight * e^(-ln2/halfLifeHours *
+// ageHours). Plurals are counted under their singular when both appear
+// (see canonicalTopics); `variants` holds every form merged into a topic.
 // extractTopics already lists each topic once per post, so postCount is a
-// count of distinct posts. Pure and DB-free, so it's the part of this
-// module worth unit testing directly.
+// count of distinct posts -- except a post using both "internship" and
+// "internships" counts twice, which is rare enough to leave alone. Pure
+// and DB-free, so it's the part of this module worth unit testing directly.
 function scoreTopics(occurrenceLists = [], opts = {}) {
   const halfLifeHours = opts.halfLifeHours ?? DEFAULT_HALF_LIFE_HOURS;
   const minTextPosts = opts.minTextPosts ?? DEFAULT_MIN_TEXT_POSTS;
   const now = opts.now ?? new Date();
   const lambda = Math.LN2 / halfLifeHours;
+
+  const canonical = canonicalTopics(occurrenceLists.flat().map((o) => o.topic));
 
   const totals = new Map();
   for (const occurrences of occurrenceLists) {
@@ -62,12 +67,14 @@ function scoreTopics(occurrenceLists = [], opts = {}) {
       const ageHours = (now - new Date(timestamp)) / (1000 * 60 * 60);
       const decay = Math.exp(-lambda * Math.max(ageHours, 0));
       const weight = isHashtag ? HASHTAG_WEIGHT : 1;
+      const key = canonical.get(topic);
 
-      const entry = totals.get(topic) || { score: 0, postCount: 0, isHashtag: false };
+      const entry = totals.get(key) || { score: 0, postCount: 0, isHashtag: false, variants: new Set() };
       entry.score += weight * decay;
       entry.postCount += 1;
       entry.isHashtag = entry.isHashtag || isHashtag;
-      totals.set(topic, entry);
+      entry.variants.add(topic);
+      totals.set(key, entry);
     }
   }
 
@@ -78,9 +85,11 @@ function scoreTopics(occurrenceLists = [], opts = {}) {
 }
 
 // Returns the top `limit` trending topics across posts and nearby_posts,
-// ranked by decayed, weighted frequency, as [{ tag, score, isHashtag }],
-// highest first. The key stays `tag` so the sidebar template's existing
-// `t.tag` reads keep working.
+// ranked by decayed, weighted frequency, as [{ tag, score, isHashtag,
+// variants }], highest first. The key stays `tag` so the sidebar
+// template's existing `t.tag` reads keep working; `variants` lets its
+// click-to-filter match every merged form (e.g. #internships under
+// #internship).
 async function getTrendingTags(limit = 3, opts = {}) {
   const windowHours = opts.windowHours ?? DEFAULT_WINDOW_HOURS;
   const now = opts.now ?? new Date();
@@ -95,7 +104,7 @@ async function getTrendingTags(limit = 3, opts = {}) {
   return [...totals.entries()]
     .sort((a, b) => b[1].score - a[1].score)
     .slice(0, limit)
-    .map(([tag, { score, isHashtag }]) => ({ tag, score, isHashtag }));
+    .map(([tag, { score, isHashtag, variants }]) => ({ tag, score, isHashtag, variants: [...variants].sort() }));
 }
 
 module.exports = { getTrendingTags, scoreTopics, getTopicOccurrences, HASHTAG_WEIGHT };

@@ -7,6 +7,7 @@ const User = require("../models/user");
 const dbo = require("../db/conn");
 const { ObjectId } = require("mongodb");
 const { extractHashtags } = require("../utils/hashtags");
+const { requestTrendingRefresh } = require("../jobs/trendingJob");
 
 function ensureAuth(req, res, next) {
 	if (req.isAuthenticated && req.isAuthenticated()) {
@@ -57,6 +58,7 @@ router.post('/post', ensureAuth, async (req, res, next) => {
     });
 
     await post.save();
+    await requestTrendingRefresh();
     res.redirect('back');
   } catch (err) {
     return next(err);
