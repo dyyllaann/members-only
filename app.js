@@ -31,7 +31,7 @@ var uploadRouter = require("./routes/upload");
 var createAccountRouter = require("./routes/createAccount");
 var coursesRouter = require("./routes/courses");
 const suggestedCourses = require("./data/suggestedCourses.json");
-const { getTrendingTags } = require("./utils/trending");
+const { getCachedTrendingTags, startTrendingJob } = require("./jobs/trendingJob");
 const { renderMessageWithHashtags } = require("./utils/hashtags");
 
 passport.use(
@@ -76,6 +76,7 @@ dbo.connectToServer(function (err) {
 		process.exit(1);
 	}
 	console.log("Successfully connected to MongoDB");
+	startTrendingJob();
 });
 
 app.use(compression());
@@ -130,16 +131,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Placed after express.static so a real static-file hit short-circuits
-// there and never reaches this -- otherwise every CSS/JS/image request
-// would also trigger the trending aggregation query.
+// there and never reaches this. Reads the cache the scheduled job
+// (jobs/trendingJob.js) maintains -- a point lookup, not the
+// $unwind/$group aggregation this used to run on every GET.
 app.use(async function (req, res, next) {
 	if (req.method !== "GET") {
 		return next();
 	}
 	try {
-		res.locals.trendingTags = await getTrendingTags(3);
+		res.locals.trendingTags = await getCachedTrendingTags();
 	} catch (err) {
-		console.error("Failed to compute trending tags:", err.message);
+		console.error("Failed to read cached trending tags:", err.message);
 		res.locals.trendingTags = [];
 	}
 	next();

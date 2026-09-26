@@ -478,10 +478,15 @@ if (tagFilterBtns.length > 0 && postsContainer) {
         if (selectedTag === 'all') {
           post.style.display = ''; // Show all
         } else {
-          // Get post tags from data attribute (you'll need to add this)
           const postTags = post.dataset.tags ? post.dataset.tags.split(',') : [];
-          
-          if (postTags.includes(selectedTag)) {
+          // Free-text trending topics (utils/topics.js) aren't stored in
+          // data-tags, so also match them as a whole word in the message.
+          const messageEl = post.querySelector('.post-message');
+          const messageText = messageEl ? messageEl.textContent.toLowerCase() : '';
+          const escapedTag = selectedTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const inMessage = new RegExp(`\\b${escapedTag}\\b`).test(messageText);
+
+          if (postTags.includes(selectedTag) || inMessage) {
             post.style.display = '';
           } else {
             post.style.display = 'none';

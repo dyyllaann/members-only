@@ -29,6 +29,8 @@
     "mongodb": "^4.9.1",
     "morgan": "~1.9.1",
     "multer": "^2.2.0",
+    "natural": "8.1.1",
+    "node-cron": "^3.0.3",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.3"
